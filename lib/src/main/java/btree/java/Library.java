@@ -7,4 +7,17 @@ public class Library {
     public boolean someLibraryMethod() {
         return true;
     }
+
+    public static void main(String... args) {
+        final String message = "\n"
+            + "Btree-java is a port of the (Python) Binarytree library.\n"
+            + "It has most of Binarytree's functionality, but lacks support for Graphviz and Jupyter Notebooks.\n"
+            + "Btree-java includes matching unit tests.\n"
+            // FIX: add github pages site url
+            + "For docs, license, tests, and downloads, see:\n";
+        
+        System.out.println(message);
+    }
 }
+
+
