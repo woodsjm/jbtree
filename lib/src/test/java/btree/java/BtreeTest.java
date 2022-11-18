@@ -4,11 +4,17 @@
 package btree.java;
 
 import org.junit.Test;
+import static java.util.Collections.singletonList;
 import static org.junit.Assert.*;
 
-public class LibraryTest {
+public class BtreeTest {
     @Test public void someLibraryMethodReturnsTrue() {
-        Library classUnderTest = new Library();
+        Btree classUnderTest = new Btree();
         assertTrue("someLibraryMethod should return 'true'", classUnderTest.someLibraryMethod());
+    }
+
+    @Test 
+    public void main() {
+        Btree.main(new String[] {});
     }
 }
