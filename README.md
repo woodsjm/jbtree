@@ -1,2 +1,2 @@
 # btree-java
-Pseudo port of Python binarytree lib\
+Pseudo port of Python binarytree lib
