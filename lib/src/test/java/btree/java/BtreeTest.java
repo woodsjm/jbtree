@@ -4,7 +4,6 @@
 package btree.java;
 
 import org.junit.Test;
-import static java.util.Collections.singletonList;
 import static org.junit.Assert.*;
 
 public class BtreeTest {
