@@ -4,8 +4,13 @@
 package btree.java;
 
 public class Btree {
+    Object nodeValue;
     public boolean someLibraryMethod() {
         return true;
+    }
+
+    public void Btree(Integer value) {
+        this.nodeValue = value;
     }
 
     public static void main(String[] args) {
