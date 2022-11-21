@@ -13,6 +13,10 @@ public class Btree {
         this.nodeValue = value;
     }
 
+    public void Btree(String value) {
+        this.nodeValue = value;
+    }
+
     public static void main(String[] args) {
         final String message = "\n"
             + "Btree-java is a port of the (Python) Binarytree library.\n"
