@@ -9,19 +9,19 @@ public class Btree {
         return true;
     }
 
-    public void Btree(Integer value) {
+    public Btree(Integer value) {
         this.nodeValue = value;
     }
 
-    public void Btree(String value) {
+    public Btree(String value) {
         this.nodeValue = value;
     }
 
-    public void Btree(Float value) {
+    public Btree(Float value) {
         this.nodeValue = value;
     }
 
-    public static void main(String[] args) {
+    public static void main(String... args) {
         final String message = "\n"
             + "Btree-java is a port of the (Python) Binarytree library.\n"
             + "It has most of Binarytree's functionality, but lacks support for Graphviz and Jupyter Notebooks.\n"
