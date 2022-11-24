@@ -11,6 +11,9 @@ public class BtreeTest {
         Integer num = Integer.valueOf(76);
         Btree btree = new Btree(num);
         assertEquals(num, btree.nodeValue);
+        String str = String.valueOf("ABC");
+        Btree btree2 = new Btree(str);
+        assertEquals(str, btree2.nodeValue);
     }
 
     @Test 
