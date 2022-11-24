@@ -14,6 +14,9 @@ public class BtreeTest {
         String str = String.valueOf("ABC");
         Btree btree2 = new Btree(str);
         assertEquals(str, btree2.nodeValue);
+        Float flt = Float.valueOf(25.53f);
+        Btree btree3 = new Btree(flt);
+        assertEquals(flt, btree3.nodeValue);
     }
 
     @Test 
