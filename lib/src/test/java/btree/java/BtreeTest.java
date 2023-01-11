@@ -19,6 +19,21 @@ public class BtreeTest {
         assertEquals(flt, btree3.nodeValue);
     }
 
+    @Test public void testtoString() {
+        Integer num = Integer.valueOf(76);
+        Btree btree = new Btree(num);
+        String btreeAsString = "Node(76)";
+        assertEquals(btreeAsString, btree.toString());
+        String str = String.valueOf("ABC");
+        Btree btree2 = new Btree(str);
+        String btree2AsString = "Node(ABC)";
+        assertEquals(btree2AsString, btree2.toString());
+        Float flt = Float.valueOf(25.53f);
+        Btree btree3 = new Btree(flt);
+        String btree3AsString = "Node(25.53)";
+        assertEquals(btree3AsString, btree3.toString());
+    }
+
     @Test 
     public void main() {
         Btree.main(new String[] {});
