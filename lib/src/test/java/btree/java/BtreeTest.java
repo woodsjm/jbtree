@@ -9,29 +9,33 @@ import static org.junit.Assert.*;
 public class BtreeTest {
     @Test public void testConstructor() {
         Integer num = Integer.valueOf(76);
-        Btree btree = new Btree(num);
-        assertEquals(num, btree.nodeValue);
+        Btree.Node intNode = new Btree.Node(num);
+        assertEquals(num, intNode.nodeValue);
+
         String str = String.valueOf("ABC");
-        Btree btree2 = new Btree(str);
-        assertEquals(str, btree2.nodeValue);
+        Btree.Node strNode = new Btree.Node(str);
+        assertEquals(str, strNode.nodeValue);
+
         Float flt = Float.valueOf(25.53f);
-        Btree btree3 = new Btree(flt);
-        assertEquals(flt, btree3.nodeValue);
+        Btree.Node fltNode = new Btree.Node(flt);
+        assertEquals(flt, fltNode.nodeValue);
     }
 
     @Test public void testtoString() {
         Integer num = Integer.valueOf(76);
-        Btree btree = new Btree(num);
-        String btreeAsString = "Node(76)";
-        assertEquals(btreeAsString, btree.toString());
+        Btree.Node intNode = new Btree.Node(num);
+        String intNodeAsString = "Node(76)";
+        assertEquals(intNodeAsString, intNode.toString());
+
         String str = String.valueOf("ABC");
-        Btree btree2 = new Btree(str);
-        String btree2AsString = "Node(ABC)";
-        assertEquals(btree2AsString, btree2.toString());
+        Btree.Node strNode = new Btree.Node(str);
+        String strNodeAsString = "Node(ABC)";
+        assertEquals(strNodeAsString, strNode.toString());
+        
         Float flt = Float.valueOf(25.53f);
-        Btree btree3 = new Btree(flt);
-        String btree3AsString = "Node(25.53)";
-        assertEquals(btree3AsString, btree3.toString());
+        Btree.Node fltNode = new Btree.Node(flt);
+        String fltNodeAsString = "Node(25.53)";
+        assertEquals(fltNodeAsString, fltNode.toString());
     }
 
     @Test 

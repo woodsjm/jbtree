@@ -4,34 +4,39 @@
 package btree.java;
 
 public class Btree {
-    Object nodeValue;
+    
+    public static class Node {
+        Object nodeValue;
 
-    public Btree(Integer value) {
-        this.nodeValue = value;
-    }
-
-    public Btree(String value) {
-        this.nodeValue = value;
-    }
-
-    public Btree(Float value) {
-        this.nodeValue = value;
-    }
-
-    @Override
-    public String toString() {
-        String nodeString = "Node()";
-        
-        if (this.nodeValue instanceof Integer) {
-            nodeString = String.format("Node(%d)", this.nodeValue);
-        } else if (this.nodeValue instanceof String) {
-            nodeString = String.format("Node(%s)", this.nodeValue);
-        } else if (this.nodeValue instanceof Float) {
-            nodeString = String.format("Node(%.2f)", this.nodeValue);
+        public Node(Integer value) {
+            this.nodeValue = value;
         }
 
-        return nodeString;
+        public Node(String value) {
+            this.nodeValue = value;
+        }
+
+        public Node(Float value) {
+            this.nodeValue = value;
+        }
+
+        @Override
+        public String toString() {
+            String nodeString = "Node()";
+            
+            if (this.nodeValue instanceof Integer) {
+                nodeString = String.format("Node(%d)", this.nodeValue);
+            } else if (this.nodeValue instanceof String) {
+                nodeString = String.format("Node(%s)", this.nodeValue);
+            } else if (this.nodeValue instanceof Float) {
+                nodeString = String.format("Node(%.2f)", this.nodeValue);
+            }
+
+            return nodeString;
+        }
     }
+
+    public Btree() {}
 
     public static void main(String... args) {
         final String message = "\n"
