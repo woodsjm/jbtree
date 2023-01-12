@@ -7,7 +7,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class BtreeTest {
-    @Test public void testConstructor() {
+    @Test public void testNodeConstructor() {
         Integer num = Integer.valueOf(76);
         Btree.Node intNode = new Btree.Node(num);
         assertEquals(num, intNode.nodeValue);
@@ -21,7 +21,7 @@ public class BtreeTest {
         assertEquals(flt, fltNode.nodeValue);
     }
 
-    @Test public void testtoString() {
+    @Test public void testNodeToString() {
         Integer num = Integer.valueOf(76);
         Btree.Node intNode = new Btree.Node(num);
         String intNodeAsString = "Node(76)";
