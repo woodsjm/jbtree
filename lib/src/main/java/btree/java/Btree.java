@@ -5,9 +5,6 @@ package btree.java;
 
 public class Btree {
     Object nodeValue;
-    public boolean someLibraryMethod() {
-        return true;
-    }
 
     public Btree(Integer value) {
         this.nodeValue = value;
