@@ -7,6 +7,8 @@ public class Btree {
     
     public static class Node {
         Object val;
+        Node left;
+        Node right;
 
         public Node(Integer value) {
             this.val = value;
