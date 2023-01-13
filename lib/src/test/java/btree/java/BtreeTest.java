@@ -10,15 +10,15 @@ public class BtreeTest {
     @Test public void testNodeConstructor() {
         Integer num = Integer.valueOf(76);
         Btree.Node intNode = new Btree.Node(num);
-        assertEquals(num, intNode.nodeValue);
+        assertEquals(num, intNode.val);
 
         String str = String.valueOf("ABC");
         Btree.Node strNode = new Btree.Node(str);
-        assertEquals(str, strNode.nodeValue);
+        assertEquals(str, strNode.val);
 
         Float flt = Float.valueOf(25.53f);
         Btree.Node fltNode = new Btree.Node(flt);
-        assertEquals(flt, fltNode.nodeValue);
+        assertEquals(flt, fltNode.val);
     }
 
     @Test public void testNodeToString() {

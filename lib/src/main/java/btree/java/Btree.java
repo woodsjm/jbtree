@@ -6,30 +6,30 @@ package btree.java;
 public class Btree {
     
     public static class Node {
-        Object nodeValue;
+        Object val;
 
         public Node(Integer value) {
-            this.nodeValue = value;
+            this.val = value;
         }
 
         public Node(String value) {
-            this.nodeValue = value;
+            this.val = value;
         }
 
         public Node(Float value) {
-            this.nodeValue = value;
+            this.val = value;
         }
 
         @Override
         public String toString() {
             String nodeString = "Node()";
             
-            if (this.nodeValue instanceof Integer) {
-                nodeString = String.format("Node(%d)", this.nodeValue);
-            } else if (this.nodeValue instanceof String) {
-                nodeString = String.format("Node(%s)", this.nodeValue);
-            } else if (this.nodeValue instanceof Float) {
-                nodeString = String.format("Node(%.2f)", this.nodeValue);
+            if (this.val instanceof Integer) {
+                nodeString = String.format("Node(%d)", this.val);
+            } else if (this.val instanceof String) {
+                nodeString = String.format("Node(%s)", this.val);
+            } else if (this.val instanceof Float) {
+                nodeString = String.format("Node(%.2f)", this.val);
             }
 
             return nodeString;
