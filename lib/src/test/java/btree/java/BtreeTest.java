@@ -49,19 +49,50 @@ public class BtreeTest {
         leftChild.right = lastNode;
         assertEquals(lastNode, root.left.right);
         assertEquals(String.valueOf("Node(4)"), root.left.right.toString());
+    }
 
-        // FIX: match remaining tests
-        String str = String.valueOf("ABC");
-        Btree.Node strNode = new Btree.Node(str);
-        assertEquals(str, strNode.val);
-        assertNull(strNode.left);
-        assertNull(strNode.right);
+    @Test public void testNodeInitAndSetAttrWithFloats() {
+        Btree.Node root = new Btree.Node(Float.valueOf(1.50f));
+        assertEquals(null, root.left);
+        assertEquals(null, root.right);
+        assertEquals(Float.valueOf(1.50f), root.val);
+        assertEquals(String.valueOf("Node(1.50)"), root.toString());
 
-        Float flt = Float.valueOf(25.53f);
-        Btree.Node fltNode = new Btree.Node(flt);
-        assertEquals(flt, fltNode.val); 
-        assertNull(fltNode.left);
-        assertNull(fltNode.right);
+        root.val = 2.50f;
+        assertEquals(Float.valueOf(2.50f), root.val);
+        assertEquals(String.valueOf("Node(2.50)"), root.toString());
+
+        // seems unnecessary, but needed for matching tests from python
+        // library that has multiple names for node value property
+        // (e.g. node.val + node.value)
+        root.val = 1.50f;
+        assertEquals(Float.valueOf(1.50f), root.val);
+        assertEquals(String.valueOf("Node(1.50)"), root.toString());
+
+        Btree.Node leftChild = new Btree.Node(Float.valueOf(2.50f));
+        root.left = leftChild;
+        assertEquals(leftChild, root.left);
+        assertEquals(null, root.right);
+        assertEquals(Float.valueOf(1.50f), root.val);
+        assertEquals(null, root.left.left);
+        assertEquals(null, root.left.right);
+        assertEquals(Float.valueOf(2.50f), root.left.val);
+        assertEquals(String.valueOf("Node(2.50)"), leftChild.toString());
+
+        Btree.Node rightChild = new Btree.Node(Float.valueOf(3.50f));
+        root.right = rightChild;
+        assertEquals(leftChild, root.left);
+        assertEquals(rightChild, root.right);
+        assertEquals(Float.valueOf(1.50f), root.val);
+        assertEquals(null, root.right.left);
+        assertEquals(null, root.right.right);
+        assertEquals(Float.valueOf(3.50f), root.right.val);
+        assertEquals(String.valueOf("Node(3.50)"), rightChild.toString());
+
+        Btree.Node lastNode = new Btree.Node(Float.valueOf(4.50f));
+        leftChild.right = lastNode;
+        assertEquals(lastNode, root.left.right);
+        assertEquals(String.valueOf("Node(4.50)"), root.left.right.toString());
     }
 
     @Test public void testEquals() {
