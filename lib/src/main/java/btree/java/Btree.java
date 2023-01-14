@@ -3,6 +3,8 @@
  */
 package btree.java;
 
+import java.util.Stack;
+
 public class Btree {
     
     public static class Node {
@@ -20,6 +22,40 @@ public class Btree {
 
         public Node(Float value) {
             this.val = value;
+        }
+
+        @Override
+        public int hashCode() {
+            return Integer.valueOf(this.val.toString()).intValue();
+        }
+
+        public boolean equals(Node other) {
+            Stack<Node> stack1 = new Stack<>();
+            stack1.push(this);
+            Stack<Node> stack2 = new Stack<>();
+            stack2.push(other);
+
+            while (stack1.size() > 0 || stack2.size() > 0) {
+                Node node1 = stack1.pop();
+                Node node2 = stack2.pop();
+
+                if (node1 == null && node2 == null) {
+                    continue;
+                } else if (node1 == null || node2 == null) {
+                    return false;
+                } else if (!(other instanceof Node)) {
+                    return false;
+                } else if (node1.val != node2.val) {
+                    return false;
+                }
+                    
+                stack1.push(node1.right);
+                stack1.push(node1.left);
+                stack2.push(node2.right);
+                stack2.push(node2.left);
+            }
+
+            return true;
         }
 
         @Override
