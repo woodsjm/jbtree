@@ -5,8 +5,10 @@ package btree.java;
 
 import java.util.Stack;
 
+
+
 public class Btree {
-    
+     
     public static class Node {
         Object val;
         Node left;
@@ -45,8 +47,16 @@ public class Btree {
                     return false;
                 } else if (!(other instanceof Node)) {
                     return false;
-                } else if (node1.val != node2.val) {
-                    return false;
+                } else {
+                    if (node1.val instanceof Float && node2.val instanceof Float) {
+                        String float1 = String.format("%.2f", node1.val);
+                        String float2 = String.format("%.2f", node2.val);
+                        if (Float.compare(Float.valueOf(float1), Float.valueOf(float2)) != 0) {
+                            return false;
+                        }
+                    } else if (node1.val != node2.val) {
+                        return false;
+                    }
                 }
                     
                 stack1.push(node1.right);
