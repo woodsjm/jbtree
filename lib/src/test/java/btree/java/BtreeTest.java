@@ -122,7 +122,7 @@ public class BtreeTest {
         Btree.Node root1 = new Btree.Node(Integer.valueOf(1));
         Btree.Node root2 = new Btree.Node(Integer.valueOf(1));
         assertFalse(root1.equals(null));
-        assertFalse(root2.equals(null));
+        assertFalse(root1.equals(Integer.valueOf(1)));
         assertFalse(root1.equals(new Btree.Node(Integer.valueOf(2))));
         assertTrue(root1.equals(root2));
         assertTrue(root2.equals(root1));
