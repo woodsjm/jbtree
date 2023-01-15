@@ -14,16 +14,9 @@ public class BtreeTest {
         assertEquals(Integer.valueOf(1), root.val);
         assertEquals(String.valueOf("Node(1)"), root.toString());
 
-        root.val = 2;
-        assertEquals(Integer.valueOf(2), root.val);
-        assertEquals(String.valueOf("Node(2)"), root.toString());
-
-        // seems unnecessary, but needed for matching tests from python
-        // library that has multiple names for node value property
-        // (e.g. node.val + node.value)
-        root.val = 1;
-        assertEquals(Integer.valueOf(1), root.val);
-        assertEquals(String.valueOf("Node(1)"), root.toString());
+        //NOTE: Missing matching tests for multinamed node value
+        //attribute node.val + node.value, because current attribute 
+        //implementation lacks multiple names
 
         Btree.Node leftChild = new Btree.Node(Integer.valueOf(2));
         root.left = leftChild;
@@ -58,16 +51,9 @@ public class BtreeTest {
         assertEquals(Float.valueOf(1.50f), root.val);
         assertEquals(String.valueOf("Node(1.50)"), root.toString());
 
-        root.val = 2.50f;
-        assertEquals(Float.valueOf(2.50f), root.val);
-        assertEquals(String.valueOf("Node(2.50)"), root.toString());
-
-        // seems unnecessary, but needed for matching tests from python
-        // library that has multiple names for node value property
-        // (e.g. node.val + node.value)
-        root.val = 1.50f;
-        assertEquals(Float.valueOf(1.50f), root.val);
-        assertEquals(String.valueOf("Node(1.50)"), root.toString());
+        //NOTE: Missing matching tests for multinamed node value
+        //attribute node.val + node.value, because current attribute 
+        //implementation lacks multiple names
 
         Btree.Node leftChild = new Btree.Node(Float.valueOf(2.50f));
         root.left = leftChild;
@@ -102,16 +88,9 @@ public class BtreeTest {
         assertEquals(String.valueOf("A"), root.val);
         assertEquals(String.valueOf("Node(A)"), root.toString());
 
-        root.val = "B";
-        assertEquals(String.valueOf("B"), root.val);
-        assertEquals(String.valueOf("Node(B)"), root.toString());
-
-        // seems unnecessary, but needed for matching tests from python
-        // library that has multiple names for node value property
-        // (e.g. node.val + node.value)
-        root.val = "A";
-        assertEquals(String.valueOf("A"), root.val);
-        assertEquals(String.valueOf("Node(A)"), root.toString());
+        //NOTE: Missing matching tests for multinamed node value
+        //attribute node.val + node.value, because current attribute 
+        //implementation lacks multiple names
 
         Btree.Node leftChild = new Btree.Node(String.valueOf("B"));
         root.left = leftChild;
