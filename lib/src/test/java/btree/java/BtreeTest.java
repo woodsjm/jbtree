@@ -152,6 +152,40 @@ public class BtreeTest {
         assertTrue(root2.equals(root1));
     }
 
+    @Test public void testTreeEqualsWithFloats() {
+        Btree.Node root1 = new Btree.Node(Float.valueOf(1.50f));
+        Btree.Node root2 = new Btree.Node(Float.valueOf(1.50f));
+        assertFalse(root1.equals(null));
+        assertFalse(root1.equals(Float.valueOf(1.50f)));
+        assertFalse(root1.equals(new Btree.Node(Float.valueOf(2.50f))));
+        assertTrue(root1.equals(root2));
+        assertTrue(root2.equals(root1));
+
+        root1.left = new Btree.Node(Float.valueOf(2.50f));
+        assertFalse(root1.equals(root2));
+        assertFalse(root2.equals(root1));
+
+        root2.left = new Btree.Node(Float.valueOf(2.50f));
+        assertTrue(root1.equals(root2));
+        assertTrue(root2.equals(root1));
+
+        root1.right = new Btree.Node(Float.valueOf(3.50f));
+        assertFalse(root1.equals(root2));
+        assertFalse(root2.equals(root1));
+
+        root2.right = new Btree.Node(Float.valueOf(3.50f));
+        assertTrue(root1.equals(root2));
+        assertTrue(root2.equals(root1));
+
+        root1.right.left = new Btree.Node(Float.valueOf(4.50f));
+        assertFalse(root1.equals(root2));
+        assertFalse(root2.equals(root1));
+
+        root2.right.left = new Btree.Node(Float.valueOf(4.50f));
+        assertTrue(root1.equals(root2));
+        assertTrue(root2.equals(root1));
+    }
+
     @Test public void testEquals() {
         String str = String.valueOf("ABC");
         Btree.Node strNode = new Btree.Node(str);
