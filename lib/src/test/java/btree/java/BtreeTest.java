@@ -118,17 +118,41 @@ public class BtreeTest {
         assertEquals(String.valueOf("Node(D)"), root.left.right.toString());
     }
 
+    @Test public void testTreeEqualsWithIntegers() {
+        Btree.Node root1 = new Btree.Node(Integer.valueOf(1));
+        Btree.Node root2 = new Btree.Node(Integer.valueOf(1));
+        assertFalse(root1.equals(null));
+        assertFalse(root2.equals(null));
+        assertFalse(root1.equals(new Btree.Node(Integer.valueOf(2))));
+        assertTrue(root1.equals(root2));
+        assertTrue(root2.equals(root1));
+
+        root1.left = new Btree.Node(Integer.valueOf(2));
+        assertFalse(root1.equals(root2));
+        assertFalse(root2.equals(root1));
+
+        root2.left = new Btree.Node(Integer.valueOf(2));
+        assertTrue(root1.equals(root2));
+        assertTrue(root2.equals(root1));
+
+        root1.right = new Btree.Node(Integer.valueOf(3));
+        assertFalse(root1.equals(root2));
+        assertFalse(root2.equals(root1));
+
+        root2.right = new Btree.Node(Integer.valueOf(3));
+        assertTrue(root1.equals(root2));
+        assertTrue(root2.equals(root1));
+
+        root1.right.left = new Btree.Node(Integer.valueOf(4));
+        assertFalse(root1.equals(root2));
+        assertFalse(root2.equals(root1));
+
+        root2.right.left = new Btree.Node(Integer.valueOf(4));
+        assertTrue(root1.equals(root2));
+        assertTrue(root2.equals(root1));
+    }
+
     @Test public void testEquals() {
-        Integer num = Integer.valueOf(76);
-        Btree.Node intNode = new Btree.Node(num);
-        assertEquals(intNode, intNode);
-        
-        Btree.Node intNodeValCopy = new Btree.Node(Integer.valueOf(76));
-        assertTrue(intNode.equals(intNodeValCopy));
-
-        Btree.Node intNode2 = new Btree.Node(Integer.valueOf(43));
-        assertNotEquals(intNode, intNode2);
-
         String str = String.valueOf("ABC");
         Btree.Node strNode = new Btree.Node(str);
         Float flt = Float.valueOf(25.53f);
