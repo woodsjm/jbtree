@@ -95,6 +95,50 @@ public class BtreeTest {
         assertEquals(String.valueOf("Node(4.50)"), root.left.right.toString());
     }
 
+    @Test public void testNodeInitAndSetAttrWithLetters() {
+        Btree.Node root = new Btree.Node(String.valueOf("A"));
+        assertEquals(null, root.left);
+        assertEquals(null, root.right);
+        assertEquals(String.valueOf("A"), root.val);
+        assertEquals(String.valueOf("Node(A)"), root.toString());
+
+        root.val = "B";
+        assertEquals(String.valueOf("B"), root.val);
+        assertEquals(String.valueOf("Node(B)"), root.toString());
+
+        // seems unnecessary, but needed for matching tests from python
+        // library that has multiple names for node value property
+        // (e.g. node.val + node.value)
+        root.val = "A";
+        assertEquals(String.valueOf("A"), root.val);
+        assertEquals(String.valueOf("Node(A)"), root.toString());
+
+        Btree.Node leftChild = new Btree.Node(String.valueOf("B"));
+        root.left = leftChild;
+        assertEquals(leftChild, root.left); 
+        assertEquals(null, root.right);
+        assertEquals(String.valueOf("A"), root.val);
+        assertEquals(null, root.left.left);
+        assertEquals(null, root.left.right);
+        assertEquals(String.valueOf("B"), root.left.val);
+        assertEquals(String.valueOf("Node(B)"), leftChild.toString());
+
+        Btree.Node rightChild = new Btree.Node(String.valueOf("C"));
+        root.right = rightChild;
+        assertEquals(leftChild, root.left);
+        assertEquals(rightChild, root.right);
+        assertEquals(String.valueOf("A"), root.val);
+        assertEquals(null, root.right.left);
+        assertEquals(null, root.right.right);
+        assertEquals(String.valueOf("C"), root.right.val);
+        assertEquals(String.valueOf("Node(C)"), rightChild.toString());
+
+        Btree.Node lastNode = new Btree.Node(String.valueOf("D"));
+        leftChild.right = lastNode;
+        assertEquals(lastNode, root.left.right);
+        assertEquals(String.valueOf("Node(D)"), root.left.right.toString());
+    }
+
     @Test public void testEquals() {
         Integer num = Integer.valueOf(76);
         Btree.Node intNode = new Btree.Node(num);
