@@ -14,20 +14,26 @@ public class Btree {
         private Node left;
         private Node right;
 
+        // Init
         public Node(Integer value) {
-            this.val = value;
+            this.setVal(value);
         }
 
         public Node(String value) {
-            this.val = value;
+            this.setVal(value);
         }
 
         public Node(Float value) {
-            this.val = value;
+            this.setVal(value);
         }
 
+        // Getters + Setters
         public Object getVal() {
             return this.val;
+        }
+
+        public void setVal(Object value) {
+            this.val = value;
         }
 
         public Node getLeft() {
@@ -48,7 +54,7 @@ public class Btree {
 
         @Override
         public int hashCode() {
-            return Integer.valueOf(this.val.toString()).intValue();
+            return Integer.valueOf(this.getVal().toString()).intValue();
         }
 
         public boolean equals(Node other) {
@@ -68,21 +74,21 @@ public class Btree {
                 } else if (!(other instanceof Node)) {
                     return false;
                 } else {
-                    if (node1.val instanceof Float && node2.val instanceof Float) {
-                        String float1 = String.format("%.2f", node1.val);
-                        String float2 = String.format("%.2f", node2.val);
+                    if (node1.getVal() instanceof Float && node2.getVal() instanceof Float) {
+                        String float1 = String.format("%.2f", node1.getVal());
+                        String float2 = String.format("%.2f", node2.getVal());
                         if (Float.compare(Float.valueOf(float1), Float.valueOf(float2)) != 0) {
                             return false;
                         }
-                    } else if (node1.val != node2.val) {
+                    } else if (node1.getVal() != node2.getVal()) {
                         return false;
                     }
                 }
                     
-                stack1.push(node1.right);
-                stack1.push(node1.left);
-                stack2.push(node2.right);
-                stack2.push(node2.left);
+                stack1.push(node1.getRight());
+                stack1.push(node1.getLeft());
+                stack2.push(node2.getRight());
+                stack2.push(node2.getLeft());
             }
 
             return true;
@@ -93,11 +99,11 @@ public class Btree {
             String nodeString = "Node()";
             
             if (this.val instanceof Integer) {
-                nodeString = String.format("Node(%d)", this.val);
+                nodeString = String.format("Node(%d)", this.getVal());
             } else if (this.val instanceof String) {
-                nodeString = String.format("Node(%s)", this.val);
+                nodeString = String.format("Node(%s)", this.getVal());
             } else if (this.val instanceof Float) {
-                nodeString = String.format("Node(%.2f)", this.val);
+                nodeString = String.format("Node(%.2f)", this.getVal());
             }
 
             return nodeString;
