@@ -3,8 +3,8 @@
  */
 package btree.java;
 
+import java.util.List;
 import java.util.Stack;
-
 
 
 public class Btree {
@@ -16,15 +16,21 @@ public class Btree {
 
         // Init
         public Node(Integer value) {
-            this.setVal(value);
+            this.val = value;
         }
 
         public Node(String value) {
-            this.setVal(value);
+            this.val = value;
         }
 
         public Node(Float value) {
-            this.setVal(value);
+            this.val = value;
+        }
+
+        public Node(List<Object> list) throws BtreeException.NodeValueException {
+            if (list.size() == 0) {
+                throw new BtreeException.NodeValueException("node value must be a float/int/str");
+            }
         }
 
         // Getters + Setters
@@ -32,8 +38,12 @@ public class Btree {
             return this.val;
         }
 
-        public void setVal(Object value) {
-            this.val = value;
+        public void setVal(Object value) throws BtreeException.NodeValueException {
+            if (value instanceof Integer || value instanceof Float || value instanceof String) {
+                this.val = value;
+            } else {
+                throw new BtreeException.NodeValueException("node value must be a float/int/str");
+            }
         }
 
         public Node getLeft() {

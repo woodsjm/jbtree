@@ -3,6 +3,10 @@
  */
 package btree.java;
 
+import java.util.*;
+
+import org.junit.rules.ExpectedException;
+import org.junit.Rule;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -118,6 +122,24 @@ public class BtreeTest {
         assertEquals(String.valueOf("Node(D)"), root.getLeft().getRight().toString());
     }
 
+    // Test Node init and set attribtue error cases
+    // NOTE: these matching exception tests are split out
+    // instead of grouped into a single test as in the 
+    // Python lib
+    @Rule public ExpectedException exceptionRule = ExpectedException.none();
+    @Test public void throwsNodeValueExceptionOnEmptyNode() throws Exception {
+        exceptionRule.expect(BtreeException.NodeValueException.class);
+        exceptionRule.expectMessage("node value must be a float/int/str");
+        Btree.Node root = new Btree.Node(Collections.emptyList());
+    }
+
+    @Test public void throwsNodeValueExceptionOnEmptyVal() throws Exception {
+        exceptionRule.expect(BtreeException.NodeValueException.class);
+        exceptionRule.expectMessage("node value must be a float/int/str");
+        Btree.Node root = new Btree.Node(Integer.valueOf(1));
+        root.setVal(Collections.emptyList());
+    }
+    
     @Test public void testTreeEqualsWithIntegers() {
         Btree.Node root1 = new Btree.Node(Integer.valueOf(1));
         Btree.Node root2 = new Btree.Node(Integer.valueOf(1));
