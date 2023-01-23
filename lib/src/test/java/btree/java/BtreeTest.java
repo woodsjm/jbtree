@@ -129,13 +129,13 @@ public class BtreeTest {
     @Rule public ExpectedException exceptionRule = ExpectedException.none();
     @Test public void throwsNodeValueExceptionOnEmptyNode() throws Exception {
         exceptionRule.expect(BtreeException.NodeValueException.class);
-        exceptionRule.expectMessage("node value must be a float/int/str");
+        exceptionRule.expectMessage("node value must be an Integer, a Float, or a String");
         Btree.Node root = new Btree.Node(Collections.emptyList());
     }
 
     @Test public void throwsNodeValueExceptionOnEmptyVal() throws Exception {
         exceptionRule.expect(BtreeException.NodeValueException.class);
-        exceptionRule.expectMessage("node value must be a float/int/str");
+        exceptionRule.expectMessage("node value must be an Integer, a Float, or a String");
         Btree.Node root = new Btree.Node(Integer.valueOf(1));
         root.setVal(Collections.emptyList());
     }
