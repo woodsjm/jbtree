@@ -10,9 +10,9 @@ import java.util.Stack;
 public class Btree {
      
     public static class Node {
-        Object val;
-        Node left;
-        Node right;
+        private Object val;
+        private Node left;
+        private Node right;
 
         public Node(Integer value) {
             this.val = value;
@@ -24,6 +24,26 @@ public class Btree {
 
         public Node(Float value) {
             this.val = value;
+        }
+
+        public Object getVal() {
+            return this.val;
+        }
+
+        public Node getLeft() {
+            return this.left;
+        }
+
+        public Node getRight() {
+            return this.right;
+        }
+
+        public void setLeft(Node node) {
+            this.left = node;
+        }
+
+        public void setRight(Node node) {
+            this.right = node;
         }
 
         @Override
