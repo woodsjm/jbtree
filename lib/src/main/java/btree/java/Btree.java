@@ -152,18 +152,18 @@ public class Btree {
         return null;
     }
 
-    private static <T> Node build(ArrayList<T> values) throws BtreeException.NodeNotFoundException {
+    private static <T> Node build(ArrayList<T> values) {
         ArrayList<Node> nodes = new ArrayList<>();
         for (T value: values) {
             if (value == null) {
                 nodes.add(null);
                 continue;
-            }
+            } 
 
             if (value instanceof String) {
-                nodes.add(new Node(String.valueOf(value)));
+                nodes.add(new Node((String) value));
             } else if (value instanceof Integer) {
-                nodes.add(new Node( (Integer) value ));
+                nodes.add(new Node((Integer) value));
             }
         }
 
@@ -172,16 +172,19 @@ public class Btree {
                 int parentIdx = Math.floorDiv(idx - 1, 2);
                 Node parent = nodes.get(parentIdx);
 
-                if (parent == null) {
-                    throw new BtreeException.NodeNotFoundException("parent node missing at index " + parentIdx);
-                }
-
+                try {
+                    if (parent == null) {
+                        throw new BtreeException.NodeNotFoundException("parent node missing at index " + parentIdx);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } 
+                
                 if (idx % 2 == 0) {
                     parent.setRight(nodes.get(idx));
                 } else {
                     parent.setLeft(nodes.get(idx));
                 }
-
             }
         }
 
@@ -193,19 +196,19 @@ public class Btree {
 		int[] nodeValues = IntStream.iterate(0, n -> n + 1).limit(maxNodeCount).toArray();
 
 		Random rand = new Random();
-		for (int i = 0; i < nodeValues.length; i++) {
+		for (int idx = 0; idx < nodeValues.length; idx++) {
 			int idxToSwap = rand.nextInt(nodeValues.length);
 			int temp = nodeValues[idxToSwap];
-			nodeValues[idxToSwap] = nodeValues[i];
-			nodeValues[i] = temp;
+			nodeValues[idxToSwap] = nodeValues[idx];
+			nodeValues[idx] = temp;
 		}
 		
 	    return nodeValues;
 	}
 
-    public static String numberToLetters(int number) {
-        BigDecimal bigNumber = new BigDecimal(number);
-        BigDecimal[] divMod = bigNumber.divideAndRemainder(new BigDecimal(26));
+    private static String numberToLetters(int number) {
+        BigDecimal bigNum = new BigDecimal(number);
+        BigDecimal[] divMod = bigNum.divideAndRemainder(new BigDecimal(26));
 
         int quotient = divMod[0].intValue();
         int remainder = divMod[1].intValue();
