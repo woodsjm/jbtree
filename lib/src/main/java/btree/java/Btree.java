@@ -3,7 +3,11 @@
  */
 package btree.java;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
+import java.util.Random;
 import java.util.Stack;
 
 
@@ -29,7 +33,7 @@ public class Btree {
 
         public Node(List<Object> list) throws BtreeException.NodeValueException {
             if (list.size() == 0) {
-                throw new BtreeException.NodeValueException("node value must be a float/int/str");
+                throw new BtreeException.NodeValueException("node value must be an Integer, a Float, or a String");
             }
         }
 
@@ -42,7 +46,7 @@ public class Btree {
             if (value instanceof Integer || value instanceof Float || value instanceof String) {
                 this.val = value;
             } else {
-                throw new BtreeException.NodeValueException("node value must be a float/int/str");
+                throw new BtreeException.NodeValueException("node value must be an Integer, a Float, or a String");
             }
         }
 
@@ -117,6 +121,106 @@ public class Btree {
             }
 
             return nodeString;
+        }
+    }
+
+    public static Node tree() {
+        return tree(3, false, false);
+    }
+
+    public static Node tree(int height, boolean isPerfect, boolean letters) {
+        validateTreeHeight(height);
+        int[] numbers = generateRandomNumbers(height);
+
+        ArrayList<Object> values = new ArrayList<>();
+        for (int num: numbers) {
+            if (letters) {
+                values.add((String) numberToLetters(num));
+            } else {
+                values.add((Integer) num);
+            }
+        }
+
+        if (isPerfect) {
+            try {
+                return build(values);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } 
+        }
+
+        return null;
+    }
+
+    private static <T> Node build(ArrayList<T> values) throws BtreeException.NodeNotFoundException {
+        ArrayList<Node> nodes = new ArrayList<>();
+        for (T value: values) {
+            if (value == null) {
+                nodes.add(null);
+                continue;
+            }
+
+            if (value instanceof String) {
+                nodes.add(new Node(String.valueOf(value)));
+            } else if (value instanceof Integer) {
+                nodes.add(new Node( (Integer) value ));
+            }
+        }
+
+        for (int idx = 1; idx < nodes.size(); idx++) {
+            if (!( nodes.get(idx) == null) ) {
+                int parentIdx = Math.floorDiv(idx - 1, 2);
+                Node parent = nodes.get(parentIdx);
+
+                if (parent == null) {
+                    throw new BtreeException.NodeNotFoundException("parent node missing at index " + parentIdx);
+                }
+
+                if (idx % 2 == 0) {
+                    parent.setRight(nodes.get(idx));
+                } else {
+                    parent.setLeft(nodes.get(idx));
+                }
+
+            }
+        }
+
+        return nodes.isEmpty() ? null : nodes.get(0);
+    }
+
+    private static int[] generateRandomNumbers(int height) {
+		int maxNodeCount = (1 << (height + 1)) - 1;
+		int[] nodeValues = IntStream.iterate(0, n -> n + 1).limit(maxNodeCount).toArray();
+
+		Random rand = new Random();
+		for (int i = 0; i < nodeValues.length; i++) {
+			int idxToSwap = rand.nextInt(nodeValues.length);
+			int temp = nodeValues[idxToSwap];
+			nodeValues[idxToSwap] = nodeValues[i];
+			nodeValues[i] = temp;
+		}
+		
+	    return nodeValues;
+	}
+
+    public static String numberToLetters(int number) {
+        BigDecimal bigNumber = new BigDecimal(number);
+        BigDecimal[] divMod = bigNumber.divideAndRemainder(new BigDecimal(26));
+
+        int quotient = divMod[0].intValue();
+        int remainder = divMod[1].intValue();
+
+        String prefix = new String(new char[quotient]).replace("\0", "Z");
+        return prefix + Character.toString(65 + remainder);
+    }
+
+    private static void validateTreeHeight(int height)  {
+        try {
+            if (height < 0 || height > 9) {
+                throw new BtreeException.TreeHeightException("height must be an int between 0 - 9");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

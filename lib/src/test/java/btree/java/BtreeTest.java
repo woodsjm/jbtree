@@ -242,6 +242,18 @@ public class BtreeTest {
         assertTrue(root2.equals(root1));
     }
 
+    @Test public void testTreeCloneWithNumbers() {
+        for (int dummy = 0; dummy < 20; dummy++) {
+            int height = 3;
+            boolean isPerfect = true;
+            boolean letters = false;
+
+            Btree btree = new Btree();
+            Btree.Node root = Btree.tree(height, isPerfect, letters);
+            assertNotNull(root);
+        }
+    }
+
     @Test public void testNodeToString() {
         Integer num = Integer.valueOf(76);
         Btree.Node intNode = new Btree.Node(num);
