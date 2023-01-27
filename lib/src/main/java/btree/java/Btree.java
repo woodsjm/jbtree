@@ -66,6 +66,58 @@ public class Btree {
             this.right = node;
         }
 
+        public Node deepCopy() {
+            Node clone;
+            if (this.getVal() instanceof Integer) {
+                clone = new Node((Integer) this.getVal());
+            } else if (this.getVal() instanceof String) {
+                clone = new Node((String) this.getVal());
+            } else if (this.getVal() instanceof Float) {
+                clone = new Node((Float) this.getVal());
+            } else {
+                return null;
+            }
+
+            Stack<Node> stack1 = new Stack<>();
+            stack1.push(this);
+            Stack<Node> stack2 = new Stack<>();
+            stack2.push(clone);
+            
+
+            while (stack1.size() > 0 || stack2.size() > 0) {
+                Node node1 = stack1.pop();
+                Node node2 = stack2.pop();
+
+                if (node1.getLeft() != null) {
+                    if (node1.getLeft().getVal() instanceof Integer) {
+                        node2.setLeft(new Node((Integer) node1.getLeft().getVal()));
+                    } else if (node1.getLeft().getVal() instanceof String) {
+                        node2.setLeft(new Node((String) node1.getLeft().getVal()));
+                    } else if (node1.getVal() instanceof Float) {
+                        node2.setLeft(new Node((Float) node1.getLeft().getVal()));
+                    }
+
+                    stack1.push(node1.getLeft());
+                    stack2.push(node2.getLeft());
+                }
+
+                if (node1.getRight() != null) {
+                    if (node1.getRight().getVal() instanceof Integer) {
+                        node2.setRight(new Node((Integer) node1.getRight().getVal()));
+                    } else if (node1.getRight().getVal() instanceof String) {
+                        node2.setRight(new Node((String) node1.getRight().getVal()));
+                    } else if (node1.getVal() instanceof Float) {
+                        node2.setRight(new Node((Float) node1.getRight().getVal()));
+                    }
+
+                    stack1.push(node1.getRight());
+                    stack2.push(node2.getRight());
+                }
+            }
+
+            return clone;
+        }
+
         @Override
         public int hashCode() {
             return Integer.valueOf(this.getVal().toString()).intValue();

@@ -251,6 +251,8 @@ public class BtreeTest {
             Btree btree = new Btree();
             Btree.Node root = Btree.tree(height, isPerfect, letters);
             assertNotNull(root);
+            Btree.Node clone = root.deepCopy();
+            assertTrue(root.equals(clone));
         }
     }
 
