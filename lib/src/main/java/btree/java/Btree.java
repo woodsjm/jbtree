@@ -18,6 +18,8 @@ public class Btree {
         private Node left;
         private Node right;
 
+        public final ArrayList values = this.values();
+
         // Init
         public Node(Integer value) {
             this.val = value;
@@ -173,6 +175,42 @@ public class Btree {
             }
 
             return nodeString;
+        }
+
+        private ArrayList values() {
+            ArrayList<Node> currentNodes = new ArrayList<>();
+            currentNodes.add(this);
+            ArrayList<Object> nodeValues = new ArrayList<>();
+
+            boolean areNodesLeft = true;
+            while (areNodesLeft) {
+                areNodesLeft = false;
+                ArrayList<Node> nextNodes = new ArrayList<>();
+
+                for (Node node: currentNodes) {
+                    if (node == null) {
+                        nodeValues.add(null);
+                        nextNodes.add(null);
+                        nextNodes.add(null);
+                    } else {
+                        if (node.getLeft() != null || node.getRight() != null) {
+                            areNodesLeft = true;
+                        }
+
+                        nodeValues.add(node.getVal());
+                        nextNodes.add(node.getLeft());
+                        nextNodes.add(node.getRight());
+                    }
+                }
+
+                currentNodes = nextNodes;
+            }
+
+            while (!nodeValues.isEmpty() && nodeValues.get(nodeValues.size() - 1) == null) {
+                nodeValues.remove(nodeValues.size() - 1);
+            }
+
+            return nodeValues;
         }
     }
 

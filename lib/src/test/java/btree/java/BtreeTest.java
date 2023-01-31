@@ -252,7 +252,9 @@ public class BtreeTest {
             Btree.Node root = Btree.tree(height, isPerfect, letters);
             assertNotNull(root);
             Btree.Node clone = root.deepCopy();
+            assertEquals(clone.values, root.values);
             assertTrue(root.equals(clone));
+            assertTrue(clone.equals(root));
         }
     }
 
