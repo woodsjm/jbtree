@@ -6,6 +6,7 @@ package btree.java;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.IntStream;
 import java.util.Random;
@@ -274,9 +275,6 @@ public class Btree {
                         maxNodeValue = Float.compare(mxv, v) < 0 ? val : maxNodeValue;
                     }
                     
-
-
-
                     // Node is a leaf
                     if (node.getLeft() == null && node.getRight() == null) {
                         if (minLeafDepth == 0) {
@@ -285,7 +283,6 @@ public class Btree {
 
                         leafCount++;
                     }
-
 
                     if (node.getLeft() != null) {
                         // FIX: Check for mismatched NodeValue types (e.g. order comparision of letters and numbers)
@@ -398,8 +395,10 @@ public class Btree {
     }
 
     public static Node tree(int height, boolean isPerfect, boolean letters) {
+        Random rand = new Random();
+        
         validateTreeHeight(height);
-        int[] numbers = generateRandomNumbers(height);
+        int[] numbers = generateRandomNumbers(height, rand);
 
         ArrayList<Object> values = new ArrayList<>();
         for (int num: numbers) {
@@ -418,7 +417,61 @@ public class Btree {
             } 
         }
 
-        return null;
+        int leafCount = generateRandomLeafCount(height, rand);
+        Node root;
+        if (values.get(0) instanceof String) {
+            root = new Node((String) values.get(0));
+        } else if (values.get(0) instanceof Integer) {
+            root = new Node((Integer) values.get(0));
+        } else {
+            return null;
+        }
+        HashSet<Node> leaves = new HashSet<>();
+
+        for (Object value: values) {
+            Node node = root;
+            int depth = 0;
+            boolean inserted = false;
+
+            while (depth < height && !inserted) {
+                String direction = String.valueOf(rand.nextBoolean() ? "left" : "right");
+                Node child = direction == "left" ? node.getLeft() : node.getRight();
+                if (child == null) {
+
+                    if (value instanceof String) {
+                        String strVal = String.valueOf((String) value);
+                        if (direction == "left") {
+                            root.setLeft(new Node(strVal));
+                        } else if (direction == "right") {
+                            root.setRight(new Node(strVal));
+                        }
+                        
+                    } else if (value instanceof Integer) {
+                        Integer intVal = Integer.valueOf((Integer) value);
+                        if (direction == "left") {
+                            root.setLeft(new Node(intVal));
+                        } else if (direction == "right") {
+                            root.setRight(new Node(intVal));
+                        }
+                    }
+
+                    inserted = true;
+                }
+
+                node = child;
+                depth++;
+            }
+
+            if (inserted && depth == height) {
+                leaves.add(node);
+            }
+
+            if (leaves.size() == leafCount) {
+                break;
+            }
+        }
+
+        return root;
     }
 
     private static <T> Node build(ArrayList<T> values) {
@@ -460,11 +513,22 @@ public class Btree {
         return nodes.isEmpty() ? null : nodes.get(0);
     }
 
-    private static int[] generateRandomNumbers(int height) {
+    private static int generateRandomLeafCount(int height, Random rand) {
+        int maxLeafCount = 1 << height;
+        int halfLeafCount = Math.floorDiv(maxLeafCount, 2);
+
+        // Random rand = new Random();
+        int roll1 = rand.nextInt(halfLeafCount);
+        int roll2 = rand.nextInt(maxLeafCount - halfLeafCount);
+
+        return roll1 + roll2 > 0 ? roll1 + roll2 : halfLeafCount;
+    }
+
+    private static int[] generateRandomNumbers(int height, Random rand) {
 		int maxNodeCount = (1 << (height + 1)) - 1;
 		int[] nodeValues = IntStream.iterate(0, n -> n + 1).limit(maxNodeCount).toArray();
 
-		Random rand = new Random();
+		// Random rand = new Random();
 		for (int idx = 0; idx < nodeValues.length; idx++) {
 			int idxToSwap = rand.nextInt(nodeValues.length);
 			int temp = nodeValues[idxToSwap];
