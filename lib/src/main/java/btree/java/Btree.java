@@ -5,6 +5,7 @@ package btree.java;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.IntStream;
 import java.util.Random;
@@ -12,13 +13,84 @@ import java.util.Stack;
 
 
 public class Btree {
+
+    private static class NodeProperties {
+        int height;
+        int size;
+        boolean isMaxHeap;
+        boolean isMinHeap;
+        boolean isPerfect;
+        boolean isStrict;
+        boolean isComplete;
+        int leafCount;
+        Object minNodeValue;
+        Object maxNodeValue;
+        int minLeafDepth;
+        int maxLeafDepth;
+    
+        public NodeProperties() { }
+    
+        public NodeProperties(
+            int height, 
+            int size, 
+            boolean isMaxHeap, 
+            boolean isMinHeap, 
+            boolean isPerfect, 
+            boolean isStrict, 
+            boolean isComplete,
+            int leafCount,
+            Object minNodeValue,
+            Object maxNodeValue,
+            int minLeafDepth,
+            int maxLeafDepth) {
+                this.height = height;
+                this.size = size;
+                this.isMaxHeap = isMaxHeap;
+                this.isMinHeap = isMinHeap;
+                this.isPerfect = isPerfect;
+                this.isStrict = isStrict;
+                this.isComplete = isComplete;
+                this.leafCount = leafCount;
+                
+                if (minNodeValue instanceof Integer || minNodeValue instanceof Float || minNodeValue instanceof String) {
+                    this.minNodeValue = minNodeValue;
+                }
+                
+                if (maxNodeValue instanceof Integer || maxNodeValue instanceof Float || maxNodeValue instanceof String) {
+                    this.maxNodeValue = maxNodeValue;
+                }
+                
+                this.minLeafDepth = minLeafDepth;
+                this.maxLeafDepth = maxLeafDepth;
+        }
+
+        private HashMap<String, Object> toHashMap() {
+            HashMap<String, Object> propsHashMap = new HashMap<>();
+
+            propsHashMap.put("height", this.height);
+            propsHashMap.put("size", this.size);
+            propsHashMap.put("isMaxHeap", this.isMaxHeap);
+            propsHashMap.put("isMinHeap", this.isMinHeap);
+            propsHashMap.put("isPerfect", this.isPerfect);
+            propsHashMap.put("isStrict", this.isStrict);
+            propsHashMap.put("isComplete", this.isComplete);
+            propsHashMap.put("leafCount", this.leafCount);
+            propsHashMap.put("minNodeValue", this.minNodeValue);
+            propsHashMap.put("maxNodeValue", this.maxNodeValue);
+            propsHashMap.put("minLeafDepth", this.minLeafDepth);
+            propsHashMap.put("maxLeafDepth", this.maxLeafDepth);
+
+            return propsHashMap;
+        }
+    }
      
     public static class Node {
         private Object val;
         private Node left;
         private Node right;
 
-        public final ArrayList values = this.values();
+        public ArrayList values = this.values();
+        public HashMap<String, Object> properties = this.properties();
 
         // Init
         public Node(Integer value) {
@@ -161,6 +233,113 @@ public class Btree {
 
             return true;
         }
+
+        private HashMap<String, Object> properties() {
+            boolean isDescending = true;
+            boolean isAscending = true;
+            Object minNodeValue = this.getVal();
+            Object maxNodeValue = this.getVal();
+            int size = 0;
+            int leafCount = 0;
+            int minLeafDepth = 0;
+            int maxLeafDepth = -1;
+            boolean isStrict = true;
+            boolean isComplete = true;
+            ArrayList<Node> currentNodes = new ArrayList<>();
+            currentNodes.add(this);
+            boolean nonFullNodeSeen = false;
+
+            while (currentNodes.size() > 0) {
+                maxLeafDepth++;
+                ArrayList<Node> nextNodes = new ArrayList<>();
+
+                for (Node node: currentNodes) {
+                    size++;
+                    Object val = node.getVal();
+                    // NOTE: Will be part of refactor of Node.val from Object to NodeValue
+                    if (val instanceof String && minNodeValue instanceof String && maxNodeValue instanceof String) {
+                        String mnv = String.valueOf(minNodeValue);
+                        String mxv = String.valueOf(maxNodeValue);
+                        String v = String.valueOf(val);
+                        minNodeValue = mnv.compareTo(v) > 0 ? val : minNodeValue;
+                        maxNodeValue = mxv.compareTo(v) < 0 ? val : maxNodeValue;
+                    } else if (val instanceof Integer && minNodeValue instanceof Integer && maxNodeValue instanceof Integer) {
+                        minNodeValue = Integer.valueOf((int) minNodeValue) > Integer.valueOf((int) val) ? val : minNodeValue;
+                        maxNodeValue = Integer.valueOf((int) maxNodeValue) < Integer.valueOf((int) val) ? val : maxNodeValue;
+                    } else if (val instanceof Float && minNodeValue instanceof Float && maxNodeValue instanceof Float) {
+                        Float mnv = Float.valueOf(String.format("%.2f", minNodeValue));
+                        Float mxv = Float.valueOf(String.format("%.2f", maxNodeValue));
+                        Float v = Float.valueOf(String.format("%.2f", val));
+                        minNodeValue = Float.compare(mnv, v) > 0 ? val : minNodeValue;
+                        maxNodeValue = Float.compare(mxv, v) < 0 ? val : maxNodeValue;
+                    }
+                    
+
+
+
+                    // Node is a leaf
+                    if (node.getLeft() == null && node.getRight() == null) {
+                        if (minLeafDepth == 0) {
+                            minLeafDepth = maxLeafDepth;
+                        }
+
+                        leafCount++;
+                    }
+
+
+                    if (node.getLeft() != null) {
+                        // FIX: Check for mismatched NodeValue types (e.g. order comparision of letters and numbers)
+                        if (String.valueOf(node.getLeft().getVal()).compareTo((String) val) > 0) {
+                            isDescending = false;
+                        } else if (String.valueOf(node.getLeft().getVal()).compareTo((String) val) < 0) {
+                            isAscending = false;
+                        }
+
+                        nextNodes.add(node.getLeft());
+                        isComplete = !nonFullNodeSeen;
+                    } else {
+                        nonFullNodeSeen = true;
+                    }
+
+                    if (node.getRight() != null) {
+                        // FIX: Check for mismatched NodeValue types (e.g. order comparision of letters and numbers)
+                        if (String.valueOf(node.getRight().getVal()).compareTo((String) val) > 0) {
+                            isDescending = false;
+                        } else if (String.valueOf(node.getRight().getVal()).compareTo((String) val) < 0) {
+                            isAscending = false;
+                        }
+
+                        nextNodes.add(node.getRight());
+                        isComplete = !nonFullNodeSeen;
+                    } else {
+                        nonFullNodeSeen = true;
+                    }
+
+                    // If we see a node with only one child, it is not strict
+                    if ((node.getLeft() == null) == (node.getRight() == null)) {
+                        isStrict = false;
+                    }
+                }
+
+                currentNodes = nextNodes;
+            }
+
+            // FIX: Add properties for checks of isBalanced, isBST, and isSymmetric
+            return new NodeProperties(
+                maxLeafDepth, // height
+                size,                             
+                isComplete && isDescending, // isMaxHeap
+                isComplete && isAscending,  // isMinHeap
+                leafCount == (1 << maxLeafDepth), //isPefect
+                isStrict,
+                isComplete, 
+                leafCount, 
+                minNodeValue,
+                maxNodeValue,
+                minLeafDepth,
+                maxLeafDepth).toHashMap();
+        }
+
 
         @Override
         public String toString() {

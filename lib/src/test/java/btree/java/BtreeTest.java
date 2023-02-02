@@ -255,6 +255,7 @@ public class BtreeTest {
             assertEquals(clone.values, root.values);
             assertTrue(root.equals(clone));
             assertTrue(clone.equals(root));
+            assertEquals(clone.properties, root.properties);
         }
     }
 
