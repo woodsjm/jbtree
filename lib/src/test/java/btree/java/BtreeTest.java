@@ -244,12 +244,30 @@ public class BtreeTest {
 
     @Test public void testTreeCloneWithNumbers() {
         Random rand = new Random();
-        Btree btree = new Btree();
         for (int dummy = 0; dummy < 20; dummy++) {
             int height = rand.nextInt(10);
             boolean isPerfect = rand.nextBoolean();
             boolean letters = false;
 
+            Btree btree = new Btree();
+            Btree.Node root = Btree.tree(height, isPerfect, letters);
+            assertNotNull(root);
+            Btree.Node clone = root.deepCopy();
+            assertEquals(clone.values, root.values);
+            assertTrue(root.equals(clone));
+            assertTrue(clone.equals(root));
+            assertEquals(clone.properties, root.properties);
+        }
+    }
+
+    @Test public void testTreeCloneWithLetters() {
+        Random rand = new Random();
+        for (int dummy = 0; dummy < 20; dummy++) {
+            int height = rand.nextInt(10);
+            boolean isPerfect = rand.nextBoolean();
+            boolean letters = true;
+
+            Btree btree = new Btree();
             Btree.Node root = Btree.tree(height, isPerfect, letters);
             assertNotNull(root);
             Btree.Node clone = root.deepCopy();
