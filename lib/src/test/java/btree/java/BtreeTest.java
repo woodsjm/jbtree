@@ -3,7 +3,8 @@
  */
 package btree.java;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.rules.ExpectedException;
 import org.junit.Rule;
@@ -243,10 +244,9 @@ public class BtreeTest {
     }
 
     @Test public void testTreeCloneWithNumbers() {
-        Random rand = new Random();
         for (int dummy = 0; dummy < 20; dummy++) {
-            int height = rand.nextInt(10);
-            boolean isPerfect = rand.nextBoolean();
+            int height = ThreadLocalRandom.current().nextInt(10);
+            boolean isPerfect = ThreadLocalRandom.current().nextBoolean();
             boolean letters = false;
 
             Btree btree = new Btree();
@@ -261,10 +261,9 @@ public class BtreeTest {
     }
 
     @Test public void testTreeCloneWithLetters() {
-        Random rand = new Random();
         for (int dummy = 0; dummy < 20; dummy++) {
-            int height = rand.nextInt(10);
-            boolean isPerfect = rand.nextBoolean();
+            int height = ThreadLocalRandom.current().nextInt(10);
+            boolean isPerfect = ThreadLocalRandom.current().nextBoolean();
             boolean letters = true;
 
             Btree btree = new Btree();
