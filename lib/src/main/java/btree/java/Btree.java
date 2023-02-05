@@ -5,11 +5,11 @@ package btree.java;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.IntStream;
-import java.util.Random;
 import java.util.Stack;
 
 
@@ -395,10 +395,8 @@ public class Btree {
     }
 
     public static Node tree(int height, boolean isPerfect, boolean letters) {
-        Random rand = new Random();
-        
         validateTreeHeight(height);
-        int[] numbers = generateRandomNumbers(height, rand);
+        int[] numbers = generateRandomNumbers(height);
 
         ArrayList<Object> values = new ArrayList<>();
         for (int num: numbers) {
@@ -417,7 +415,7 @@ public class Btree {
             } 
         }
 
-        int leafCount = generateRandomLeafCount(height, rand);
+        int leafCount = generateRandomLeafCount(height);
         Node root;
         if (values.get(0) instanceof String) {
             root = new Node((String) values.get(0));
@@ -434,7 +432,7 @@ public class Btree {
             boolean inserted = false;
 
             while (depth < height && !inserted) {
-                String direction = String.valueOf(rand.nextBoolean() ? "left" : "right");
+                String direction = String.valueOf(ThreadLocalRandom.current().nextBoolean() ? "left" : "right");
                 Node child = direction == "left" ? node.getLeft() : node.getRight();
                 if (child == null) {
 
@@ -513,24 +511,22 @@ public class Btree {
         return nodes.isEmpty() ? null : nodes.get(0);
     }
 
-    private static int generateRandomLeafCount(int height, Random rand) {
+    private static int generateRandomLeafCount(int height) {
         int maxLeafCount = 1 << height;
         int halfLeafCount = Math.floorDiv(maxLeafCount, 2);
 
-        // Random rand = new Random();
-        int roll1 = rand.nextInt(halfLeafCount);
-        int roll2 = rand.nextInt(maxLeafCount - halfLeafCount);
+        int roll1 = ThreadLocalRandom.current().nextInt(halfLeafCount == 0 ? 1 : halfLeafCount);
+        int roll2 = ThreadLocalRandom.current().nextInt(maxLeafCount - halfLeafCount);
 
         return roll1 + roll2 > 0 ? roll1 + roll2 : halfLeafCount;
     }
 
-    private static int[] generateRandomNumbers(int height, Random rand) {
+    private static int[] generateRandomNumbers(int height) {
 		int maxNodeCount = (1 << (height + 1)) - 1;
 		int[] nodeValues = IntStream.iterate(0, n -> n + 1).limit(maxNodeCount).toArray();
 
-		// Random rand = new Random();
 		for (int idx = 0; idx < nodeValues.length; idx++) {
-			int idxToSwap = rand.nextInt(nodeValues.length);
+			int idxToSwap = ThreadLocalRandom.current().nextInt(nodeValues.length);
 			int temp = nodeValues[idxToSwap];
 			nodeValues[idxToSwap] = nodeValues[idx];
 			nodeValues[idx] = temp;
