@@ -84,7 +84,7 @@ public class Btree {
             return propsHashMap;
         }
     }
-     
+
     public static class Node {
         private Object val;
         private Node left;
@@ -198,11 +198,18 @@ public class Btree {
             return Integer.valueOf(this.getVal().toString()).intValue();
         }
 
-        public boolean equals(Node other) {
+        @Override
+        public boolean equals(Object other) {
+            if ( !(other instanceof Node) ) {
+                return false;
+            } else if (other == this) {
+                return true;
+            }
+    
             Stack<Node> stack1 = new Stack<>();
             stack1.push(this);
             Stack<Node> stack2 = new Stack<>();
-            stack2.push(other);
+            stack2.push((Node) other);
 
             while (stack1.size() > 0 || stack2.size() > 0) {
                 Node node1 = stack1.pop();
