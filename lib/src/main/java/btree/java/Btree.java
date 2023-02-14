@@ -3,6 +3,7 @@
  */
 package btree.java;
 
+import java.lang.Comparable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
@@ -85,8 +86,8 @@ public class Btree {
         }
     }
 
-    public static class Node {
-        private Object val;
+    public static class Node<T extends Comparable<T>> {
+        private T val;
         private Node left;
         private Node right;
 
@@ -94,35 +95,39 @@ public class Btree {
         public HashMap<String, Object> properties = this.properties();
 
         // Init
-        public Node(Integer value) {
-            this.val = value;
+        public Node(T value) {
+            try {
+                if (value instanceof Integer || value instanceof Float || value instanceof String) {
+                    this.val = value;
+                } else {
+                    throw new BtreeException.NodeValueException("node value must be an Integer, a Float, or a String");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } 
         }
 
-        public Node(String value) {
-            this.val = value;
-        }
-
-        public Node(Float value) {
-            this.val = value;
-        }
-
-        public Node(List<Object> list) throws BtreeException.NodeValueException {
+        public Node(List list) throws BtreeException.NodeValueException {
             if (list.size() == 0) {
                 throw new BtreeException.NodeValueException("node value must be an Integer, a Float, or a String");
             }
         }
 
         // Getters + Setters
-        public Object getVal() {
+        public T getVal() {
             return this.val;
         }
 
-        public void setVal(Object value) throws BtreeException.NodeValueException {
+        public void setVal(T value) throws BtreeException.NodeValueException {
             if (value instanceof Integer || value instanceof Float || value instanceof String) {
                 this.val = value;
             } else {
                 throw new BtreeException.NodeValueException("node value must be an Integer, a Float, or a String");
             }
+        }
+
+        public void setVal(List<T> list) throws BtreeException.NodeValueException {
+            throw new BtreeException.NodeValueException("node value must be an Integer, a Float, or a String");
         }
 
         public Node getLeft() {
@@ -142,49 +147,25 @@ public class Btree {
         }
 
         public Node deepCopy() {
-            Node clone;
-            if (this.getVal() instanceof Integer) {
-                clone = new Node((Integer) this.getVal());
-            } else if (this.getVal() instanceof String) {
-                clone = new Node((String) this.getVal());
-            } else if (this.getVal() instanceof Float) {
-                clone = new Node((Float) this.getVal());
-            } else {
-                return null;
-            }
+            Node clone = new Node(this.getVal());
 
             Stack<Node> stack1 = new Stack<>();
             stack1.push(this);
             Stack<Node> stack2 = new Stack<>();
             stack2.push(clone);
             
-
             while (stack1.size() > 0 || stack2.size() > 0) {
                 Node node1 = stack1.pop();
                 Node node2 = stack2.pop();
 
                 if (node1.getLeft() != null) {
-                    if (node1.getLeft().getVal() instanceof Integer) {
-                        node2.setLeft(new Node((Integer) node1.getLeft().getVal()));
-                    } else if (node1.getLeft().getVal() instanceof String) {
-                        node2.setLeft(new Node((String) node1.getLeft().getVal()));
-                    } else if (node1.getVal() instanceof Float) {
-                        node2.setLeft(new Node((Float) node1.getLeft().getVal()));
-                    }
-
+                    node2.setLeft(new Node(node1.getLeft().getVal()));
                     stack1.push(node1.getLeft());
                     stack2.push(node2.getLeft());
                 }
 
                 if (node1.getRight() != null) {
-                    if (node1.getRight().getVal() instanceof Integer) {
-                        node2.setRight(new Node((Integer) node1.getRight().getVal()));
-                    } else if (node1.getRight().getVal() instanceof String) {
-                        node2.setRight(new Node((String) node1.getRight().getVal()));
-                    } else if (node1.getVal() instanceof Float) {
-                        node2.setRight(new Node((Float) node1.getRight().getVal()));
-                    }
-
+                    node2.setRight(new Node(node1.getRight().getVal()));
                     stack1.push(node1.getRight());
                     stack2.push(node2.getRight());
                 }
@@ -206,14 +187,14 @@ public class Btree {
                 return true;
             }
     
-            Stack<Node> stack1 = new Stack<>();
+            Stack<Node<T>> stack1 = new Stack<>();
             stack1.push(this);
-            Stack<Node> stack2 = new Stack<>();
-            stack2.push((Node) other);
+            Stack<Node<T>> stack2 = new Stack<>();
+            stack2.push((Node<T>) other);
 
             while (stack1.size() > 0 || stack2.size() > 0) {
-                Node node1 = stack1.pop();
-                Node node2 = stack2.pop();
+                Node<T> node1 = stack1.pop();
+                Node<T> node2 = stack2.pop();
 
                 if (node1 == null && node2 == null) {
                     continue;
@@ -245,8 +226,8 @@ public class Btree {
         private HashMap<String, Object> properties() {
             boolean isDescending = true;
             boolean isAscending = true;
-            Object minNodeValue = this.getVal();
-            Object maxNodeValue = this.getVal();
+            T minNodeValue = this.getVal();
+            T maxNodeValue = this.getVal();
             int size = 0;
             int leafCount = 0;
             int minLeafDepth = 0;
@@ -261,25 +242,13 @@ public class Btree {
                 maxLeafDepth++;
                 ArrayList<Node> nextNodes = new ArrayList<>();
 
-                for (Node node: currentNodes) {
+                for (Node<T> node: currentNodes) {
                     size++;
-                    Object val = node.getVal();
-                    // NOTE: Will be part of refactor of Node.val from Object to NodeValue
-                    if (val instanceof String && minNodeValue instanceof String && maxNodeValue instanceof String) {
-                        String mnv = String.valueOf(minNodeValue);
-                        String mxv = String.valueOf(maxNodeValue);
-                        String v = String.valueOf(val);
-                        minNodeValue = mnv.compareTo(v) > 0 ? val : minNodeValue;
-                        maxNodeValue = mxv.compareTo(v) < 0 ? val : maxNodeValue;
-                    } else if (val instanceof Integer && minNodeValue instanceof Integer && maxNodeValue instanceof Integer) {
-                        minNodeValue = Integer.valueOf((int) minNodeValue) > Integer.valueOf((int) val) ? val : minNodeValue;
-                        maxNodeValue = Integer.valueOf((int) maxNodeValue) < Integer.valueOf((int) val) ? val : maxNodeValue;
-                    } else if (val instanceof Float && minNodeValue instanceof Float && maxNodeValue instanceof Float) {
-                        Float mnv = Float.valueOf(String.format("%.2f", minNodeValue));
-                        Float mxv = Float.valueOf(String.format("%.2f", maxNodeValue));
-                        Float v = Float.valueOf(String.format("%.2f", val));
-                        minNodeValue = Float.compare(mnv, v) > 0 ? val : minNodeValue;
-                        maxNodeValue = Float.compare(mxv, v) < 0 ? val : maxNodeValue;
+                    T val = node.getVal();
+
+                    if (val != null) {
+                        minNodeValue = minNodeValue.compareTo(val) > 0 ? val : minNodeValue;
+                        maxNodeValue = maxNodeValue.compareTo(val) < 0 ? val : maxNodeValue;
                     }
                     
                     // Node is a leaf
