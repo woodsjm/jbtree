@@ -260,11 +260,11 @@ public class Btree {
                         leafCount++;
                     }
 
-                    if (node.getLeft() != null) {
+                    if (node.getLeft() != null && node.getLeft().getVal() != null && val != null) {
                         // FIX: Check for mismatched NodeValue types (e.g. order comparision of letters and numbers)
-                        if (String.valueOf(node.getLeft().getVal()).compareTo((String) val) > 0) {
+                        if (node.getLeft().getVal().compareTo(val) > 0) {
                             isDescending = false;
-                        } else if (String.valueOf(node.getLeft().getVal()).compareTo((String) val) < 0) {
+                        } else if (node.getLeft().getVal().compareTo(val) < 0) {
                             isAscending = false;
                         }
 
@@ -274,11 +274,10 @@ public class Btree {
                         nonFullNodeSeen = true;
                     }
 
-                    if (node.getRight() != null) {
-                        // FIX: Check for mismatched NodeValue types (e.g. order comparision of letters and numbers)
-                        if (String.valueOf(node.getRight().getVal()).compareTo((String) val) > 0) {
+                    if (node.getRight() != null && node.getRight().getVal() != null && val != null) {
+                        if (node.getRight().getVal().compareTo(val) > 0) {
                             isDescending = false;
-                        } else if (String.valueOf(node.getRight().getVal()).compareTo((String) val) < 0) {
+                        } else if (node.getRight().getVal().compareTo(val) < 0) {
                             isAscending = false;
                         }
 
@@ -316,17 +315,11 @@ public class Btree {
 
         @Override
         public String toString() {
-            String nodeString = "Node()";
-            
-            if (this.val instanceof Integer) {
-                nodeString = String.format("Node(%d)", this.getVal());
-            } else if (this.val instanceof String) {
-                nodeString = String.format("Node(%s)", this.getVal());
-            } else if (this.val instanceof Float) {
-                nodeString = String.format("Node(%.2f)", this.getVal());
+            if (this.val instanceof Float) {
+                return String.format("Node(%.2f)", this.getVal());
             }
 
-            return nodeString;
+            return String.format("Node(%s)", this.getVal().toString());
         }
 
         private ArrayList values() {
