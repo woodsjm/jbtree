@@ -91,7 +91,7 @@ public class Btree {
         private Node left;
         private Node right;
 
-        public ArrayList values = this.values();
+        public ArrayList<T> values = this.values();
         public HashMap<String, Object> properties = this.properties();
 
         // Init
@@ -322,17 +322,17 @@ public class Btree {
             return String.format("Node(%s)", this.getVal().toString());
         }
 
-        private ArrayList values() {
-            ArrayList<Node> currentNodes = new ArrayList<>();
+        protected ArrayList<T> values() {
+            ArrayList<Node<T>> currentNodes = new ArrayList<>();
             currentNodes.add(this);
-            ArrayList<Object> nodeValues = new ArrayList<>();
+            ArrayList<T> nodeValues = new ArrayList<>();
 
             boolean areNodesLeft = true;
             while (areNodesLeft) {
                 areNodesLeft = false;
-                ArrayList<Node> nextNodes = new ArrayList<>();
+                ArrayList<Node<T>> nextNodes = new ArrayList<>();
 
-                for (Node node: currentNodes) {
+                for (Node<T> node: currentNodes) {
                     if (node == null) {
                         nodeValues.add(null);
                         nextNodes.add(null);
@@ -441,7 +441,7 @@ public class Btree {
         return root;
     }
 
-    private static <T> Node build(ArrayList<T> values) {
+    protected static <T> Node build(ArrayList<T> values) {
         ArrayList<Node> nodes = new ArrayList<>();
         for (T value: values) {
             if (value == null) {

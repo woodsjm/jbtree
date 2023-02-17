@@ -3,6 +3,8 @@
  */
 package btree.java;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -277,6 +279,102 @@ public class BtreeTest {
             assertTrue(root.equals(clone));
             assertTrue(clone.equals(root));
             assertEquals(clone.properties, root.properties);
+        }
+    }
+
+    @Test public void testListRepresentation1() {
+        Btree btree = new Btree();
+        ArrayList<Integer> listRep = new ArrayList<Integer>();
+
+        Btree.Node root = btree.build(new ArrayList()); // []
+        assertEquals(null, root);
+
+        listRep.addAll(Arrays.asList(1));
+        root = btree.build(listRep); // [1]
+        assertNotNull(root);
+        assertEquals(Integer.valueOf(1), root.getVal());
+        assertEquals(null, root.getLeft());
+        assertEquals(null, root.getRight());
+
+        listRep.addAll(Arrays.asList(2));
+        root = btree.build(listRep); // [1, 2]
+        assertNotNull(root);
+        assertEquals(Integer.valueOf(1), root.getVal());
+        assertNotNull(root.getLeft());
+        assertEquals(Integer.valueOf(2), root.getLeft().getVal());
+        assertEquals(null, root.getRight());
+
+        listRep.addAll(Arrays.asList(3));
+        root = btree.build(listRep); // [1, 2, 3]
+        assertNotNull(root);
+        assertEquals(Integer.valueOf(1), root.getVal());
+        assertNotNull(root.getLeft());
+        assertEquals(Integer.valueOf(2), root.getLeft().getVal());
+        assertNotNull(root.getRight());
+        assertEquals(Integer.valueOf(3), root.getRight().getVal());
+        assertEquals(null, root.getLeft().getLeft());
+        assertEquals(null, root.getLeft().getRight());
+        assertEquals(null, root.getRight().getLeft());
+        assertEquals(null, root.getRight().getRight());
+
+        listRep.addAll(Arrays.asList(null, 4));
+        root = btree.build(listRep); // [1, 2, 3, null, 4]
+        assertNotNull(root);
+        assertEquals(Integer.valueOf(1), root.getVal());
+        assertNotNull(root.getLeft());
+        assertEquals(Integer.valueOf(2), root.getLeft().getVal());
+        assertNotNull(root.getRight());
+        assertEquals(Integer.valueOf(3), root.getRight().getVal());
+        assertEquals(null, root.getLeft().getLeft());
+        assertNotNull(root.getLeft().getRight());
+        assertEquals(Integer.valueOf(4), root.getLeft().getRight().getVal());
+        assertEquals(null, root.getRight().getLeft());
+        assertEquals(null, root.getRight().getRight());
+        assertEquals(null, root.getLeft().getRight().getLeft());
+        assertEquals(null, root.getLeft().getRight().getRight());
+
+        //FIX: Missing NodeNotFoundException test for try... catch
+        //block in build()
+        //NOTE: Use mocking and put this in separate
+        //testListRepresentation1 test
+        
+        listRep.clear();
+        listRep.addAll(Arrays.asList(1));
+        root = new Btree.Node(1); // [1]
+        assertArrayEquals(listRep.toArray(), root.values().toArray());
+
+        listRep.addAll(Arrays.asList(null, 3));
+        root.setRight(new Btree.Node(3)); // [1, null, 3]
+        assertArrayEquals(listRep.toArray(), root.values().toArray());
+
+        listRep.set(1, 2);
+        root.setLeft(new Btree.Node(2)); // [1, 2, 3]
+        assertArrayEquals(listRep.toArray(), root.values().toArray());
+
+        listRep.addAll(Arrays.asList(null, null, 4));
+        root.getRight().setLeft(new Btree.Node(4)); // [1, 2, 3, null, null, 4]
+        assertArrayEquals(listRep.toArray(), root.values().toArray());
+
+        listRep.add(5);
+        root.getRight().setRight(new Btree.Node(5)); // [1, 2, 3, null, null, 4, 5]
+        assertArrayEquals(listRep.toArray(), root.values().toArray()); 
+
+        listRep.set(3, 6);
+        root.getLeft().setLeft(new Btree.Node(6)); // [1, 2, 3, 6, null, 4, 5]
+        assertArrayEquals(listRep.toArray(), root.values().toArray());
+
+        listRep.set(4, 7);
+        root.getLeft().setRight(new Btree.Node(7)); // [1, 2, 3, 6, 7, 4, 5]
+        assertArrayEquals(listRep.toArray(), root.values().toArray());
+
+        for (int dummy = 0; dummy < 20; dummy++) {
+            Btree.Node<Integer> tree1 = btree.tree();
+            assertNotNull(tree1);
+
+            Btree.Node<Integer> tree2 = btree.build(tree1.values());
+            assertNotNull(tree2);
+            
+            assertArrayEquals(tree2.values().toArray(), tree1.values().toArray());
         }
     }
 
