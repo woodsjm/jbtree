@@ -91,9 +91,6 @@ public class Btree {
         private Node left;
         private Node right;
 
-        public ArrayList<T> values = this.values();
-        public HashMap<String, Object> properties = this.properties();
-
         // Init
         public Node(T value) {
             try {
@@ -223,7 +220,7 @@ public class Btree {
             return true;
         }
 
-        private HashMap<String, Object> properties() {
+        protected HashMap<String, Object> properties() {
             boolean isDescending = true;
             boolean isAscending = true;
             T minNodeValue = this.getVal();

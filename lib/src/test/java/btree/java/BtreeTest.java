@@ -6,124 +6,124 @@ package btree.java;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.List;
 
+import static org.junit.Assert.*;
 import org.junit.rules.ExpectedException;
 import org.junit.Rule;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 public class BtreeTest {
     @Test public void testNodeInitAndSetAttrWithIntegers() {
-        Btree.Node<Integer> root = new Btree.Node<>(Integer.valueOf(1));
-        assertEquals(null, root.getLeft());
-        assertEquals(null, root.getRight());
+        Btree.Node<Integer> root = new Btree.Node<>(1);
+        assertNull(root.getLeft());
+        assertNull(root.getRight());
         assertEquals(Integer.valueOf(1), root.getVal());
-        assertEquals(String.valueOf("Node(1)"), root.toString());
+        assertEquals("Node(1)", root.toString());
 
         //NOTE: Missing matching tests for multinamed node value
         //attribute node.val + node.value, because current attribute 
         //implementation lacks multiple names
 
-        Btree.Node<Integer> leftChild = new Btree.Node<>(Integer.valueOf(2));
+        Btree.Node<Integer> leftChild = new Btree.Node<>(2);
         root.setLeft(leftChild);
         assertEquals(leftChild, root.getLeft());
-        assertEquals(null, root.getRight());
+        assertNull(root.getRight());
         assertEquals(Integer.valueOf(1), root.getVal());
-        assertEquals(null, root.getLeft().getLeft());
-        assertEquals(null, root.getLeft().getRight());
+        assertNull(root.getLeft().getLeft());
+        assertNull(root.getLeft().getRight());
         assertEquals(Integer.valueOf(2), root.getLeft().getVal());
-        assertEquals(String.valueOf("Node(2)"), leftChild.toString());
+        assertEquals("Node(2)", leftChild.toString());
 
-        Btree.Node<Integer> rightChild = new Btree.Node<>(Integer.valueOf(3));
+        Btree.Node<Integer> rightChild = new Btree.Node<>(3);
         root.setRight(rightChild);
         assertEquals(leftChild, root.getLeft());
         assertEquals(rightChild, root.getRight());
         assertEquals(Integer.valueOf(1), root.getVal());
-        assertEquals(null, root.getRight().getLeft());
-        assertEquals(null, root.getRight().getRight());
+        assertNull(root.getRight().getLeft());
+        assertNull(root.getRight().getRight());
         assertEquals(Integer.valueOf(3), root.getRight().getVal());
-        assertEquals(String.valueOf("Node(3)"), rightChild.toString());
+        assertEquals("Node(3)", rightChild.toString());
 
-        Btree.Node<Integer> lastNode = new Btree.Node<>(Integer.valueOf(4));
+        Btree.Node<Integer> lastNode = new Btree.Node<>(4);
         leftChild.setRight(lastNode);
         assertEquals(lastNode, root.getLeft().getRight());
-        assertEquals(String.valueOf("Node(4)"), root.getLeft().getRight().toString());
+        assertEquals("Node(4)", root.getLeft().getRight().toString());
     }
 
     @Test public void testNodeInitAndSetAttrWithFloats() {
-        Btree.Node<Float> root = new Btree.Node<>(Float.valueOf(1.50f));
-        assertEquals(null, root.getLeft());
-        assertEquals(null, root.getRight());
+        Btree.Node<Float> root = new Btree.Node<>(1.50f);
+        assertNull(root.getLeft());
+        assertNull(root.getRight());
         assertEquals(Float.valueOf(1.50f), root.getVal());
-        assertEquals(String.valueOf("Node(1.50)"), root.toString());
+        assertEquals("Node(1.50)", root.toString());
 
         //NOTE: Missing matching tests for multinamed node value
         //attribute node.val + node.value, because current attribute 
         //implementation lacks multiple names
 
-        Btree.Node<Float> leftChild = new Btree.Node<>(Float.valueOf(2.50f));
+        Btree.Node<Float> leftChild = new Btree.Node<>(2.50f);
         root.setLeft(leftChild);
         assertEquals(leftChild, root.getLeft());
-        assertEquals(null, root.getRight());
+        assertNull(root.getRight());
         assertEquals(Float.valueOf(1.50f), root.getVal());
-        assertEquals(null, root.getLeft().getLeft());
-        assertEquals(null, root.getLeft().getRight());
+        assertNull(root.getLeft().getLeft());
+        assertNull(root.getLeft().getRight());
         assertEquals(Float.valueOf(2.50f), root.getLeft().getVal());
-        assertEquals(String.valueOf("Node(2.50)"), leftChild.toString());
+        assertEquals("Node(2.50)", leftChild.toString());
 
-        Btree.Node<Float> rightChild = new Btree.Node<>(Float.valueOf(3.50f));
+        Btree.Node<Float> rightChild = new Btree.Node<>(3.50f);
         root.setRight(rightChild);
         assertEquals(leftChild, root.getLeft());
         assertEquals(rightChild, root.getRight());
         assertEquals(Float.valueOf(1.50f), root.getVal());
-        assertEquals(null, root.getRight().getLeft());
-        assertEquals(null, root.getRight().getRight());
+        assertNull(root.getRight().getLeft());
+        assertNull(root.getRight().getRight());
         assertEquals(Float.valueOf(3.50f), root.getRight().getVal());
-        assertEquals(String.valueOf("Node(3.50)"), rightChild.toString());
+        assertEquals("Node(3.50)", rightChild.toString());
 
-        Btree.Node<Float> lastNode = new Btree.Node<>(Float.valueOf(4.50f));
+        Btree.Node<Float> lastNode = new Btree.Node<>(4.50f);
         leftChild.setRight(lastNode);
         assertEquals(lastNode, root.getLeft().getRight());
-        assertEquals(String.valueOf("Node(4.50)"), root.getLeft().getRight().toString());
+        assertEquals("Node(4.50)", root.getLeft().getRight().toString());
     }
 
     @Test public void testNodeInitAndSetAttrWithLetters() {
-        Btree.Node<String> root = new Btree.Node<>(String.valueOf("A"));
-        assertEquals(null, root.getLeft());
-        assertEquals(null, root.getRight());
-        assertEquals(String.valueOf("A"), root.getVal());
-        assertEquals(String.valueOf("Node(A)"), root.toString());
+        Btree.Node<String> root = new Btree.Node<>("A");
+        assertNull(root.getLeft());
+        assertNull(root.getRight());
+        assertEquals("A", root.getVal());
+        assertEquals("Node(A)", root.toString());
 
         //NOTE: Missing matching tests for multinamed node value
         //attribute node.val + node.value, because current attribute 
         //implementation lacks multiple names
 
-        Btree.Node<String> leftChild = new Btree.Node<>(String.valueOf("B"));
+        Btree.Node<String> leftChild = new Btree.Node<>("B");
         root.setLeft(leftChild);
         assertEquals(leftChild, root.getLeft()); 
-        assertEquals(null, root.getRight());
-        assertEquals(String.valueOf("A"), root.getVal());
-        assertEquals(null, root.getLeft().getLeft());
-        assertEquals(null, root.getLeft().getRight());
-        assertEquals(String.valueOf("B"), root.getLeft().getVal());
-        assertEquals(String.valueOf("Node(B)"), leftChild.toString());
+        assertNull(root.getRight());
+        assertEquals("A", root.getVal());
+        assertNull(root.getLeft().getLeft());
+        assertNull(root.getLeft().getRight());
+        assertEquals("B", root.getLeft().getVal());
+        assertEquals("Node(B)", leftChild.toString());
 
-        Btree.Node<String> rightChild = new Btree.Node<>(String.valueOf("C"));
+        Btree.Node<String> rightChild = new Btree.Node<>("C");
         root.setRight(rightChild);
         assertEquals(leftChild, root.getLeft());
         assertEquals(rightChild, root.getRight());
-        assertEquals(String.valueOf("A"), root.getVal());
-        assertEquals(null, root.getRight().getLeft());
-        assertEquals(null, root.getRight().getRight());
-        assertEquals(String.valueOf("C"), root.getRight().getVal());
-        assertEquals(String.valueOf("Node(C)"), rightChild.toString());
+        assertEquals("A", root.getVal());
+        assertNull(root.getRight().getLeft());
+        assertNull(root.getRight().getRight());
+        assertEquals("C", root.getRight().getVal());
+        assertEquals("Node(C)", rightChild.toString());
 
-        Btree.Node<String> lastNode = new Btree.Node<>(String.valueOf("D"));
+        Btree.Node<String> lastNode = new Btree.Node<>("D");
         leftChild.setRight(lastNode);
         assertEquals(lastNode, root.getLeft().getRight());
-        assertEquals(String.valueOf("Node(D)"), root.getLeft().getRight().toString());
+        assertEquals("Node(D)", root.getLeft().getRight().toString());
     }
 
     // Test Node init and set attribtue error cases
@@ -142,108 +142,108 @@ public class BtreeTest {
     @Test public void throwsNodeValueExceptionOnEmptyVal() throws Exception {
         exceptionRule.expect(BtreeException.NodeValueException.class);
         exceptionRule.expectMessage("node value must be an Integer, a Float, or a String");
-        Btree.Node<Integer> root = new Btree.Node<>(Integer.valueOf(1));
+        Btree.Node<Integer> root = new Btree.Node<>(1);
         root.setVal(Collections.<Integer>emptyList());
     }
     
     @Test public void testTreeEqualsWithIntegers() {
-        Btree.Node<Integer> root1 = new Btree.Node<>(Integer.valueOf(1));
-        Btree.Node<Integer> root2 = new Btree.Node<>(Integer.valueOf(1));
+        Btree.Node<Integer> root1 = new Btree.Node<>(1);
+        Btree.Node<Integer> root2 = new Btree.Node<>(1);
         assertFalse(root1.equals(null));
         assertFalse(root1.equals(Integer.valueOf(1)));
-        assertFalse(root1.equals(new Btree.Node<>(Integer.valueOf(2))));
+        assertFalse(root1.equals(new Btree.Node<>(2)));
         assertTrue(root1.equals(root2));
         assertTrue(root2.equals(root1));
 
-        root1.setLeft(new Btree.Node<>(Integer.valueOf(2)));
+        root1.setLeft(new Btree.Node<>(2));
         assertFalse(root1.equals(root2));
         assertFalse(root2.equals(root1));
 
-        root2.setLeft(new Btree.Node<>(Integer.valueOf(2)));
+        root2.setLeft(new Btree.Node<>(2));
         assertTrue(root1.equals(root2));
         assertTrue(root2.equals(root1));
 
-        root1.setRight(new Btree.Node<>(Integer.valueOf(3)));
+        root1.setRight(new Btree.Node<>(3));
         assertFalse(root1.equals(root2));
         assertFalse(root2.equals(root1));
 
-        root2.setRight(new Btree.Node<>(Integer.valueOf(3)));
+        root2.setRight(new Btree.Node<>(3));
         assertTrue(root1.equals(root2));
         assertTrue(root2.equals(root1));
 
-        root1.getRight().setLeft(new Btree.Node<>(Integer.valueOf(4)));
+        root1.getRight().setLeft(new Btree.Node<>(4));
         assertFalse(root1.equals(root2));
         assertFalse(root2.equals(root1));
 
-        root2.getRight().setLeft(new Btree.Node<>(Integer.valueOf(4)));
+        root2.getRight().setLeft(new Btree.Node<>(4));
         assertTrue(root1.equals(root2));
         assertTrue(root2.equals(root1));
     }
 
     @Test public void testTreeEqualsWithFloats() {
-        Btree.Node<Float> root1 = new Btree.Node<>(Float.valueOf(1.50f));
-        Btree.Node<Float> root2 = new Btree.Node<>(Float.valueOf(1.50f));
+        Btree.Node<Float> root1 = new Btree.Node<>(1.50f);
+        Btree.Node<Float> root2 = new Btree.Node<>(1.50f);
         assertFalse(root1.equals(null));
         assertFalse(root1.equals(Float.valueOf(1.50f)));
-        assertFalse(root1.equals(new Btree.Node<>(Float.valueOf(2.50f))));
+        assertFalse(root1.equals(new Btree.Node<>(2.50f)));
         assertTrue(root1.equals(root2));
         assertTrue(root2.equals(root1));
 
-        root1.setLeft(new Btree.Node<>(Float.valueOf(2.50f)));
+        root1.setLeft(new Btree.Node<>(2.50f));
         assertFalse(root1.equals(root2));
         assertFalse(root2.equals(root1));
 
-        root2.setLeft(new Btree.Node<>(Float.valueOf(2.50f)));
+        root2.setLeft(new Btree.Node<>(2.50f));
         assertTrue(root1.equals(root2));
         assertTrue(root2.equals(root1));
 
-        root1.setRight(new Btree.Node<>(Float.valueOf(3.50f)));
+        root1.setRight(new Btree.Node<>(3.50f));
         assertFalse(root1.equals(root2));
         assertFalse(root2.equals(root1));
 
-        root2.setRight(new Btree.Node<>(Float.valueOf(3.50f)));
+        root2.setRight(new Btree.Node<>(3.50f));
         assertTrue(root1.equals(root2));
         assertTrue(root2.equals(root1));
 
-        root1.getRight().setLeft(new Btree.Node<>(Float.valueOf(4.50f)));
+        root1.getRight().setLeft(new Btree.Node<>(4.50f));
         assertFalse(root1.equals(root2));
         assertFalse(root2.equals(root1));
 
-        root2.getRight().setLeft(new Btree.Node<>(Float.valueOf(4.50f)));
+        root2.getRight().setLeft(new Btree.Node<>(4.50f));
         assertTrue(root1.equals(root2));
         assertTrue(root2.equals(root1));
     }
 
     @Test public void testTreeEqualsWithLetters() {
-        Btree.Node<String> root1 = new Btree.Node<>(String.valueOf("A"));
-        Btree.Node<String> root2 = new Btree.Node<>(String.valueOf("A"));
+        Btree.Node<String> root1 = new Btree.Node<>("A");
+        Btree.Node<String> root2 = new Btree.Node<>("A");
         assertFalse(root1.equals(null));
-        assertFalse(root1.equals(String.valueOf("A")));
-        assertFalse(root1.equals(new Btree.Node<>(String.valueOf("B"))));
+        assertFalse(root1.equals("A"));
+        assertFalse(root1.equals(new Btree.Node<>("B")));
         assertTrue(root1.equals(root2));
         assertTrue(root2.equals(root1));
 
-        root1.setLeft(new Btree.Node<>(String.valueOf("B")));
+        root1.setLeft(new Btree.Node<>("B"));
         assertFalse(root1.equals(root2));
         assertFalse(root2.equals(root1));
 
-        root2.setLeft(new Btree.Node<>(String.valueOf("B")));
+        root2.setLeft(new Btree.Node<>("B"));
         assertTrue(root1.equals(root2));
         assertTrue(root2.equals(root1));
 
-        root1.setRight(new Btree.Node<>(String.valueOf("C")));
+        root1.setRight(new Btree.Node<>("C"));
         assertFalse(root1.equals(root2));
         assertFalse(root2.equals(root1));
 
-        root2.setRight(new Btree.Node<>(String.valueOf("C")));
+        root2.setRight(new Btree.Node<>("C"));
         assertTrue(root1.equals(root2));
         assertTrue(root2.equals(root1));
 
-        root1.getRight().setLeft(new Btree.Node<>(String.valueOf("D")));
+        root1.getRight().setLeft(new Btree.Node<>("D"));
         assertFalse(root1.equals(root2));
         assertFalse(root2.equals(root1));
 
-        root2.getRight().setLeft(new Btree.Node<>(String.valueOf("D")));
+        root2.getRight().setLeft(new Btree.Node<>("D"));
         assertTrue(root1.equals(root2));
         assertTrue(root2.equals(root1));
     }
@@ -258,10 +258,10 @@ public class BtreeTest {
             Btree.Node<Integer> root = Btree.tree(height, isPerfect, letters);
             assertNotNull(root);
             Btree.Node<Integer> clone = root.deepCopy();
-            assertEquals(clone.values, root.values);
+            assertEquals(clone.values(), root.values());
             assertTrue(root.equals(clone));
             assertTrue(clone.equals(root));
-            assertEquals(clone.properties, root.properties);
+            assertEquals(clone.properties(), root.properties());
         }
     }
 
@@ -275,10 +275,10 @@ public class BtreeTest {
             Btree.Node<String> root = Btree.tree(height, isPerfect, letters);
             assertNotNull(root);
             Btree.Node<String> clone = root.deepCopy();
-            assertEquals(clone.values, root.values);
+            assertEquals(clone.values(), root.values());
             assertTrue(root.equals(clone));
             assertTrue(clone.equals(root));
-            assertEquals(clone.properties, root.properties);
+            assertEquals(clone.properties(), root.properties());
         }
     }
 
@@ -287,14 +287,14 @@ public class BtreeTest {
         ArrayList<Integer> listRep = new ArrayList<Integer>();
 
         Btree.Node root = btree.build(new ArrayList()); // []
-        assertEquals(null, root);
+        assertNull(root);
 
         listRep.addAll(Arrays.asList(1));
         root = btree.build(listRep); // [1]
         assertNotNull(root);
         assertEquals(Integer.valueOf(1), root.getVal());
-        assertEquals(null, root.getLeft());
-        assertEquals(null, root.getRight());
+        assertNull(root.getLeft());
+        assertNull(root.getRight());
 
         listRep.addAll(Arrays.asList(2));
         root = btree.build(listRep); // [1, 2]
@@ -302,7 +302,7 @@ public class BtreeTest {
         assertEquals(Integer.valueOf(1), root.getVal());
         assertNotNull(root.getLeft());
         assertEquals(Integer.valueOf(2), root.getLeft().getVal());
-        assertEquals(null, root.getRight());
+        assertNull(root.getRight());
 
         listRep.addAll(Arrays.asList(3));
         root = btree.build(listRep); // [1, 2, 3]
@@ -312,10 +312,10 @@ public class BtreeTest {
         assertEquals(Integer.valueOf(2), root.getLeft().getVal());
         assertNotNull(root.getRight());
         assertEquals(Integer.valueOf(3), root.getRight().getVal());
-        assertEquals(null, root.getLeft().getLeft());
-        assertEquals(null, root.getLeft().getRight());
-        assertEquals(null, root.getRight().getLeft());
-        assertEquals(null, root.getRight().getRight());
+        assertNull(root.getLeft().getLeft());
+        assertNull(root.getLeft().getRight());
+        assertNull(root.getRight().getLeft());
+        assertNull(root.getRight().getRight());
 
         listRep.addAll(Arrays.asList(null, 4));
         root = btree.build(listRep); // [1, 2, 3, null, 4]
@@ -325,13 +325,13 @@ public class BtreeTest {
         assertEquals(Integer.valueOf(2), root.getLeft().getVal());
         assertNotNull(root.getRight());
         assertEquals(Integer.valueOf(3), root.getRight().getVal());
-        assertEquals(null, root.getLeft().getLeft());
+        assertNull(root.getLeft().getLeft());
         assertNotNull(root.getLeft().getRight());
         assertEquals(Integer.valueOf(4), root.getLeft().getRight().getVal());
-        assertEquals(null, root.getRight().getLeft());
-        assertEquals(null, root.getRight().getRight());
-        assertEquals(null, root.getLeft().getRight().getLeft());
-        assertEquals(null, root.getLeft().getRight().getRight());
+        assertNull(root.getRight().getLeft());
+        assertNull(root.getRight().getRight());
+        assertNull(root.getLeft().getRight().getLeft());
+        assertNull(root.getLeft().getRight().getRight());
 
         //FIX: Missing NodeNotFoundException test for try... catch
         //block in build()
@@ -379,20 +379,14 @@ public class BtreeTest {
     }
 
     @Test public void testNodeToString() {
-        Integer num = Integer.valueOf(76);
-        Btree.Node<Integer> intNode = new Btree.Node<>(num);
-        String intNodeAsString = "Node(76)";
-        assertEquals(intNodeAsString, intNode.toString());
+        Btree.Node<Integer> intNode = new Btree.Node<>(76);
+        assertEquals("Node(76)", intNode.toString());
 
-        String str = String.valueOf("ABC");
-        Btree.Node<String> strNode = new Btree.Node<>(str);
-        String strNodeAsString = "Node(ABC)";
-        assertEquals(strNodeAsString, strNode.toString());
+        Btree.Node<String> strNode = new Btree.Node<>("ABC");
+        assertEquals("Node(ABC)", strNode.toString());
         
-        Float flt = Float.valueOf(25.53f);
-        Btree.Node<Float> fltNode = new Btree.Node<>(flt);
-        String fltNodeAsString = "Node(25.53)";
-        assertEquals(fltNodeAsString, fltNode.toString());
+        Btree.Node<Float> fltNode = new Btree.Node<>(25.53f);
+        assertEquals("Node(25.53)", fltNode.toString());
     }
 
     @Test 
