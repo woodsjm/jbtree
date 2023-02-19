@@ -10,6 +10,12 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.junit.contrib.java.lang.system.ExpectedSystemExit.*;
+
+import nl.altindag.log.LogCaptor;
+import nl.altindag.log.model.LogEvent;
+import org.junit.contrib.java.lang.system.Assertion;
+import org.junit.contrib.java.lang.system.ExpectedSystemExit;
 import org.junit.rules.ExpectedException;
 import org.junit.Rule;
 import org.junit.Test;
@@ -280,7 +286,11 @@ public class BtreeTest {
         }
     }
 
+    // more elaborate because of build()'s try... catch 
+    @Rule public final ExpectedSystemExit exit = ExpectedSystemExit.none();
     @Test public void testListRepresentation1() {
+        LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
+
         ArrayList<Integer> listRep = new ArrayList<Integer>();
 
         Btree.Node root = Btree.build(new ArrayList()); // []
@@ -330,11 +340,42 @@ public class BtreeTest {
         assertNull(root.getLeft().getRight().getLeft());
         assertNull(root.getLeft().getRight().getRight());
 
-        //FIX: Missing NodeNotFoundException test for try... catch
-        //block in build()
-        //NOTE: Use mocking and put this in separate
-        //testListRepresentation1 test
-        
+        listRep.clear();
+        listRep.addAll(Arrays.asList(null, 2, 3));
+        exit.expectSystemExitWithStatus(0);
+        exit.checkAssertionAfterwards(new Assertion() {
+            public void checkAssertion() {
+                String capturedLogs = String.valueOf(logCaptor.getWarnLogs());
+                LogEvent logEvent = logCaptor.getLogEvents().get(0);
+
+                assertTrue(capturedLogs.contains("Likely a problem with the ArrayList argument"));
+                assertTrue(capturedLogs.contains("Here's your stack trace..."));
+                
+                assertTrue(logEvent.getThrowable().get() instanceof BtreeException.NodeNotFoundException);
+                assertTrue(logEvent.getThrowable().get().getMessage().contains("parent node missing at index 0"));
+            }
+        });
+        root = Btree.build(listRep); // [null, 2, 3]
+
+        logCaptor.clearLogs();
+
+        listRep.clear();
+        listRep.addAll(Arrays.asList(1, null, 2, 3, 4));
+        exit.expectSystemExitWithStatus(0);
+        exit.checkAssertionAfterwards(new Assertion() {
+            public void checkAssertion() {
+                String capturedLogs = String.valueOf(logCaptor.getWarnLogs());
+                LogEvent logEvent = logCaptor.getLogEvents().get(0);
+
+                assertTrue(capturedLogs.contains("Likely a problem with the ArrayList argument"));
+                assertTrue(capturedLogs.contains("Here's your stack trace..."));
+
+                assertTrue(logEvent.getThrowable().get() instanceof BtreeException.NodeNotFoundException);
+                assertTrue(logEvent.getThrowable().get().getMessage().contains("parent node missing at index 1"));
+            }
+        });
+        root = Btree.build(listRep); // [1, null, 2, 3, 4]
+
         listRep.clear();
         listRep.addAll(Arrays.asList(1));
         root = new Btree.Node(1); // [1]
@@ -374,6 +415,36 @@ public class BtreeTest {
             assertArrayEquals(tree2.values().toArray(), tree1.values().toArray());
         }
     }
+
+    // @Rule public final ExpectedSystemExit exit = ExpectedSystemExit.none();
+    // @Test public void testListRepresentation1Exits() {
+    //     LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
+
+    //     ArrayList<Integer> listRep = new ArrayList<>();
+    //     listRep.addAll(Arrays.asList(null, 2, 3));
+
+    //     exit.expectSystemExitWithStatus(0);
+    //     exit.checkAssertionAfterwards(new Assertion() {
+    //         public void checkAssertion() {
+    //             String capturedLogs = String.valueOf(logCaptor.getWarnLogs());
+    //             assertTrue(capturedLogs.contains("Likely a problem with the ArrayList argument"));
+    //             assertTrue(capturedLogs.contains("Example 1"));
+    //             assertTrue(capturedLogs.contains("Fix"));
+    //             assertTrue(capturedLogs.contains("Example 2"));
+    //             assertTrue(capturedLogs.contains("Here's your stack trace..."));
+    //         }
+    //     });
+    //     Btree.Node<Integer> root = Btree.build(listRep);
+    // }
+
+    // @Test public void throwsNodeNotFoundExceptionOnMissingParentBuild() throws Exception {
+    //     exceptionRule.expect(BtreeException.NodeNotFoundException.class);
+    //     exceptionRule.expectMessage("parent node missing at index 0");
+    //     ArrayList<Integer> listRep = new ArrayList<>();
+    //     listRep.addAll(Arrays.asList(null, 1, 2));
+    //     Btree.build(listRep);
+    //     //root.setVal(Collections.<Integer>emptyList());
+    // }
 
     @Test public void testNodeToString() {
         Btree.Node<Integer> intNode = new Btree.Node<>(76);

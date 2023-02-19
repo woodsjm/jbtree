@@ -21,7 +21,8 @@ repositories {
 }
 
 dependencies {
-    // Use JUnit test framework.
+    testImplementation 'com.github.stefanbirkner:system-rules:1.19.0'
+    testImplementation 'io.github.hakky54:logcaptor:2.8.0'
     testImplementation 'junit:junit:4.13.2'
 
     // This dependency is exported to consumers, that is to say found on their compile classpath.

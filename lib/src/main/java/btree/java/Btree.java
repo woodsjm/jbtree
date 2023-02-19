@@ -10,6 +10,8 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.IntStream;
 import java.util.Stack;
 
@@ -463,7 +465,14 @@ public class Btree {
                         throw new BtreeException.NodeNotFoundException("parent node missing at index " + parentIdx);
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    final String message = "Likely a problem with the ArrayList argument\n\n"
+                        + "Example 1: [null, 2, 4]\n"
+                        + "Fix: [1, 2, 4]\n\n"
+                        + "Example 2: [1, null, 4, null, 8]\n"
+                        + "Fix: [1, 2, 4, null, 8]\n\n"
+                        + "Here's your stack trace...";
+                    Logger.getLogger(Btree.class.getName()).log(Level.WARNING, message, e);
+                    System.exit(0);
                 } 
                 
                 if (idx % 2 == 0) {
