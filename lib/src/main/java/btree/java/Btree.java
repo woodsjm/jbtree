@@ -366,35 +366,26 @@ public class Btree {
         validateTreeHeight(height);
         int[] numbers = generateRandomNumbers(height);
 
-        ArrayList<Object> values = new ArrayList<>();
+        ArrayList<Comparable> values = new ArrayList<>();
         for (int num: numbers) {
-            if (letters) {
-                values.add((String) numberToLetters(num));
-            } else {
-                values.add((Integer) num);
-            }
+            values.add(letters ? numberToLetters(num) : num);
         }
 
         if (isPerfect) {
-            try {
-                return build(values);
-            } catch (Exception e) {
-                e.printStackTrace();
-            } 
+            return build(values);
         }
 
         int leafCount = generateRandomLeafCount(height);
         Node root;
-        if (values.get(0) instanceof String) {
-            root = new Node((String) values.get(0));
-        } else if (values.get(0) instanceof Integer) {
-            root = new Node((Integer) values.get(0));
+        if (values.get(0) != null) {
+            root = new Node(values.get(0));
         } else {
             return null;
         }
+        
         HashSet<Node> leaves = new HashSet<>();
 
-        for (Object value: values) {
+        for (Comparable value: values) {
             Node node = root;
             int depth = 0;
             boolean inserted = false;
@@ -402,25 +393,13 @@ public class Btree {
             while (depth < height && !inserted) {
                 String direction = String.valueOf(ThreadLocalRandom.current().nextBoolean() ? "left" : "right");
                 Node child = direction == "left" ? node.getLeft() : node.getRight();
+
                 if (child == null) {
-
-                    if (value instanceof String) {
-                        String strVal = String.valueOf((String) value);
-                        if (direction == "left") {
-                            root.setLeft(new Node(strVal));
-                        } else if (direction == "right") {
-                            root.setRight(new Node(strVal));
-                        }
-                        
-                    } else if (value instanceof Integer) {
-                        Integer intVal = Integer.valueOf((Integer) value);
-                        if (direction == "left") {
-                            root.setLeft(new Node(intVal));
-                        } else if (direction == "right") {
-                            root.setRight(new Node(intVal));
-                        }
+                    if (direction == "left") {
+                        root.setLeft(new Node(value));
+                    } else if (direction == "right") {
+                        root.setRight(new Node(value));
                     }
-
                     inserted = true;
                 }
 
@@ -440,20 +419,15 @@ public class Btree {
         return root;
     }
 
-    protected static <T> Node build(ArrayList<T> values) {
+    protected static <T extends Comparable<T>> Node build(ArrayList<T> values) {
         ArrayList<Node> nodes = new ArrayList<>();
-        for (T value: values) {
-            if (value == null) {
+        values.forEach((val) -> {
+            if (val == null) {
                 nodes.add(null);
-                continue;
-            } 
-
-            if (value instanceof String) {
-                nodes.add(new Node((String) value));
-            } else if (value instanceof Integer) {
-                nodes.add(new Node((Integer) value));
+            } else {
+                nodes.add(new Node(val));
             }
-        }
+        });
 
         for (int idx = 1; idx < nodes.size(); idx++) {
             if (!( nodes.get(idx) == null) ) {
