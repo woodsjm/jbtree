@@ -416,36 +416,6 @@ public class BtreeTest {
         }
     }
 
-    // @Rule public final ExpectedSystemExit exit = ExpectedSystemExit.none();
-    // @Test public void testListRepresentation1Exits() {
-    //     LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
-
-    //     ArrayList<Integer> listRep = new ArrayList<>();
-    //     listRep.addAll(Arrays.asList(null, 2, 3));
-
-    //     exit.expectSystemExitWithStatus(0);
-    //     exit.checkAssertionAfterwards(new Assertion() {
-    //         public void checkAssertion() {
-    //             String capturedLogs = String.valueOf(logCaptor.getWarnLogs());
-    //             assertTrue(capturedLogs.contains("Likely a problem with the ArrayList argument"));
-    //             assertTrue(capturedLogs.contains("Example 1"));
-    //             assertTrue(capturedLogs.contains("Fix"));
-    //             assertTrue(capturedLogs.contains("Example 2"));
-    //             assertTrue(capturedLogs.contains("Here's your stack trace..."));
-    //         }
-    //     });
-    //     Btree.Node<Integer> root = Btree.build(listRep);
-    // }
-
-    // @Test public void throwsNodeNotFoundExceptionOnMissingParentBuild() throws Exception {
-    //     exceptionRule.expect(BtreeException.NodeNotFoundException.class);
-    //     exceptionRule.expectMessage("parent node missing at index 0");
-    //     ArrayList<Integer> listRep = new ArrayList<>();
-    //     listRep.addAll(Arrays.asList(null, 1, 2));
-    //     Btree.build(listRep);
-    //     //root.setVal(Collections.<Integer>emptyList());
-    // }
-
     @Test public void testNodeToString() {
         Btree.Node<Integer> intNode = new Btree.Node<>(76);
         assertEquals("Node(76)", intNode.toString());
