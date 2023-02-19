@@ -21,6 +21,8 @@ import org.junit.Rule;
 import org.junit.Test;
 
 public class BtreeTest {
+    final int REPETITIONS = 20;
+
     @Test public void testNodeInitAndSetAttrWithIntegers() {
         Btree.Node<Integer> root = new Btree.Node<>(1);
         assertNull(root.getLeft());
@@ -132,24 +134,19 @@ public class BtreeTest {
         assertEquals("Node(D)", root.getLeft().getRight().toString());
     }
 
-    // Test Node init and set attribtue error cases
-    // NOTE: these matching exception tests are split out
-    // instead of grouped into a single test as in the 
-    // Python lib
-    @Rule public ExpectedException exceptionRule = ExpectedException.none();
-    // FIX: Modify constructor to side step default java error on init
-    // with empty list 
-    // @Test public void throwsNodeValueExceptionOnEmptyNode() throws Exception {
-    //     exceptionRule.expect(BtreeException.NodeValueException.class);
-    //     exceptionRule.expectMessage("node value must be an Integer, a Float, or a String");
-    //     Btree.Node<List> root = new Btree.Node<>(Collections.emptyList());
-    // }
+    @Rule public ExpectedException exceptionRule = ExpectedException.none(); 
+
+    @Test public void throwsNodeValueExceptionOnEmptyNode() throws Exception {
+        exceptionRule.expect(BtreeException.NodeValueException.class);
+        exceptionRule.expectMessage("node value must be an Integer, a Float, or a String");
+        Btree.Node root = new Btree.Node(Collections.emptyList());
+    }
 
     @Test public void throwsNodeValueExceptionOnEmptyVal() throws Exception {
         exceptionRule.expect(BtreeException.NodeValueException.class);
         exceptionRule.expectMessage("node value must be an Integer, a Float, or a String");
         Btree.Node<Integer> root = new Btree.Node<>(1);
-        root.setVal(Collections.<Integer>emptyList());
+        root.setVal(new ArrayList<Integer>());
     }
     
     @Test public void testTreeEqualsWithIntegers() {
@@ -255,7 +252,7 @@ public class BtreeTest {
     }
 
     @Test public void testTreeCloneWithNumbers() {
-        for (int dummy = 0; dummy < 20; dummy++) {
+        for (int dummy = 0; dummy < REPETITIONS; dummy++) {
             int height = ThreadLocalRandom.current().nextInt(10);
             boolean isPerfect = ThreadLocalRandom.current().nextBoolean();
             boolean letters = false;
@@ -271,7 +268,7 @@ public class BtreeTest {
     }
 
     @Test public void testTreeCloneWithLetters() {
-        for (int dummy = 0; dummy < 20; dummy++) {
+        for (int dummy = 0; dummy < REPETITIONS; dummy++) {
             int height = ThreadLocalRandom.current().nextInt(10);
             boolean isPerfect = ThreadLocalRandom.current().nextBoolean();
             boolean letters = true;

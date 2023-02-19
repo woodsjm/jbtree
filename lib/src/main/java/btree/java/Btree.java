@@ -364,9 +364,10 @@ public class Btree {
 
     public static Node tree(int height, boolean isPerfect, boolean letters) {
         validateTreeHeight(height);
-        int[] numbers = generateRandomNumbers(height);
 
         ArrayList<Comparable> values = new ArrayList<>();
+
+        int[] numbers = generateRandomNumbers(height);
         for (int num: numbers) {
             values.add(letters ? numberToLetters(num) : num);
         }
@@ -375,16 +376,14 @@ public class Btree {
             return build(values);
         }
 
-        int leafCount = generateRandomLeafCount(height);
-        Node root;
-        if (values.get(0) != null) {
-            root = new Node(values.get(0));
-        } else {
+        if (values.get(0) == null) {
             return null;
         }
-        
-        HashSet<Node> leaves = new HashSet<>();
 
+        Node root = new Node(values.get(0));
+        HashSet<Node> leaves = new HashSet<>();
+        int leafCount = generateRandomLeafCount(height);
+        
         for (Comparable value: values) {
             Node node = root;
             int depth = 0;
