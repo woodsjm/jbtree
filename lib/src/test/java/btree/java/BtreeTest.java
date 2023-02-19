@@ -23,6 +23,9 @@ import org.junit.Test;
 public class BtreeTest {
     final int REPETITIONS = 20;
 
+    @Rule public final ExpectedSystemExit exit = ExpectedSystemExit.none();
+    @Rule public final ExpectedException exceptionRule = ExpectedException.none();
+
     @Test public void testNodeInitAndSetAttrWithIntegers() {
         Btree.Node<Integer> root = new Btree.Node<>(1);
         assertNull(root.getLeft());
@@ -132,9 +135,7 @@ public class BtreeTest {
         leftChild.setRight(lastNode);
         assertEquals(lastNode, root.getLeft().getRight());
         assertEquals("Node(D)", root.getLeft().getRight().toString());
-    }
-
-    @Rule public ExpectedException exceptionRule = ExpectedException.none(); 
+    } 
 
     @Test public void throwsNodeValueExceptionOnEmptyNode() throws Exception {
         exceptionRule.expect(BtreeException.NodeValueException.class);
@@ -283,8 +284,6 @@ public class BtreeTest {
         }
     }
 
-    // more elaborate because of build()'s try... catch 
-    @Rule public final ExpectedSystemExit exit = ExpectedSystemExit.none();
     @Test public void testListRepresentation1() {
         LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
 
