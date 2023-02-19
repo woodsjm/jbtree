@@ -421,13 +421,7 @@ public class Btree {
 
     protected static <T extends Comparable<T>> Node build(ArrayList<T> values) {
         ArrayList<Node> nodes = new ArrayList<>();
-        values.forEach((val) -> {
-            if (val == null) {
-                nodes.add(null);
-            } else {
-                nodes.add(new Node(val));
-            }
-        });
+        values.forEach(val -> nodes.add(val == null ? null : new Node(val)));
 
         for (int idx = 1; idx < nodes.size(); idx++) {
             if (!( nodes.get(idx) == null) ) {
