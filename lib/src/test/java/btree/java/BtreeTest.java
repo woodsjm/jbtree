@@ -401,7 +401,7 @@ public class BtreeTest {
         root.getLeft().setRight(new Btree.Node(7)); // [1, 2, 3, 6, 7, 4, 5]
         assertArrayEquals(treeAsList.toArray(), root.values().toArray());
 
-        for (int dummy = 0; dummy < 20; dummy++) {
+        for (int dummy = 0; dummy < REPETITIONS; dummy++) {
             Btree.Node<Integer> tree1 = Btree.tree();
             assertNotNull(tree1);
 
@@ -413,14 +413,9 @@ public class BtreeTest {
     }
 
     @Test public void testNodeToString() {
-        Btree.Node<Integer> intNode = new Btree.Node<>(76);
-        assertEquals("Node(76)", intNode.toString());
-
-        Btree.Node<String> strNode = new Btree.Node<>("ABC");
-        assertEquals("Node(ABC)", strNode.toString());
-        
-        Btree.Node<Float> fltNode = new Btree.Node<>(25.53f);
-        assertEquals("Node(25.53)", fltNode.toString());
+        assertEquals("Node(1)", new Btree.Node<>(1).toString());
+        assertEquals("Node(1.50)", new Btree.Node<>(1.50f).toString());
+        assertEquals("Node(A)", new Btree.Node<>("A").toString());
     }
 
     @Test 

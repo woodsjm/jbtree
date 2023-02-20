@@ -93,7 +93,6 @@ public class Btree {
         private Node left;
         private Node right;
 
-        // Init
         public Node(T value) {
             try {
                 if (value instanceof Integer || value instanceof Float || value instanceof String) {
@@ -112,7 +111,6 @@ public class Btree {
             }
         }
 
-        // Getters + Setters
         public T getVal() {
             return this.val;
         }
@@ -173,6 +171,7 @@ public class Btree {
             return clone;
         }
 
+        //FIX: computed value should include computed values of left and right Nodes
         @Override
         public int hashCode() {
             return Integer.valueOf(this.getVal().toString()).intValue();
@@ -315,10 +314,10 @@ public class Btree {
         @Override
         public String toString() {
             if (this.val instanceof Float) {
-                return String.format("Node(%.2f)", this.getVal());
+                return String.format("Node(%.2f)", this.val);
             }
 
-            return String.format("Node(%s)", this.getVal().toString());
+            return String.format("Node(%s)", this.val);
         }
 
         protected ArrayList<T> values() {
