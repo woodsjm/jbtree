@@ -9,9 +9,6 @@ import java.util.Collections;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.List;
 
-import static org.junit.Assert.*;
-import static org.junit.contrib.java.lang.system.ExpectedSystemExit.*;
-
 import nl.altindag.log.LogCaptor;
 import nl.altindag.log.model.LogEvent;
 import org.junit.contrib.java.lang.system.Assertion;
@@ -19,6 +16,9 @@ import org.junit.contrib.java.lang.system.ExpectedSystemExit;
 import org.junit.rules.ExpectedException;
 import org.junit.Rule;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
+import static org.junit.contrib.java.lang.system.ExpectedSystemExit.*;
 
 public class BtreeTest {
     final int REPETITIONS = 20;
@@ -287,7 +287,7 @@ public class BtreeTest {
     @Test public void testListRepresentation1() {
         LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
 
-        ArrayList<Integer> treeAsList = new ArrayList<Integer>();
+        List<Integer> treeAsList = new ArrayList<Integer>();
 
         Btree.Node root = Btree.build(new ArrayList()); // []
         assertNull(root);

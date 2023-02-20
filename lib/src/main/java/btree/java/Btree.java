@@ -200,16 +200,8 @@ public class Btree {
                     return false;
                 } else if (!(other instanceof Node)) {
                     return false;
-                } else {
-                    if (node1.getVal() instanceof Float && node2.getVal() instanceof Float) {
-                        String float1 = String.format("%.2f", node1.getVal());
-                        String float2 = String.format("%.2f", node2.getVal());
-                        if (Float.compare(Float.valueOf(float1), Float.valueOf(float2)) != 0) {
-                            return false;
-                        }
-                    } else if (node1.getVal() != node2.getVal()) {
-                        return false;
-                    }
+                } else if (node1.getVal().compareTo(node2.getVal()) != 0) {
+                    return false;
                 }
                     
                 stack1.push(node1.getRight());
@@ -232,13 +224,13 @@ public class Btree {
             int maxLeafDepth = -1;
             boolean isStrict = true;
             boolean isComplete = true;
-            ArrayList<Node> currentNodes = new ArrayList<>();
+            List<Node> currentNodes = new ArrayList<>();
             currentNodes.add(this);
             boolean nonFullNodeSeen = false;
 
             while (currentNodes.size() > 0) {
                 maxLeafDepth++;
-                ArrayList<Node> nextNodes = new ArrayList<>();
+                List<Node> nextNodes = new ArrayList<>();
 
                 for (Node<T> node: currentNodes) {
                     size++;
@@ -317,18 +309,19 @@ public class Btree {
                 return String.format("Node(%.2f)", this.val);
             }
 
+            //FIX: possible issue with localization using %s on number
             return String.format("Node(%s)", this.val);
         }
 
-        protected ArrayList<T> values() {
-            ArrayList<Node<T>> currentNodes = new ArrayList<>();
+        protected List<T> values() {
+            List<Node<T>> currentNodes = new ArrayList<>();
             currentNodes.add(this);
-            ArrayList<T> nodeValues = new ArrayList<>();
+            List<T> nodeValues = new ArrayList<>();
 
             boolean areNodesLeft = true;
             while (areNodesLeft) {
                 areNodesLeft = false;
-                ArrayList<Node<T>> nextNodes = new ArrayList<>();
+                List<Node<T>> nextNodes = new ArrayList<>();
 
                 for (Node<T> node: currentNodes) {
                     if (node == null) {
@@ -364,7 +357,7 @@ public class Btree {
     public static Node tree(int height, boolean isPerfect, boolean letters) {
         validateTreeHeight(height);
 
-        ArrayList<Comparable> values = new ArrayList<>();
+        List<Comparable> values = new ArrayList<>((1 << (height + 1)) - 1);
 
         int[] numbers = generateRandomNumbers(height);
         for (int num: numbers) {
@@ -417,8 +410,8 @@ public class Btree {
         return root;
     }
 
-    protected static <T extends Comparable<T>> Node build(ArrayList<T> values) {
-        ArrayList<Node> nodes = new ArrayList<>();
+    protected static <T extends Comparable<T>> Node build(List<T> values) {
+        List<Node> nodes = new ArrayList<>(values.size());
         values.forEach(val -> nodes.add(val == null ? null : new Node(val)));
 
         for (int idx = 1; idx < nodes.size(); idx++) {
