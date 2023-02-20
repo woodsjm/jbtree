@@ -300,7 +300,7 @@ public class Btree {
                 size,                             
                 isComplete && isDescending, // isMaxHeap
                 isComplete && isAscending,  // isMinHeap
-                leafCount == (1 << maxLeafDepth), //isPefect
+                leafCount == (1 << maxLeafDepth), //isPerfect
                 isStrict,
                 isComplete, 
                 leafCount, 
@@ -432,12 +432,12 @@ public class Btree {
                     }
                 } catch (Exception e) {
                     final String message = "Likely a problem with the ArrayList argument\n\n"
-                        + "Example 1: [null, 2, 4]\n"
+                        + "Example A: [null, 2, 4]\n"
                         + "Fix: [1, 2, 4]\n\n"
-                        + "Example 2: [1, null, 4, null, 8]\n"
+                        + "Example B: [1, null, 4, null, 8]\n"
                         + "Fix: [1, 2, 4, null, 8]\n\n"
                         + "Here's your stack trace...";
-                    Logger.getLogger(Btree.class.getName()).log(Level.WARNING, message, e);
+                    Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, message, e);
                     System.exit(0);
                 } 
                 

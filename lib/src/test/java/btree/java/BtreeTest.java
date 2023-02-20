@@ -341,7 +341,7 @@ public class BtreeTest {
         exit.expectSystemExitWithStatus(0);
         exit.checkAssertionAfterwards(new Assertion() {
             public void checkAssertion() {
-                String capturedLogs = String.valueOf(logCaptor.getWarnLogs());
+                String capturedLogs = String.valueOf(logCaptor.getLogs());
                 LogEvent capturedLogEvent = logCaptor.getLogEvents().get(0);
 
                 assertTrue(capturedLogs.contains("Likely a problem with the ArrayList argument"));
@@ -360,7 +360,7 @@ public class BtreeTest {
         exit.expectSystemExitWithStatus(0);
         exit.checkAssertionAfterwards(new Assertion() {
             public void checkAssertion() {
-                String capturedLogs = String.valueOf(logCaptor.getWarnLogs());
+                String capturedLogs = String.valueOf(logCaptor.getLogs());
                 LogEvent capturedLogEvent = logCaptor.getLogEvents().get(0);
 
                 assertTrue(capturedLogs.contains("Likely a problem with the ArrayList argument"));
