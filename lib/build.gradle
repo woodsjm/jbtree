@@ -38,3 +38,7 @@ tasks.named('jar') {
                    'Implementation-Version': project.version)
     }
 }
+
+test {
+    testLogging.showStandardStreams true
+}

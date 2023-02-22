@@ -5,13 +5,16 @@ package btree.java;
 
 import java.lang.Comparable;
 import java.math.BigDecimal;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Queue;
 import java.util.stream.IntStream;
 import java.util.Stack;
 
@@ -90,8 +93,8 @@ public class Btree {
 
     public static class Node<T extends Comparable<T>> {
         private T val;
-        private Node left;
-        private Node right;
+        private Node<T> left;
+        private Node<T> right;
 
         public Node(T value) {
             try {
@@ -211,6 +214,10 @@ public class Btree {
             }
 
             return true;
+        }
+
+        public Iterator<Node<T>> iterator() {
+            return new BtreeIterator(this);
         }
 
         protected HashMap<String, Object> properties() {
@@ -348,7 +355,25 @@ public class Btree {
 
             return nodeValues;
         }
+
+        protected List<T> values2() {
+            List<T> nodeValues = new ArrayList<>();
+
+            Iterator<Node<T>> nodes = this.iterator();
+            while (nodes.hasNext()) {
+                Node<T> node = nodes.next();
+                nodeValues.add(node == null ? null : node.getVal());
+            }
+
+            while (!nodeValues.isEmpty() && nodeValues.get(nodeValues.size() - 1) == null) {
+                nodeValues.remove(nodeValues.size() - 1);
+            }
+
+            return nodeValues;
+        }
     }
+
+    
 
     public static Node tree() {
         return tree(3, false, false);
@@ -443,6 +468,47 @@ public class Btree {
         }
 
         return nodes.isEmpty() ? null : nodes.get(0);
+    }
+
+    protected static <T extends Comparable<T>> Node build2(List<T> values) {
+        Node root = null;
+
+        Queue<Node> queue = new ArrayDeque();
+
+        if (!values.isEmpty()) {
+            try {
+                if (values.get(0) == null) {
+                    throw new BtreeException.NodeValueException("node value must be an Integer, a Float, or a String");
+                } else {
+                    root = new Node(values.get(0));
+                    queue.add(root);
+                }
+            } catch (Exception e) {
+                Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, "", e);
+                System.exit(0);
+            } 
+        } 
+
+        int idx = 1;
+        while (idx < values.size()) {
+            Node node = queue.remove();
+
+            if (values.get(idx) != null) {
+                node.setLeft(new Node(values.get(idx)));
+                queue.add(node.getLeft());
+            }
+
+            idx++;
+
+            if (idx < values.size() && values.get(idx) != null) {
+                node.setRight(new Node(values.get(idx)));
+                queue.add(node.getRight());
+            }
+
+            idx++;
+        }
+
+        return root;
     }
 
     private static int generateRandomLeafCount(int height) {
