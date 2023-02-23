@@ -505,11 +505,57 @@ public class BtreeTest {
         treeAsList.addAll(Arrays.asList(1));
         root = new Btree.Node(1);
         assertArrayEquals(treeAsList.toArray(), root.values2().toArray()); // [1]
-
         treeAsList.clear();
         treeAsList.addAll(Arrays.asList(1, null, 3));
         root.setRight(new Btree.Node(3));
         assertArrayEquals(treeAsList.toArray(), root.values2().toArray()); // [1, null, 3]
+        treeAsList.set(1, 2);
+        root.setLeft(new Btree.Node(2));
+        assertArrayEquals(treeAsList.toArray(), root.values2().toArray()); // [1, 2, 3]
+        treeAsList.addAll(Arrays.asList(null, null, 4));
+        root.getRight().setLeft(new Btree.Node(4));
+        assertArrayEquals(treeAsList.toArray(), root.values2().toArray()); // [1, 2, 3, null, null, 4]
+        treeAsList.add(5);
+        root.getRight().setRight(new Btree.Node(5));
+        assertArrayEquals(treeAsList.toArray(), root.values2().toArray()); // [1, 2, 3, null, null, 4, 5]
+        treeAsList.set(3, 6);
+        root.getLeft().setLeft(new Btree.Node(6));
+        assertArrayEquals(treeAsList.toArray(), root.values2().toArray()); // [1, 2, 3, 6, null, 4, 5]
+        treeAsList.set(4, 7);
+        root.getLeft().setRight(new Btree.Node(7));
+        assertArrayEquals(treeAsList.toArray(), root.values2().toArray()); // [1, 2, 3, 6, 7, 4, 5]
+        
+        treeAsList.clear();
+        treeAsList.addAll(Arrays.asList(1));
+        root = new Btree.Node(1);
+        assertArrayEquals(treeAsList.toArray(), root.values2().toArray()); // [1]
+        treeAsList.add(2);
+        root.setLeft(new Btree.Node(2));
+        assertArrayEquals(treeAsList.toArray(), root.values2().toArray()); // [1, 2]
+        treeAsList.add(3);
+        root.setRight(new Btree.Node(3));
+        assertArrayEquals(treeAsList.toArray(), root.values2().toArray()); // [1, 2, 3]
+        treeAsList.add(2, null);
+        root.setRight(null);
+        root.getLeft().setLeft(new Btree.Node(3));
+        assertArrayEquals(treeAsList.toArray(), root.values2().toArray()); // [1, 2, null, 3]
+        treeAsList.add(null);
+        treeAsList.add(4);
+        root.getLeft().getLeft().setLeft(new Btree.Node(4));
+        assertArrayEquals(treeAsList.toArray(), root.values2().toArray()); // [1, 2, null, 3, null, 4]
+        treeAsList.add(5);
+        root.getLeft().getLeft().setRight(new Btree.Node(5));
+        assertArrayEquals(treeAsList.toArray(), root.values2().toArray()); // [1, 2, null, 3, null, 4, 5]
+
+        for (int dummy = 0; dummy < REPETITIONS; dummy++) {
+            Btree.Node<Integer> tree1 = Btree.tree();
+            assertNotNull(tree1);
+
+            Btree.Node<Integer> tree2 = Btree.build(tree1.values2());
+            assertNotNull(tree2);
+
+            assertArrayEquals(tree2.values2().toArray(), tree1.values2().toArray());
+        }
     }
 
     @Test public void testListRepresentation2EmptyRoot() {
