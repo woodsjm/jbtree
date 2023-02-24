@@ -29,13 +29,6 @@ class TreeGetNodeByLevelOrderIndex {
 
   @Test 
   public void testTreeGetNodeByLevelOrderIndex() {
-    // Btree.Node root = new Btree.Node(1);
-    // root.setLeft(new Btree.Node(2));
-    // root.setRight(new Btree.Node(3));
-    // root.getLeft().setLeft(new Btree.Node(4));
-    // root.getLeft().setRight(new Btree.Node(5));
-    // root.getLeft().getRight().setLeft(new Btree.Node(6));
-
     assertSame(root, root.get(0));
     assertSame(root.getLeft(), root.get(1));
     assertSame(root.getRight(), root.get(2));
@@ -47,13 +40,6 @@ class TreeGetNodeByLevelOrderIndex {
   @Test
   public void testTreeGetNodeByLevelOrderIndexWithExit() throws Exception {
     LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
-
-    // Btree.Node root = new Btree.Node(1);
-    // root.setLeft(new Btree.Node(2));
-    // root.setRight(new Btree.Node(3));
-    // root.getLeft().setLeft(new Btree.Node(4));
-    // root.getLeft().setRight(new Btree.Node(5));
-    // root.getLeft().getRight().setLeft(new Btree.Node(6));
 
     int statusCode = catchSystemExit(() -> {
       root.get(5);
