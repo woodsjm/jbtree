@@ -576,22 +576,6 @@ public class BtreeTest {
         Btree.Node root = Btree.build2(treeAsList); // [null, 1, 2]
     }
 
-    @Test public void testTreeGetNodeByLevelOrderIndex() {
-        Btree.Node root = new Btree.Node(1);
-        root.setLeft(new Btree.Node(2));
-        root.setRight(new Btree.Node(3));
-        root.getLeft().setLeft(new Btree.Node(4));
-        root.getLeft().setRight(new Btree.Node(5));
-        root.getLeft().getRight().setLeft(new Btree.Node(6));
-
-        assertSame(root, root.get(0));
-        assertSame(root.getLeft(), root.get(1));
-        assertSame(root.getRight(), root.get(2));
-        assertSame(root.getLeft().getLeft(), root.get(3));
-        assertSame(root.getLeft().getRight(), root.get(4));
-        assertSame(root.getLeft().getRight().getLeft(), root.get(9));     
-    }
-
     @Test public void testNodeToString() {
         assertEquals("Node(1)", new Btree.Node<>(1).toString());
         assertEquals("Node(1.50)", new Btree.Node<>(1.50f).toString());

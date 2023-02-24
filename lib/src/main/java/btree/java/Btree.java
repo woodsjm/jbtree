@@ -132,17 +132,27 @@ public class Btree {
 
         public Node<T> get(int index) {
             Iterator<Node<T>> nodes = this.iterator();
+            Node<T> searchResult = null;
 
             int counter = 0;
             while(nodes.hasNext()) {
                 if (counter == index) {
-                    return nodes.next();
+                    searchResult = nodes.next();
                 }
                 nodes.next();
                 counter++;
             }
 
-            return null;
+            try {
+                if (searchResult == null) {
+                    throw new BtreeException.NodeNotFoundException("node missing at index " + index);
+                }
+            } catch (Exception e) {
+                Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, "", e);
+                System.exit(0);
+            }
+
+            return searchResult;
         }
 
         public Node getLeft() {
