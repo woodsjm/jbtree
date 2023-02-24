@@ -40,5 +40,5 @@ tasks.named('jar') {
 }
 
 test {
-    testLogging.showStandardStreams true
+    testLogging.showStandardStreams false
 }

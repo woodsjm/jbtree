@@ -130,6 +130,21 @@ public class Btree {
             throw new BtreeException.NodeValueException("node value must be an Integer, a Float, or a String");
         }
 
+        public Node<T> get(int index) {
+            Iterator<Node<T>> nodes = this.iterator();
+
+            int counter = 0;
+            while(nodes.hasNext()) {
+                if (counter == index) {
+                    return nodes.next();
+                }
+                nodes.next();
+                counter++;
+            }
+
+            return null;
+        }
+
         public Node getLeft() {
             return this.left;
         }
