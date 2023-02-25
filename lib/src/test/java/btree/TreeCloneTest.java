@@ -1,20 +1,18 @@
 package btree.java;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 public class TreeCloneTest {
   final int REPETITIONS = 20;
 
-  @Test public void testTreeCloneWithNumbers() {
+  public void testTreeCloneWithNumbers() {
     for (int dummy = 0; dummy < REPETITIONS; dummy++) {
       int height = ThreadLocalRandom.current().nextInt(10);
       boolean isPerfect = ThreadLocalRandom.current().nextBoolean();
@@ -30,7 +28,7 @@ public class TreeCloneTest {
     }
   }
 
-  @Test public void testTreeCloneWithLetters() {
+  public void testTreeCloneWithLetters() {
     for (int dummy = 0; dummy < REPETITIONS; dummy++) {
       int height = ThreadLocalRandom.current().nextInt(10);
       boolean isPerfect = ThreadLocalRandom.current().nextBoolean();

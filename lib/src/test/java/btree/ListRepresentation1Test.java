@@ -1,13 +1,5 @@
 package btree.java;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import nl.altindag.log.LogCaptor;
-import nl.altindag.log.model.LogEvent;
-import org.junit.jupiter.api.Test;
-
 import static com.github.stefanbirkner.systemlambda.SystemLambda.*;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,10 +7,17 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import nl.altindag.log.LogCaptor;
+import nl.altindag.log.model.LogEvent;
+
 public class ListRepresentation1Test {
   final int REPETITIONS = 20;
 
-  @Test public void testListRepresentation1() {
+  public void testListRepresentation1() {
     LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
 
     List<Integer> treeAsList = new ArrayList<Integer>();
@@ -110,7 +109,7 @@ public class ListRepresentation1Test {
     }
   }
 
-  @Test public void testListRepresentation1EmptyRoot() throws Exception {
+  public void testListRepresentation1EmptyRoot() throws Exception {
     LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
 
     int statusCode = catchSystemExit(() -> {
@@ -128,7 +127,7 @@ public class ListRepresentation1Test {
     assertTrue(capturedLogEvent.getThrowable().get().getMessage().contains("parent node missing at index 0"));
   }
 
-  @Test public void testListRepresentation1EmptyParent() throws Exception {
+  public void testListRepresentation1EmptyParent() throws Exception {
     LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
 
     int statusCode = catchSystemExit(() -> {

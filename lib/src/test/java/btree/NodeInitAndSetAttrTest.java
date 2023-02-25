@@ -1,22 +1,21 @@
 package btree.java;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import nl.altindag.log.LogCaptor;
-import nl.altindag.log.model.LogEvent;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
-
 import static com.github.stefanbirkner.systemlambda.SystemLambda.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import nl.altindag.log.LogCaptor;
+import nl.altindag.log.model.LogEvent;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
+
 public class NodeInitAndSetAttrTest {
-  @Test public void testNodeInitAndSetAttrWithIntegers() {
+  public void testNodeInitAndSetAttrWithIntegers() {
     Btree.Node<Integer> root = new Btree.Node<>(1);
     assertNull(root.getLeft());
     assertNull(root.getRight());
@@ -53,7 +52,7 @@ public class NodeInitAndSetAttrTest {
     assertEquals("Node(4)", root.getLeft().getRight().toString());
   }
 
-  @Test public void testNodeInitAndSetAttrWithFloats() {
+  public void testNodeInitAndSetAttrWithFloats() {
     Btree.Node<Float> root = new Btree.Node<>(1.50f);
     assertNull(root.getLeft());
     assertNull(root.getRight());
@@ -90,7 +89,7 @@ public class NodeInitAndSetAttrTest {
     assertEquals("Node(4.50)", root.getLeft().getRight().toString());
   }
 
-  @Test public void testNodeInitAndSetAttrWithLetters() {
+  public void testNodeInitAndSetAttrWithLetters() {
     Btree.Node<String> root = new Btree.Node<>("A");
     assertNull(root.getLeft());
     assertNull(root.getRight());

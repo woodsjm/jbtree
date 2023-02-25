@@ -1,13 +1,12 @@
 package btree.java;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+
 public class TreeEqualsTest {
 
-  @Test public void testTreeEqualsWithIntegers() {
+  public void testTreeEqualsWithIntegers() {
     Btree.Node<Integer> root1 = new Btree.Node<>(1);
     Btree.Node<Integer> root2 = new Btree.Node<>(1);
     assertFalse(root1.equals(null));
@@ -41,7 +40,7 @@ public class TreeEqualsTest {
     assertTrue(root2.equals(root1));
   }
 
-  @Test public void testTreeEqualsWithFloats() {
+  public void testTreeEqualsWithFloats() {
     Btree.Node<Float> root1 = new Btree.Node<>(1.50f);
     Btree.Node<Float> root2 = new Btree.Node<>(1.50f);
     assertFalse(root1.equals(null));
@@ -75,7 +74,7 @@ public class TreeEqualsTest {
     assertTrue(root2.equals(root1));
   }
 
-  @Test public void testTreeEqualsWithLetters() {
+  public void testTreeEqualsWithLetters() {
     Btree.Node<String> root1 = new Btree.Node<>("A");
     Btree.Node<String> root2 = new Btree.Node<>("A");
     assertFalse(root1.equals(null));

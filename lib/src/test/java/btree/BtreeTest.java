@@ -3,18 +3,15 @@
  */
 package btree.java;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BtreeTest {
-    @Test public void testNodeToString() {
+    public void testNodeToString() {
         assertEquals("Node(1)", new Btree.Node<>(1).toString());
         assertEquals("Node(1.50)", new Btree.Node<>(1.50f).toString());
         assertEquals("Node(A)", new Btree.Node<>("A").toString());
     }
 
-    @Test 
     public void main() {
         Btree.main(new String[] {});
     }

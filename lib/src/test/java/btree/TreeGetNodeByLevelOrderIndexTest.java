@@ -1,19 +1,15 @@
 package btree.java;
 
-import nl.altindag.log.LogCaptor;
-import nl.altindag.log.model.LogEvent;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInfo;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-
 import static com.github.stefanbirkner.systemlambda.SystemLambda.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import nl.altindag.log.LogCaptor;
+import nl.altindag.log.model.LogEvent;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class TreeGetNodeByLevelOrderIndexTest {
 
@@ -28,8 +24,7 @@ class TreeGetNodeByLevelOrderIndexTest {
     root.getLeft().setRight(new Btree.Node(5));
     root.getLeft().getRight().setLeft(new Btree.Node(6));
   }
-
-  @Test 
+ 
   public void testTreeGetNodeByLevelOrderIndex() {
     assertSame(root, root.get(0));
     assertSame(root.getLeft(), root.get(1));
