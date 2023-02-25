@@ -143,6 +143,16 @@ public class Btree {
         }
 
         public Node<T> get(int index) {
+            //FIX: Refactor exception handling into BtreeIterator
+            try {
+                if (index < 0) {
+                    throw new BtreeException.NodeIndexException("node index must be a non-negative int");
+                }
+            } catch (Exception e) {
+                Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, "", e);
+                System.exit(0);
+            }
+
             Iterator<Node<T>> nodes = this.iterator();
             Node<T> searchResult = null;
 

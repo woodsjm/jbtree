@@ -37,7 +37,25 @@ class TreeGetNodeByLevelOrderIndexTest {
 
   @ParameterizedTest
   @ValueSource(ints = { 5, 6, 7, 8, 10 })
-  public void testTreeGetNodeByLevelOrderIndexWithExit(int invalidIndex) throws Exception {
+  public void testTreeGetNodeByLevelOrderIndexForMissingNode(int index) throws Exception {
+    LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
+
+    int statusCode = catchSystemExit(() -> {
+      root.get(index);
+    });
+    assertEquals(0, statusCode);
+
+    LogEvent capturedLogEvent = logCaptor.getLogEvents().get(0);
+    String thrownMessage = String.format("node missing at index %s", index);
+
+    assertTrue(capturedLogEvent.getThrowable().get() instanceof BtreeException.NodeNotFoundException);
+    assertTrue(capturedLogEvent.getThrowable().get().getMessage().contains(thrownMessage));
+      
+  }
+
+  @ParameterizedTest
+  @ValueSource(ints = { -1, -10 })
+  public void testTreeGetNodeByLevelOrderIndexForInvalidIndex(int invalidIndex) throws Exception {
     LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
 
     int statusCode = catchSystemExit(() -> {
@@ -46,10 +64,9 @@ class TreeGetNodeByLevelOrderIndexTest {
     assertEquals(0, statusCode);
 
     LogEvent capturedLogEvent = logCaptor.getLogEvents().get(0);
-    String thrownMessage = String.format("node missing at index %s", invalidIndex);
+    String thrownMessage = String.format("node index must be a non-negative int", invalidIndex);
 
-    assertTrue(capturedLogEvent.getThrowable().get() instanceof BtreeException.NodeNotFoundException);
+    assertTrue(capturedLogEvent.getThrowable().get() instanceof BtreeException.NodeIndexException);
     assertTrue(capturedLogEvent.getThrowable().get().getMessage().contains(thrownMessage));
-
   }
 }
