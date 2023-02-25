@@ -14,7 +14,9 @@ import java.util.List;
 import nl.altindag.log.LogCaptor;
 import nl.altindag.log.model.LogEvent;
 
+
 public class ListRepresentation2Test {
+  
   final int REPETITIONS = 20;
 
   public void testListRepresentation2() {

@@ -9,7 +9,9 @@ import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.List;
 
+
 public class TreeCloneTest {
+  
   final int REPETITIONS = 20;
 
   public void testTreeCloneWithNumbers() {

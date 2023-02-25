@@ -14,7 +14,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+
 public class NodeInitAndSetAttrTest {
+  
   public void testNodeInitAndSetAttrWithIntegers() {
     Btree.Node<Integer> root = new Btree.Node<>(1);
     assertNull(root.getLeft());
