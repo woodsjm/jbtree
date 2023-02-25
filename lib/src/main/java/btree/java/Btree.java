@@ -108,9 +108,14 @@ public class Btree {
             } 
         }
 
-        public Node(List list) throws BtreeException.NodeValueException {
-            if (list.size() == 0) {
-                throw new BtreeException.NodeValueException("node value must be an Integer, a Float, or a String");
+        public Node(List list) {
+            try {
+                if (true) {
+                    throw new BtreeException.NodeValueException("node value must be an Integer, a Float, or a String");
+                }
+            } catch (Exception e) {
+                Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, "", e);
+                System.exit(0);
             }
         }
 
@@ -126,8 +131,15 @@ public class Btree {
             }
         }
 
-        public void setVal(List<T> list) throws BtreeException.NodeValueException {
-            throw new BtreeException.NodeValueException("node value must be an Integer, a Float, or a String");
+        public void setVal(List<T> list) {
+            try {
+                if (true) {
+                    throw new BtreeException.NodeValueException("node value must be an Integer, a Float, or a String");
+                }
+            } catch (Exception e) {
+                Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, "", e);
+                System.exit(0);
+            }
         }
 
         public Node<T> get(int index) {

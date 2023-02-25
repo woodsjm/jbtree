@@ -7,13 +7,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static com.github.stefanbirkner.systemlambda.SystemLambda.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class TreeGetNodeByLevelOrderIndex {
+class TreeGetNodeByLevelOrderIndexTest {
 
   private static Btree.Node root;
 
@@ -37,19 +39,21 @@ class TreeGetNodeByLevelOrderIndex {
     assertSame(root.getLeft().getRight().getLeft(), root.get(9));     
   }
 
-  @Test
-  public void testTreeGetNodeByLevelOrderIndexWithExit() throws Exception {
+  @ParameterizedTest
+  @ValueSource(ints = { 5, 6, 7, 8, 10 })
+  public void testTreeGetNodeByLevelOrderIndexWithExit(int invalidIndex) throws Exception {
     LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
 
     int statusCode = catchSystemExit(() -> {
-      root.get(5);
+      root.get(invalidIndex);
     });
     assertEquals(0, statusCode);
 
     LogEvent capturedLogEvent = logCaptor.getLogEvents().get(0);
+    String thrownMessage = String.format("node missing at index %s", invalidIndex);
 
     assertTrue(capturedLogEvent.getThrowable().get() instanceof BtreeException.NodeNotFoundException);
-    assertTrue(capturedLogEvent.getThrowable().get().getMessage().contains("node missing at index 5"));
+    assertTrue(capturedLogEvent.getThrowable().get().getMessage().contains(thrownMessage));
 
   }
 }
