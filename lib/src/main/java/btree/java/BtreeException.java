@@ -9,6 +9,12 @@ public class BtreeException {
     }
   }
 
+  public static class NodeModifyException extends Exception {
+    public NodeModifyException(String message) {
+      super(message);
+    }
+  }
+
   public static class NodeNotFoundException extends Exception {
     public NodeNotFoundException(String message) {
       super(message);
