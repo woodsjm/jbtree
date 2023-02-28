@@ -143,30 +143,15 @@ public class Btree {
         }
 
         public Node<T> get(int index) {
-            //FIX: Refactor exception handling into BtreeIterator
+            Node<T> searchResult = null;
+
             try {
                 if (index < 0) {
                     throw new BtreeException.NodeIndexException("node index must be a non-negative int");
                 }
-            } catch (Exception e) {
-                Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, "", e);
-                System.exit(0);
-            }
 
-            Iterator<Node<T>> nodes = this.iterator();
-            Node<T> searchResult = null;
+                searchResult = this.bfs(index);
 
-            int counter = 0;
-            while(nodes.hasNext()) {
-                if (counter == index) {
-                    //FIX: add break
-                    searchResult = nodes.next();
-                }
-                nodes.next();
-                counter++;
-            }
-
-            try {
                 if (searchResult == null) {
                     throw new BtreeException.NodeNotFoundException("node missing at index " + index);
                 }
@@ -179,7 +164,6 @@ public class Btree {
         }
 
         public void set(int index, Node<T> node) {
-            //FIX: Refactor exception handling into BtreeIterator
             try {
                 if (index == 0) {
                     throw new BtreeException.NodeModifyException("cannot modify the root node");
@@ -190,19 +174,7 @@ public class Btree {
                 }
 
                 int parentIdx = Math.floorDiv(index - 1, 2);
-                Node<T> parent = null;
-
-                Iterator<Node<T>> nodes = this.iterator();
-
-                int counter = 0;
-                while(nodes.hasNext()) {
-                    if (counter == parentIdx) {
-                        parent = nodes.next();
-                        break;
-                    }
-                    nodes.next();
-                    counter++;
-                }
+                Node<T> parent = this.bfs(parentIdx);
 
                 if (parent == null) {
                     throw new BtreeException.NodeNotFoundException("parent node missing at index " + parentIdx);
@@ -247,24 +219,11 @@ public class Btree {
                 }
 
                 int parentIdx = Math.floorDiv(index - 1, 2);
-                Node<T> parent = null;
+                Node<T> parent = this.bfs(parentIdx);
+
                 Node<T> nodeToRemove = null;
-
-                Iterator<Node<T>> nodes = this.iterator();
-
-                int counter = 0;
-                while(nodes.hasNext()) {
-                    if (counter == parentIdx) {
-                        parent = nodes.next();
-                    }
-
-                    if (counter == index) {
-                        nodeToRemove = nodes.next();
-                        break;
-                    }
-
-                    nodes.next();
-                    counter++;
+                if (parent != null) {
+                    nodeToRemove = index % 2 == 0 ? parent.getRight() : parent.getLeft();
                 }
 
                 if (nodeToRemove == null) {
@@ -281,6 +240,18 @@ public class Btree {
                 Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, "", e);
                 System.exit(0);
             }
+        }
+
+        private Node<T> bfs(int index) {
+            Iterator<Node<T>> nodes = this.iterator();
+            for (int iterationCount = 0; nodes.hasNext(); iterationCount++) {
+                if (iterationCount == index) {
+                    return nodes.next();
+                }
+                nodes.next();
+            }
+
+            return null;
         }
 
         public Node deepCopy() {
