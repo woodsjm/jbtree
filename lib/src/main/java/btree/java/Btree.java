@@ -236,6 +236,53 @@ public class Btree {
             this.right = node;
         }
 
+        public void remove(int index) {
+            try {
+                if (index == 0) {
+                    throw new BtreeException.NodeModifyException("cannot remove the root node");
+                }
+
+                if (index < 0) {
+                    throw new BtreeException.NodeIndexException("node index must be a non-negative int");
+                }
+
+                int parentIdx = Math.floorDiv(index - 1, 2);
+                Node<T> parent = null;
+                Node<T> nodeToRemove = null;
+
+                Iterator<Node<T>> nodes = this.iterator();
+
+                int counter = 0;
+                while(nodes.hasNext()) {
+                    if (counter == parentIdx) {
+                        parent = nodes.next();
+                    }
+
+                    if (counter == index) {
+                        nodeToRemove = nodes.next();
+                        break;
+                    }
+
+                    nodes.next();
+                    counter++;
+                }
+
+                if (nodeToRemove == null) {
+                    throw new BtreeException.NodeNotFoundException("no node to remove at index " + index);
+                }
+
+                if (index % 2 == 0) {
+                    parent.setRight(null);
+                } else {
+                    parent.setLeft(null);
+                }
+
+            } catch (Exception e) {
+                Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, "", e);
+                System.exit(0);
+            }
+        }
+
         public Node deepCopy() {
             Node clone = new Node(this.getVal());
 
@@ -397,6 +444,18 @@ public class Btree {
                 maxNodeValue,
                 minLeafDepth,
                 maxLeafDepth).toHashMap();
+        }
+
+        public int size() {
+            Iterator<Node<T>> nodes = this.iterator();
+
+            int counter = 0;
+            while(nodes.hasNext()) {
+                nodes.next();
+                counter++;
+            }
+
+            return counter;
         }
 
 
