@@ -420,13 +420,14 @@ public class Btree {
         public int size() {
             Iterator<Node<T>> nodes = this.iterator();
 
-            int counter = 0;
+            int nodeCount = 0;
             while(nodes.hasNext()) {
-                nodes.next();
-                counter++;
+                if (nodes.next() != null) {
+                    nodeCount++;
+                }
             }
 
-            return counter;
+            return nodeCount;
         }
 
 

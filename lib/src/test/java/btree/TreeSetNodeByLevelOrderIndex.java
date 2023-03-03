@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import nl.altindag.log.LogCaptor;
 import nl.altindag.log.model.LogEvent;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -39,6 +40,7 @@ class TreeSetNodeByLevelOrderIndexTest {
     newNode3 = new Btree.Node(9);
   }
 
+  @Test
   void testTreeSetNodeByLevelOrderIndex() {
     root.set(10, newNode1);
     assertEquals(Integer.valueOf(1), root.getVal());

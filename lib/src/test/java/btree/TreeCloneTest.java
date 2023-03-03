@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
@@ -14,6 +15,7 @@ public class TreeCloneTest {
   
   final int REPETITIONS = 20;
 
+  @Test
   public void testTreeCloneWithNumbers() {
     for (int dummy = 0; dummy < REPETITIONS; dummy++) {
       int height = ThreadLocalRandom.current().nextInt(10);
@@ -30,6 +32,7 @@ public class TreeCloneTest {
     }
   }
 
+  @Test
   public void testTreeCloneWithLetters() {
     for (int dummy = 0; dummy < REPETITIONS; dummy++) {
       int height = ThreadLocalRandom.current().nextInt(10);

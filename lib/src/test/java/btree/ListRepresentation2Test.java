@@ -13,12 +13,14 @@ import java.util.List;
 
 import nl.altindag.log.LogCaptor;
 import nl.altindag.log.model.LogEvent;
+import org.junit.jupiter.api.Test;
 
 
 public class ListRepresentation2Test {
   
   final int REPETITIONS = 20;
 
+  @Test
   public void testListRepresentation2() {
     LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
 
@@ -157,6 +159,7 @@ public class ListRepresentation2Test {
     }
   }
 
+  @Test
   public void testListRepresentation2EmptyRoot() throws Exception {
     LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
 

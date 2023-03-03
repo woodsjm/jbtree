@@ -13,12 +13,14 @@ import java.util.List;
 
 import nl.altindag.log.LogCaptor;
 import nl.altindag.log.model.LogEvent;
+import org.junit.jupiter.api.Test;
 
 
 public class ListRepresentation1Test {
 
   final int REPETITIONS = 20;
 
+  @Test
   public void testListRepresentation1() {
     LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
 
@@ -111,6 +113,7 @@ public class ListRepresentation1Test {
     }
   }
 
+  @Test
   public void testListRepresentation1EmptyRoot() throws Exception {
     LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
 
@@ -129,6 +132,7 @@ public class ListRepresentation1Test {
     assertTrue(capturedLogEvent.getThrowable().get().getMessage().contains("parent node missing at index 0"));
   }
 
+  @Test
   public void testListRepresentation1EmptyParent() throws Exception {
     LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
 

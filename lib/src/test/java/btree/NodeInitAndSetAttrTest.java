@@ -10,6 +10,7 @@ import java.util.List;
 
 import nl.altindag.log.LogCaptor;
 import nl.altindag.log.model.LogEvent;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -17,6 +18,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 public class NodeInitAndSetAttrTest {
   
+  @Test
   public void testNodeInitAndSetAttrWithIntegers() {
     Btree.Node<Integer> root = new Btree.Node<>(1);
     assertNull(root.getLeft());
@@ -54,6 +56,7 @@ public class NodeInitAndSetAttrTest {
     assertEquals("Node(4)", root.getLeft().getRight().toString());
   }
 
+  @Test
   public void testNodeInitAndSetAttrWithFloats() {
     Btree.Node<Float> root = new Btree.Node<>(1.50f);
     assertNull(root.getLeft());
@@ -91,6 +94,7 @@ public class NodeInitAndSetAttrTest {
     assertEquals("Node(4.50)", root.getLeft().getRight().toString());
   }
 
+  @Test
   public void testNodeInitAndSetAttrWithLetters() {
     Btree.Node<String> root = new Btree.Node<>("A");
     assertNull(root.getLeft());

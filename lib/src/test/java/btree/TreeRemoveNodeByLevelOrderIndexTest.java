@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import nl.altindag.log.LogCaptor;
 import nl.altindag.log.model.LogEvent;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -30,6 +31,7 @@ public class TreeRemoveNodeByLevelOrderIndexTest {
     root.getLeft().getRight().setLeft(new Btree.Node(6));
   }
 
+  @Test
   void testTreeRemoveNodeByLevelOrderIndex() {
     root.remove(3);
     assertNull(root.getLeft().getLeft());
