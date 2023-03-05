@@ -439,7 +439,8 @@ public class Btree {
             return String.format("Node(%s)", this.val);
         }
 
-        //NOTE: refactor line stripping into BtreeCharacterBox
+        //NOTE: refactor line stripping into BtreeCharacterBox and
+        //add add new lines above and below returned box of lines
         @Override
         public String toString() {
             BtreeCharacterBox lines = this.buildTreeString(this, 0, false, "-");
@@ -464,9 +465,10 @@ public class Btree {
             this.prettyPrint(false, delimiter);
         }
 
-        //NOTE: refactor line stripping into BtreeCharacterBox
+        //NOTE: refactor line stripping into BtreeCharacterBox and
+        //add add new lines above and below returned box of lines
         public void prettyPrint(boolean index, String delimiter) {
-            BtreeCharacterBox lines = this.buildTreeString(this, 0, false, "-");
+            BtreeCharacterBox lines = this.buildTreeString(this, 0, index, delimiter);
 
             for (int i = 0; i < lines.box.size(); i++) {
                 lines.box.set(i, lines.box.get(i).replaceAll("\\s+$", ""));
