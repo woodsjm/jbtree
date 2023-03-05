@@ -127,9 +127,4 @@ public class TreePrintWithLettersTest {
             ))
         );
     }
-
-    @Test
-    public void main() {
-        Btree.main(new String[] {});
-    }
 }

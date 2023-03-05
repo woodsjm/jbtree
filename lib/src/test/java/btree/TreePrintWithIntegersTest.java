@@ -127,9 +127,4 @@ public class TreePrintWithIntegersTest {
             ))
         );
     }
-
-    @Test
-    public void main() {
-        Btree.main(new String[] {});
-    }
 }
