@@ -7,7 +7,9 @@ import java.lang.Comparable;
 import java.math.BigDecimal;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.IdentityHashMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -15,6 +17,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.Queue;
+import java.util.Set;
 import java.util.Stack;
 import java.util.stream.IntStream;
 
@@ -285,7 +288,7 @@ public class Btree {
         //FIX: computed value should include computed values of left and right Nodes
         @Override
         public int hashCode() {
-            return Integer.valueOf(this.getVal().toString()).intValue();
+            return this.values().toString().hashCode();
         }
 
         @Override
@@ -546,6 +549,66 @@ public class Btree {
             } 
 
             return new BtreeCharacterBox(newBox, newBox.get(0).length(), newRootStart, newRootEnd);
+        }
+
+        public void validate() {
+            boolean hasMoreNodes = true;
+            Set<Node<T>> nodesSeen = Collections.newSetFromMap(new IdentityHashMap<>());
+            List<Node<T>> currentNodes = new ArrayList<>();
+            currentNodes.add(this);
+            int nodeIdx = 0;
+
+            while (hasMoreNodes) {
+                hasMoreNodes = false;
+                List<Node<T>> nextNodes = new ArrayList<>();
+
+                for (Node<T> node : currentNodes) {
+                    if (node == null) {
+                        nextNodes.add(null);
+                        nextNodes.add(null);
+                        nodeIdx++;
+                        continue;
+                    }
+
+                    try {
+                        if (nodesSeen.contains(node)) {
+                            String msg;
+                            if (node.val instanceof Float) {
+                                msg = String.format("cyclic reference at Node(%.2f) (level-order index %s)", node.val, nodeIdx);
+                            } else {
+                                msg = String.format("cyclic reference at Node(%s) (level-order index %s)", node.val, nodeIdx);
+                            }
+                            
+                            throw new BtreeException.NodeReferenceException(msg);
+                        }
+
+                        if (!(node instanceof Node)) {
+                            throw new BtreeException.NodeTypeException("invalid node instance at index " + nodeIdx);
+                        }
+
+                        //NOTE: probably not needed...
+                        if (!(node.val instanceof Integer || node.val instanceof String || node.val instanceof Float)) {
+                            throw new BtreeException.NodeValueException("invalid node value at index " + nodeIdx);
+                        }
+                    } catch (Exception e) {
+                        Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, "", e);
+                        System.exit(0);
+                    }
+
+                    if (node.getLeft() != null || node.getRight() != null) {
+                        hasMoreNodes = true;
+                    }
+
+                    nodesSeen.add(node); 
+                    nextNodes.add(node.getLeft());
+                    nextNodes.add(node.getRight());
+
+                    nodeIdx++;
+                }
+
+                currentNodes = nextNodes;
+            }
+            
         }
 
         protected List<T> values() {

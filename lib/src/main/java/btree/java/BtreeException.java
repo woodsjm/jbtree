@@ -21,6 +21,18 @@ public class BtreeException {
     }
   }
 
+  public static class NodeReferenceException extends Exception {
+    public NodeReferenceException(String message) {
+      super(message);
+    }
+  }
+
+  public static class NodeTypeException extends Exception {
+    public NodeTypeException(String message) {
+      super(message);
+    }
+  }
+
   public static class NodeValueException extends Exception {
     public NodeValueException(String message) {
       super(message);
