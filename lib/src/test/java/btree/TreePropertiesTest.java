@@ -13,6 +13,8 @@ public class TreePropertiesTest {
 
   @Test
   void testTreeProperties() {
+    Btree.Node root = new Btree.Node(1);
+    HashMap<String, Object> actualProperties = root.properties();
     HashMap<String, Object> expectedProperties = new HashMap<>();
     expectedProperties.put("height", 0);
     expectedProperties.put("isBalanced", true);
@@ -30,24 +32,31 @@ public class TreePropertiesTest {
     expectedProperties.put("minNodeValue", 1);
     expectedProperties.put("size", 1);
 
-    Btree.Node root = new Btree.Node(1);
-    HashMap<String, Object> props = root.properties();
-    assertTrue(props.keySet().equals(expectedProperties.keySet()));
     
-    assertEquals(Integer.valueOf(0), props.get("height"));
-    assertTrue((boolean) props.get("isBalanced"));
-    assertTrue((boolean) props.get("isBST"));
-    assertTrue((boolean) props.get("isComplete"));
-    assertTrue((boolean) props.get("isMaxHeap"));
-    assertTrue((boolean) props.get("isMinHeap"));
-    assertTrue((boolean) props.get("isPerfect"));
-    assertTrue((boolean) props.get("isStrict"));
-    assertTrue((boolean) props.get("isSymmetric"));
-    assertEquals(Integer.valueOf(1), props.get("leafCount"));
-    assertEquals(Integer.valueOf(0), props.get("maxLeafDepth"));
-    assertEquals(Integer.valueOf(1), props.get("maxNodeValue"));
-    assertEquals(Integer.valueOf(0), props.get("minLeafDepth"));
-    assertEquals(Integer.valueOf(1), props.get("minNodeValue"));
-    assertEquals(Integer.valueOf(1), props.get("size"));
+    assertEquals(expectedProperties.size(), actualProperties.size());
+    assertTrue(actualProperties.keySet().equals(expectedProperties.keySet()));
+    expectedProperties.forEach((k, v) -> {
+      if (v instanceof Integer) {
+        assertEquals((Integer) v, (Integer) actualProperties.get(k));
+      } else if (v instanceof Boolean) {
+        assertEquals((Boolean) v, (Boolean) actualProperties.get(k));
+      }
+    });
+    
+    assertEquals(Integer.valueOf(0), root.height());
+    assertTrue((boolean) root.isBalanced());
+    assertTrue((boolean) root.isBST());
+    assertTrue((boolean) root.isComplete());
+    assertTrue((boolean) root.isMaxHeap());
+    assertTrue((boolean) root.isMinHeap());
+    assertTrue((boolean) root.isPerfect());
+    assertTrue((boolean) root.isStrict());
+    assertTrue((boolean) root.isSymmetric());
+    assertEquals(Integer.valueOf(1), root.leafCount());
+    assertEquals(Integer.valueOf(0), root.maxLeafDepth());
+    assertEquals(Integer.valueOf(1), root.maxNodeValue());
+    assertEquals(Integer.valueOf(0), root.minLeafDepth());
+    assertEquals(Integer.valueOf(1), root.minNodeValue());
+    assertEquals(Integer.valueOf(1), root.size());
   }
 }

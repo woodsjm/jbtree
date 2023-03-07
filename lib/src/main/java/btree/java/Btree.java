@@ -25,7 +25,7 @@ import java.util.stream.IntStream;
 
 public class Btree {
 
-    private static class NodeProperties {
+    private static class NodeProperties<T extends Comparable<T>> {
         int height;
         int size;
         boolean isMaxHeap;
@@ -34,8 +34,8 @@ public class Btree {
         boolean isStrict;
         boolean isComplete;
         int leafCount;
-        Object minNodeValue;
-        Object maxNodeValue;
+        T minNodeValue;
+        T maxNodeValue;
         int minLeafDepth;
         int maxLeafDepth;
     
@@ -50,8 +50,8 @@ public class Btree {
             boolean isStrict, 
             boolean isComplete,
             int leafCount,
-            Object minNodeValue,
-            Object maxNodeValue,
+            T minNodeValue,
+            T maxNodeValue,
             int minLeafDepth,
             int maxLeafDepth) {
                 this.height = height;
@@ -410,6 +410,62 @@ public class Btree {
             result.put("isSymmetric", props.determineIfSymmetric(this));
 
             return result;
+        }
+
+        public int height() {
+            return this.getTreeProperties().height;
+        }
+
+        public int leafCount() {
+            return this.getTreeProperties().leafCount;
+        }
+
+        public boolean isBalanced() {
+            return new NodeProperties().determineIfBalanced(this) >= 0;
+        }
+
+        public boolean isBST() {
+            return new NodeProperties().determineIfBST(this);
+        }
+
+        public boolean isSymmetric() {
+            return new NodeProperties().determineIfSymmetric(this);
+        }
+
+        public boolean isMaxHeap() {
+            return this.getTreeProperties().isMaxHeap;
+        }
+
+        public boolean isMinHeap() {
+            return this.getTreeProperties().isMinHeap;
+        }
+
+        public boolean isPerfect() {
+            return this.getTreeProperties().isPerfect;
+        }
+
+        public boolean isStrict() {
+            return this.getTreeProperties().isStrict;
+        }
+
+        public boolean isComplete() {
+            return this.getTreeProperties().isComplete;
+        }
+
+        public T minNodeValue() {
+            return (T) this.getTreeProperties().minNodeValue;
+        }
+
+        public T maxNodeValue() {
+            return (T) this.getTreeProperties().maxNodeValue;
+        }
+
+        public int maxLeafDepth() {
+            return this.getTreeProperties().maxLeafDepth;
+        }
+
+        public int minLeafDepth() {
+            return this.getTreeProperties().minLeafDepth;
         }
 
         protected NodeProperties getTreeProperties() {
