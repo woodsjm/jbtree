@@ -4,6 +4,7 @@
 package btree.java;
 
 import java.lang.Comparable;
+import java.lang.Math;
 import java.math.BigDecimal;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -74,7 +75,7 @@ public class Btree {
                 this.maxLeafDepth = maxLeafDepth;
         }
 
-        private HashMap<String, Object> toHashMap() {
+        protected HashMap<String, Object> toHashMap() {
             HashMap<String, Object> propsHashMap = new HashMap<>();
 
             propsHashMap.put("height", this.height);
@@ -91,6 +92,72 @@ public class Btree {
             propsHashMap.put("maxLeafDepth", this.maxLeafDepth);
 
             return propsHashMap;
+        }
+
+        protected final int determineIfBalanced(Btree.Node root) {
+            if (root == null) {
+                return 0;
+            }
+
+            int left = determineIfBalanced(root.getLeft());
+            
+            if (left < 0) {
+                return -1;
+            }
+
+            int right = determineIfBalanced(root.getRight());
+
+            if (right < 0) {
+                return -1;
+            }
+
+            return Math.abs(left - right) > 1 ? -1 : Math.max(left, right) + 1;
+        }
+
+        protected static final <T extends Comparable<T>> boolean determineIfBST(Btree.Node<T> root) {
+            Stack<Btree.Node<T>> stack = new Stack<>();
+            Btree.Node<T> current = root;
+            Btree.Node<T> previous = null;
+
+            while (!stack.isEmpty() || current != null) {
+                if (current != null) {
+                    stack.add(current);
+                    current = current.getLeft() == null ? null : current.getLeft();
+                } else {
+                    Btree.Node<T> node = stack.pop();
+
+                    if (previous != null && node.getVal().compareTo(previous.getVal()) <= 0) {
+                        return false;
+                    }
+
+                    previous = node;
+                    current = node.getRight() == null ? null : node.getRight();
+                }
+            }
+
+            return true;
+        }
+
+        protected static final <T extends Comparable<T>> boolean determineIfSymmetric(Btree.Node<T> root) {
+            return symmetricHelper(root, root);
+        }
+
+        protected static final <T extends Comparable<T>> boolean symmetricHelper(Btree.Node<T> left, Btree.Node<T> right) {
+            if (left == null && right == null) {
+                return true;
+            }
+
+            if (left == null || right == null) {
+                return false;
+            }
+
+            boolean areValsEqual = left.getVal().compareTo(right.getVal()) == 0;
+            Btree.Node<T> lLeftChild = left.getLeft() == null ? null : left.getLeft();
+            Btree.Node<T> lRightChild = left.getRight() == null ? null : left.getRight();
+            Btree.Node<T> rLeftChild = right.getLeft() == null ? null : right.getLeft();
+            Btree.Node<T> rRightChild = right.getRight() == null ? null : right.getRight();
+
+            return areValsEqual && symmetricHelper(lLeftChild, rRightChild) && symmetricHelper(lRightChild, rLeftChild);
         }
     }
 
@@ -332,6 +399,20 @@ public class Btree {
         }
 
         protected HashMap<String, Object> properties() {
+            HashMap<String, Object> result = new HashMap<>();
+
+            NodeProperties props = this.getTreeProperties();
+            HashMap<String, Object> propsMap = props.toHashMap(); 
+            propsMap.forEach((k, v) -> result.put(k, v));
+
+            result.put("isBalanced", props.determineIfBalanced(this) >= 0);
+            result.put("isBST", props.determineIfBST(this));
+            result.put("isSymmetric", props.determineIfSymmetric(this));
+
+            return result;
+        }
+
+        protected NodeProperties getTreeProperties() {
             boolean isDescending = true;
             boolean isAscending = true;
             T minNodeValue = this.getVal();
@@ -396,7 +477,9 @@ public class Btree {
                     }
 
                     // If we see a node with only one child, it is not strict
-                    if ((node.getLeft() == null) == (node.getRight() == null)) {
+                    if (node.getLeft() == null  && node.getRight() != null) {
+                        isStrict = false;
+                    } else if (node.getLeft() != null  && node.getRight() == null) {
                         isStrict = false;
                     }
                 }
@@ -417,7 +500,7 @@ public class Btree {
                 minNodeValue,
                 maxNodeValue,
                 minLeafDepth,
-                maxLeafDepth).toHashMap();
+                maxLeafDepth);
         }
 
         public int size() {
@@ -663,8 +746,6 @@ public class Btree {
             return nodeValues;
         }
     }
-
-    
 
     public static Node tree() {
         return tree(3, false, false);
