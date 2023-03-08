@@ -19,8 +19,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 
-import java.io.*;
-
 
 public class TreePrintWithIntegersTest {
 
