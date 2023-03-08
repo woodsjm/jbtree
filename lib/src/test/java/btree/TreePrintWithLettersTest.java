@@ -26,7 +26,7 @@ public class TreePrintWithLettersTest {
     void testTreePrettyPrintWithLettersWithIndex(List<String> letters, List<String> expectedConsoleOutput) {
         ConsoleCaptor consoleCaptor = ConsoleCaptor.builder().allowTrimmingWhiteSpace(false).allowEmptyLines(true).build();
 
-        Btree.Node<String> root = Btree.build(letters);
+        Node<String> root = Btree.build(letters);
         assertNotNull(root);
 
         root.prettyPrint(true, ":"); // index, delimiter
@@ -77,7 +77,7 @@ public class TreePrintWithLettersTest {
     void testTreePrettyPrintWithLettersNoIndex(List<String> letters, List<String> expectedConsoleOutput) {
         ConsoleCaptor consoleCaptor = ConsoleCaptor.builder().allowTrimmingWhiteSpace(false).allowEmptyLines(true).build();
 
-        Btree.Node<String> root = Btree.build(letters);
+        Node<String> root = Btree.build(letters);
         assertNotNull(root);
 
         root.prettyPrint();
@@ -91,7 +91,7 @@ public class TreePrintWithLettersTest {
     void testTreeDefaultPrintWithLettersNoIndex(List<String> letters, List<String> expectedConsoleOutput) {
         ConsoleCaptor consoleCaptor = ConsoleCaptor.builder().allowTrimmingWhiteSpace(false).allowEmptyLines(true).build();
 
-        Btree.Node<String> root = Btree.build(letters);
+        Node<String> root = Btree.build(letters);
         assertNotNull(root);
 
         System.out.print(root);

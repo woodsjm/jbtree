@@ -18,16 +18,16 @@ import java.util.stream.Stream;
 
 public class TreeRemoveNodeByLevelOrderIndexTest {
 
-  private static Btree.Node root;
+  private static Node<Integer> root;
 
   @BeforeAll
   public static void init() {
-    root = new Btree.Node(1);
-    root.setLeft(new Btree.Node(2));
-    root.setRight(new Btree.Node(3));
-    root.getLeft().setLeft(new Btree.Node(4));
-    root.getLeft().setRight(new Btree.Node(5));
-    root.getLeft().getRight().setLeft(new Btree.Node(6));
+    root = new Node<>(1);
+    root.setLeft(new Node<>(2));
+    root.setRight(new Node<>(3));
+    root.getLeft().setLeft(new Node<>(4));
+    root.getLeft().setRight(new Node<>(5));
+    root.getLeft().getRight().setLeft(new Node<>(6));
   }
 
   @Test

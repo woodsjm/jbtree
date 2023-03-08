@@ -23,9 +23,9 @@ public class TreeCloneTest {
       boolean isPerfect = ThreadLocalRandom.current().nextBoolean();
       boolean letters = false;
 
-      Btree.Node<Integer> root = Btree.tree(height, isPerfect, letters);
+      Node<Integer> root = Btree.tree(height, isPerfect, letters);
       assertNotNull(root);
-      Btree.Node<Integer> clone = root.deepCopy();
+      Node<Integer> clone = root.deepCopy();
       assertEquals(clone.values(), root.values());
       assertTrue(root.equals(clone));
       assertTrue(clone.equals(root));
@@ -40,9 +40,9 @@ public class TreeCloneTest {
       boolean isPerfect = ThreadLocalRandom.current().nextBoolean();
       boolean letters = true;
 
-      Btree.Node<String> root = Btree.tree(height, isPerfect, letters);
+      Node<String> root = Btree.tree(height, isPerfect, letters);
       assertNotNull(root);
-      Btree.Node<String> clone = root.deepCopy();
+      Node<String> clone = root.deepCopy();
       assertEquals(clone.values(), root.values());
       assertTrue(root.equals(clone));
       assertTrue(clone.equals(root));

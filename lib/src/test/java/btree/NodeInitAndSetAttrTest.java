@@ -20,7 +20,7 @@ public class NodeInitAndSetAttrTest {
   
   @Test
   public void testNodeInitAndSetAttrWithIntegers() {
-    Btree.Node<Integer> root = new Btree.Node<>(1);
+    Node<Integer> root = new Node<>(1);
     assertNull(root.getLeft());
     assertNull(root.getRight());
     assertEquals(Integer.valueOf(1), root.getVal());
@@ -30,7 +30,7 @@ public class NodeInitAndSetAttrTest {
     //attribute node.val + node.value, because current attribute 
     //implementation lacks multiple names
 
-    Btree.Node<Integer> leftChild = new Btree.Node<>(2);
+    Node<Integer> leftChild = new Node<>(2);
     root.setLeft(leftChild);
     assertEquals(leftChild, root.getLeft());
     assertNull(root.getRight());
@@ -40,7 +40,7 @@ public class NodeInitAndSetAttrTest {
     assertEquals(Integer.valueOf(2), root.getLeft().getVal());
     assertEquals("Node(2)", leftChild.getNodeRepresentation());
 
-    Btree.Node<Integer> rightChild = new Btree.Node<>(3);
+    Node<Integer> rightChild = new Node<>(3);
     root.setRight(rightChild);
     assertEquals(leftChild, root.getLeft());
     assertEquals(rightChild, root.getRight());
@@ -50,7 +50,7 @@ public class NodeInitAndSetAttrTest {
     assertEquals(Integer.valueOf(3), root.getRight().getVal());
     assertEquals("Node(3)", rightChild.getNodeRepresentation());
 
-    Btree.Node<Integer> lastNode = new Btree.Node<>(4);
+    Node<Integer> lastNode = new Node<>(4);
     leftChild.setRight(lastNode);
     assertEquals(lastNode, root.getLeft().getRight());
     assertEquals("Node(4)", root.getLeft().getRight().getNodeRepresentation());
@@ -58,7 +58,7 @@ public class NodeInitAndSetAttrTest {
 
   @Test
   public void testNodeInitAndSetAttrWithFloats() {
-    Btree.Node<Float> root = new Btree.Node<>(1.50f);
+    Node<Float> root = new Node<>(1.50f);
     assertNull(root.getLeft());
     assertNull(root.getRight());
     assertEquals(Float.valueOf(1.50f), root.getVal());
@@ -68,7 +68,7 @@ public class NodeInitAndSetAttrTest {
     //attribute node.val + node.value, because current attribute 
     //implementation lacks multiple names
 
-    Btree.Node<Float> leftChild = new Btree.Node<>(2.50f);
+    Node<Float> leftChild = new Node<>(2.50f);
     root.setLeft(leftChild);
     assertEquals(leftChild, root.getLeft());
     assertNull(root.getRight());
@@ -78,7 +78,7 @@ public class NodeInitAndSetAttrTest {
     assertEquals(Float.valueOf(2.50f), root.getLeft().getVal());
     assertEquals("Node(2.50)", leftChild.getNodeRepresentation());
 
-    Btree.Node<Float> rightChild = new Btree.Node<>(3.50f);
+    Node<Float> rightChild = new Node<>(3.50f);
     root.setRight(rightChild);
     assertEquals(leftChild, root.getLeft());
     assertEquals(rightChild, root.getRight());
@@ -88,7 +88,7 @@ public class NodeInitAndSetAttrTest {
     assertEquals(Float.valueOf(3.50f), root.getRight().getVal());
     assertEquals("Node(3.50)", rightChild.getNodeRepresentation());
 
-    Btree.Node<Float> lastNode = new Btree.Node<>(4.50f);
+    Node<Float> lastNode = new Node<>(4.50f);
     leftChild.setRight(lastNode);
     assertEquals(lastNode, root.getLeft().getRight());
     assertEquals("Node(4.50)", root.getLeft().getRight().getNodeRepresentation());
@@ -96,7 +96,7 @@ public class NodeInitAndSetAttrTest {
 
   @Test
   public void testNodeInitAndSetAttrWithLetters() {
-    Btree.Node<String> root = new Btree.Node<>("A");
+    Node<String> root = new Node<>("A");
     assertNull(root.getLeft());
     assertNull(root.getRight());
     assertEquals("A", root.getVal());
@@ -106,7 +106,7 @@ public class NodeInitAndSetAttrTest {
     //attribute node.val + node.value, because current attribute 
     //implementation lacks multiple names
 
-    Btree.Node<String> leftChild = new Btree.Node<>("B");
+    Node<String> leftChild = new Node<>("B");
     root.setLeft(leftChild);
     assertEquals(leftChild, root.getLeft()); 
     assertNull(root.getRight());
@@ -116,7 +116,7 @@ public class NodeInitAndSetAttrTest {
     assertEquals("B", root.getLeft().getVal());
     assertEquals("Node(B)", leftChild.getNodeRepresentation());
 
-    Btree.Node<String> rightChild = new Btree.Node<>("C");
+    Node<String> rightChild = new Node<>("C");
     root.setRight(rightChild);
     assertEquals(leftChild, root.getLeft());
     assertEquals(rightChild, root.getRight());
@@ -126,7 +126,7 @@ public class NodeInitAndSetAttrTest {
     assertEquals("C", root.getRight().getVal());
     assertEquals("Node(C)", rightChild.getNodeRepresentation());
 
-    Btree.Node<String> lastNode = new Btree.Node<>("D");
+    Node<String> lastNode = new Node<>("D");
     leftChild.setRight(lastNode);
     assertEquals(lastNode, root.getLeft().getRight());
     assertEquals("Node(D)", root.getLeft().getRight().getNodeRepresentation());
@@ -138,7 +138,7 @@ public class NodeInitAndSetAttrTest {
     LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
 
     int statusCode = catchSystemExit(() -> {
-      Btree.Node<Integer> root = new Btree.Node<>(list);
+      Node<Integer> root = new Node<>(list);
     });
     assertEquals(0, statusCode);
 
@@ -153,7 +153,7 @@ public class NodeInitAndSetAttrTest {
   public void testNodeValueExceptionOnEmptyVal(List list) throws Exception {
     LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
 
-    Btree.Node<Integer> root = new Btree.Node<>(1);
+    Node<Integer> root = new Node<>(1);
    // List<Integer> emptyVal = new ArrayList<>();
 
     int statusCode = catchSystemExit(() -> {

@@ -19,24 +19,24 @@ import java.util.stream.Stream;
 
 class TreeSetNodeByLevelOrderIndexTest {
 
-  private static Btree.Node root;
+  private static Node<Integer> root;
 
-  private static Btree.Node newNode1;
-  private static Btree.Node newNode2;
-  private static Btree.Node newNode3;
+  private static Node<Integer> newNode1;
+  private static Node<Integer> newNode2;
+  private static Node<Integer> newNode3;
 
   @BeforeAll
   public static void init() {
-    root = new Btree.Node(1);
-    root.setLeft(new Btree.Node(2));
-    root.setRight(new Btree.Node(3));
-    root.getLeft().setLeft(new Btree.Node(4));
-    root.getLeft().setRight(new Btree.Node(5));
-    root.getLeft().getRight().setLeft(new Btree.Node(6));
+    root = new Node<>(1);
+    root.setLeft(new Node<>(2));
+    root.setRight(new Node<>(3));
+    root.getLeft().setLeft(new Node<>(4));
+    root.getLeft().setRight(new Node<>(5));
+    root.getLeft().getRight().setLeft(new Node<>(6));
 
-    newNode1 = new Btree.Node(7);
-    newNode2 = new Btree.Node(8);
-    newNode3 = new Btree.Node(9);
+    newNode1 = new Node<>(7);
+    newNode2 = new Node<>(8);
+    newNode3 = new Node<>(9);
   }
 
   @Test

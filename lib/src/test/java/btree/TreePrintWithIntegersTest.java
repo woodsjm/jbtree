@@ -27,7 +27,7 @@ public class TreePrintWithIntegersTest {
     void testTreePrettyPrintWithIntegersWithIndex(List<Integer> ints, List<String> expectedConsoleOutput) {
         ConsoleCaptor consoleCaptor = ConsoleCaptor.builder().allowTrimmingWhiteSpace(false).allowEmptyLines(true).build();
 
-        Btree.Node<Integer> root = Btree.build(ints);
+        Node<Integer> root = Btree.build(ints);
         assertNotNull(root);
 
         root.prettyPrint(true, ":"); // index, delimiter
@@ -78,7 +78,7 @@ public class TreePrintWithIntegersTest {
     void testTreePrettyPrintWithIntegersNoIndex(List<Integer> ints, List<String> expectedConsoleOutput) {
         ConsoleCaptor consoleCaptor = ConsoleCaptor.builder().allowTrimmingWhiteSpace(false).allowEmptyLines(true).build();
 
-        Btree.Node<Integer> root = Btree.build(ints);
+        Node<Integer> root = Btree.build(ints);
         assertNotNull(root);
 
         root.prettyPrint();
@@ -92,7 +92,7 @@ public class TreePrintWithIntegersTest {
     void testTreeDefaultPrinttWithIntegersNoIndex(List<Integer> ints, List<String> expectedConsoleOutput) {
         ConsoleCaptor consoleCaptor = ConsoleCaptor.builder().allowTrimmingWhiteSpace(false).allowEmptyLines(true).build();
 
-        Btree.Node<Integer> root = Btree.build(ints);
+        Node<Integer> root = Btree.build(ints);
         assertNotNull(root);
 
         System.out.print(root);

@@ -8,10 +8,10 @@ import java.util.Optional;
 
 
 // only bfs for now
-public class BtreeIterator<T extends Comparable<T>> implements Iterator<Btree.Node<T>> {
-  private ConcurrentLinkedQueue<Optional<Btree.Node<T>>> nextNodes = new ConcurrentLinkedQueue<>();
+public class BtreeIterator<T extends Comparable<T>> implements Iterator<Node<T>> {
+  private ConcurrentLinkedQueue<Optional<Node<T>>> nextNodes = new ConcurrentLinkedQueue<>();
 
-  public BtreeIterator(Btree.Node<T> root) {
+  public BtreeIterator(Node<T> root) {
     this.nextNodes.add(Optional.of(root));
   }
 
@@ -19,12 +19,12 @@ public class BtreeIterator<T extends Comparable<T>> implements Iterator<Btree.No
     return !this.nextNodes.isEmpty();
   }
 
-  public Btree.Node<T> next() {
+  public Node<T> next() {
     if (!this.hasNext()) {
       throw new NoSuchElementException("no more nodes");
     }
 
-    Optional<Btree.Node<T>> nextNode = this.nextNodes.poll();
+    Optional<Node<T>> nextNode = this.nextNodes.poll();
 		if (!nextNode.isPresent()) {
 			return null;
 		}

@@ -13,47 +13,47 @@ public class TreeValidateTest {
 
   @Test
   void testTreeValidateWithIntegers() {
-    Btree.Node root = new Btree.Node(1);
+    Node<Integer> root = new Node<>(1);
     root.validate();
 
-    root = new Btree.Node(1);
-    root.setLeft(new Btree.Node(2));
+    root = new Node<>(1);
+    root.setLeft(new Node<>(2));
     root.validate();
 
-    root = new Btree.Node(1);
-    root.setLeft(new Btree.Node(2));
-    root.setRight(new Btree.Node(3));
+    root = new Node<>(1);
+    root.setLeft(new Node<>(2));
+    root.setRight(new Node<>(3));
     root.validate();
 
-    root = new Btree.Node(1);
-    root.setLeft(new Btree.Node(2));
-    root.setRight(new Btree.Node(3));
-    root.getLeft().setLeft(new Btree.Node(4));
-    root.getLeft().setRight(new Btree.Node(5));
-    root.getLeft().getRight().setLeft(new Btree.Node(6));
+    root = new Node<>(1);
+    root.setLeft(new Node<>(2));
+    root.setRight(new Node<>(3));
+    root.getLeft().setLeft(new Node<>(4));
+    root.getLeft().setRight(new Node<>(5));
+    root.getLeft().getRight().setLeft(new Node<>(6));
     root.validate(); 
   }
 
   @Test
   void testTreeValidateWithLetters() {
-    Btree.Node root = new Btree.Node("A");
+    Node<String> root = new Node<>("A");
     root.validate();
 
-    root = new Btree.Node("A");
-    root.setLeft(new Btree.Node("B"));
+    root = new Node<>("A");
+    root.setLeft(new Node<>("B"));
     root.validate();
 
-    root = new Btree.Node("A");
-    root.setLeft(new Btree.Node("B"));
-    root.setRight(new Btree.Node(3));
+    root = new Node<>("A");
+    root.setLeft(new Node<>("B"));
+    root.setRight(new Node<>(3));
     root.validate();
 
-    root = new Btree.Node("A");
-    root.setLeft(new Btree.Node("B"));
-    root.setRight(new Btree.Node(3));
-    root.getLeft().setLeft(new Btree.Node(4));
-    root.getLeft().setRight(new Btree.Node(5));
-    root.getLeft().getRight().setLeft(new Btree.Node(6));
+    root = new Node<>("A");
+    root.setLeft(new Node<>("B"));
+    root.setRight(new Node<>(3));
+    root.getLeft().setLeft(new Node<>(4));
+    root.getLeft().setRight(new Node<>(5));
+    root.getLeft().getRight().setLeft(new Node<>(6));
     root.validate(); 
   }
 
@@ -61,8 +61,8 @@ public class TreeValidateTest {
   void testTreeValidateWithIntegersWithException() throws Exception {
     LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
 
-    Btree.Node root = new Btree.Node(1);
-    root.setLeft(new Btree.Node(2));
+    Node<Integer> root = new Node<>(1);
+    root.setLeft(new Node<>(2));
     root.getLeft().setRight(root);
 
     int statusCode = catchSystemExit(() -> {
@@ -80,8 +80,8 @@ public class TreeValidateTest {
   void testTreeValidateWithLettersWithException() throws Exception {
     LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
 
-    Btree.Node root = new Btree.Node("A");
-    root.setLeft(new Btree.Node("B"));
+    Node<String> root = new Node<>("A");
+    root.setLeft(new Node<>("B"));
     root.getLeft().setRight(root);
 
     int statusCode = catchSystemExit(() -> {

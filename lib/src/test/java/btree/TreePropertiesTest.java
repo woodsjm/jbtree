@@ -20,26 +20,26 @@ import java.util.stream.Stream;
 
 public class TreePropertiesTest {
 
-  static Btree.Node<Integer> root;
+  static Node<Integer> root;
 
   @ParameterizedTest
   @MethodSource("nodeValAndExpectedValsProvider")
   void testTreeProperties(int nodeVal, List expectedVals)  {
 
     switch (nodeVal) {
-      case 1: this.root = new Btree.Node(nodeVal);
+      case 1: this.root = new Node<>(nodeVal);
               break;
-      case 2: this.root.setLeft(new Btree.Node(nodeVal));
+      case 2: this.root.setLeft(new Node<>(nodeVal));
               break;
-      case 3: this.root.setRight(new Btree.Node(nodeVal));
+      case 3: this.root.setRight(new Node<>(nodeVal));
               break;
-      case 4: this.root.getLeft().setLeft(new Btree.Node(nodeVal));
+      case 4: this.root.getLeft().setLeft(new Node<>(nodeVal));
               break;
-      case 5: this.root.getRight().setLeft(new Btree.Node(nodeVal));
+      case 5: this.root.getRight().setLeft(new Node<>(nodeVal));
               break;
-      case 6: this.root.getRight().getLeft().setLeft(new Btree.Node(nodeVal));
+      case 6: this.root.getRight().getLeft().setLeft(new Node<>(nodeVal));
               break;
-      case 7: this.root.getLeft().getLeft().setLeft(new Btree.Node(nodeVal));
+      case 7: this.root.getLeft().getLeft().setLeft(new Node<>(nodeVal));
               break;
       default:break;
     }
