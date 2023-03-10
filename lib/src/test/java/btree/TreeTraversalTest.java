@@ -19,50 +19,75 @@ public class TreeTraversalTest {
   static Node<Integer> node5;
 
   @Test
-  void testTreeTraversalLevels() {
+  void testTreeTraversal() {
     node1 = new Node<>(1);
 
-    checkLevels(node1.levels(), Arrays.asList( // [[node1]]
-      Arrays.asList(node1))
+    checkNested(node1.levels(), // [[node1]]
+      Arrays.asList(Arrays.asList(node1))
     );
+    checkFlat(node1.leaves(), Arrays.asList(node1));    // [node1]
+    checkFlat(node1.inorder(), Arrays.asList(node1));   // [node1]
+    checkFlat(node1.preorder(), Arrays.asList(node1));  // [node1]
+    checkFlat(node1.postorder(), Arrays.asList(node1)); // [node1]
+    checkFlat(node1.levelorder(), Arrays.asList(node1));// [node1]
 
     node2 = new Node<>(2);
     node1.setLeft(node2);
 
-    checkLevels(node1.levels(), Arrays.asList( // [[node1], [node2]]
-      Arrays.asList(node1), 
-      Arrays.asList(node2))
+    checkNested(node1.levels(), // [[node1], [node2]]
+      Arrays.asList(Arrays.asList(node1), Arrays.asList(node2))
     );
-
+    checkFlat(node1.leaves(), Arrays.asList(node2));            // [node2]
+    checkFlat(node1.inorder(), Arrays.asList(node2, node1));    // [node2, node1]
+    checkFlat(node1.preorder(), Arrays.asList(node1, node2));   // [node1, node2]
+    checkFlat(node1.postorder(), Arrays.asList(node2, node1));  // [node2, node1]
+    checkFlat(node1.levelorder(), Arrays.asList(node1, node2)); // [node1, node2]
+    
     node3 = new Node<>(3);
     node1.setRight(node3);
 
-    checkLevels(node1.levels(), Arrays.asList( // [[node1], [node2, node3]]
-      Arrays.asList(node1), 
-      Arrays.asList(node2, node3))
+    checkNested(node1.levels(), // [[node1], [node2, node3]]
+      Arrays.asList(Arrays.asList(node1), Arrays.asList(node2, node3))
     );
+    checkFlat(node1.leaves(), Arrays.asList(node2, node3));           // [node2, node3]
+    checkFlat(node1.inorder(), Arrays.asList(node2, node1, node3));   // [node2, node1, node3]
+    checkFlat(node1.preorder(), Arrays.asList(node1, node2, node3));  // [node1, node2, node3]
+    checkFlat(node1.postorder(), Arrays.asList(node2, node3, node1)); // [node2, node3, node1]
+    checkFlat(node1.levelorder(), Arrays.asList(node1, node2, node3));// [node1, node2, node3]
 
     node4 = new Node<>(4);
     node5 = new Node<>(5);
     node1.getLeft().setLeft(node4);
     node1.getLeft().setRight(node5);
 
-    checkLevels(node1.levels(), Arrays.asList( // [[node1], [node2, node3], [node4, node5]]
-      Arrays.asList(node1), 
-      Arrays.asList(node2, node3), 
-      Arrays.asList(node4, node5))
+    checkNested(node1.levels(), // [[node1], [node2, node3], [node4, node5]]
+      Arrays.asList(Arrays.asList(node1), Arrays.asList(node2, node3), Arrays.asList(node4, node5))
     );
+    checkFlat(node1.leaves(), Arrays.asList(node3, node4, node5));                  // [node3, node4, node5]
+    checkFlat(node1.inorder(), Arrays.asList(node4, node2, node5, node1, node3));   // [node4, node2, node5, node1, node3]
+    checkFlat(node1.preorder(), Arrays.asList(node1, node2, node4, node5, node3));  // [node1, node2, node4, node5, node3]
+    checkFlat(node1.postorder(), Arrays.asList(node4, node5, node2, node3, node1)); // [node4, node5, node2, node3, node1]
+    checkFlat(node1.levelorder(), Arrays.asList(node1, node2, node3, node4, node5));// [node1, node2, node3, node4, node5]
   }
 
-  void checkLevels(List<List<Node<Integer>>> actualLevels, List<List<Node<Integer>>> expectedLevels) {
-    assertEquals(expectedLevels.size(), actualLevels.size());
+  void checkFlat(List<Node<Integer>> actual, List<Node<Integer>> expected) {
+    assertEquals(expected.size(), actual.size());
 
-    ListIterator<List<Node<Integer>>> actualLevelsIter = actualLevels.listIterator();
-    for (int i = 0; actualLevelsIter.hasNext(); i = 0 + actualLevelsIter.nextIndex()) {
+    ListIterator<Node<Integer>> actualIter = actual.listIterator();
+    for (int i = 0; actualIter.hasNext(); i = 0 + actualIter.nextIndex()) {
+      assertTrue(actualIter.next().equals(expected.get(i)));
+    }
+  }
 
-      ListIterator<Node<Integer>> actualLevelIter = actualLevelsIter.next().listIterator();
-      for (int j = 0; actualLevelIter.hasNext(); j = 0 + actualLevelIter.nextIndex()) {
-        assertTrue(actualLevelIter.next().equals(expectedLevels.get(i).get(j)));
+  void checkNested(List<List<Node<Integer>>> actualOuter, List<List<Node<Integer>>> expectedOuter) {
+    assertEquals(expectedOuter.size(), actualOuter.size());
+
+    ListIterator<List<Node<Integer>>> actualOuterIter = actualOuter.listIterator();
+    for (int i = 0; actualOuterIter.hasNext(); i = 0 + actualOuterIter.nextIndex()) {
+
+      ListIterator<Node<Integer>> actualInnerIter = actualOuterIter.next().listIterator();
+      for (int j = 0; actualInnerIter.hasNext(); j = 0 + actualInnerIter.nextIndex()) {
+        assertTrue(actualInnerIter.next().equals(expectedOuter.get(i).get(j)));
       }
     }
   }

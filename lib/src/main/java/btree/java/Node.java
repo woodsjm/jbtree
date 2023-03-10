@@ -282,6 +282,104 @@ public class Node<T extends Comparable<T>> {
 				return result;
 		}
 
+		public List<Node<T>> leaves() {
+				List<Node<T>> result = new ArrayList<>();
+				List<Node<T>> currentNodes = new ArrayList<>();
+				currentNodes.add(this);
+
+				while (!currentNodes.isEmpty()) {
+						List<Node<T>> nextNodes = new ArrayList<>();
+
+						currentNodes.forEach((node) -> {
+							if (node.getLeft() == null && node.getRight() == null) {
+								result.add(node);
+							} else {
+								if (node.getLeft() != null) {
+									nextNodes.add(node.getLeft());
+								}
+
+								if (node.getRight() != null) {
+									nextNodes.add(node.getRight());
+								}
+							}
+						});
+
+						currentNodes = nextNodes;
+				}
+				
+				return result;
+		}
+
+		public List<Node<T>> inorder() {
+				List<Node<T>> result = new ArrayList<>();
+				Stack<Node<T>> stack = new Stack<>();
+
+				Node<T> currentNode = this;
+				
+				while (currentNode != null || !stack.isEmpty()) {
+					while (currentNode != null) {
+						stack.add(currentNode);
+						currentNode = currentNode.getLeft();
+					}
+
+					if (!stack.isEmpty()) {
+						currentNode = stack.pop();
+						result.add(currentNode);
+						currentNode = currentNode.getRight();
+					}
+				}
+
+				return result;
+		}
+
+		public List<Node<T>> preorder() {
+				List<Node<T>> result = new ArrayList<>();
+				Stack<Node<T>> stack = new Stack<>();
+				stack.add(this);
+				
+				while (!stack.isEmpty()) {
+					Node<T> node = stack.pop();
+					if (node != null) {
+						result.add(node);
+						stack.add(node.getRight());
+						stack.add(node.getLeft());
+					}
+				}
+				
+				return result;
+		}
+
+		public List<Node<T>> postorder() {
+				List<Node<T>> result = new ArrayList<>();
+				Stack<Node<T>> stack = new Stack<>();
+				stack.add(this);
+				
+				while (!stack.isEmpty()) {
+					Node<T> node = stack.pop();
+					if (node != null) {
+						result.add(node);
+						stack.add(node.getLeft());
+						stack.add(node.getRight());
+					}
+				}
+
+				Collections.reverse(result);
+				return result;
+		}
+
+		public List<Node<T>> levelorder() {
+				List<Node<T>> result = new ArrayList<>();
+				Iterator<Node<T>> nodes = this.iterator();
+        while (nodes.hasNext()) {
+						Node<T> node = nodes.next();
+						if (node != null) {
+							result.add(node);
+						}
+        }
+
+        return result;
+		}
+
 		protected HashMap<String, Object> properties() {
 				HashMap<String, Object> result = new HashMap<>();
 
