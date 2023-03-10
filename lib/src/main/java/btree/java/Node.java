@@ -257,6 +257,31 @@ public class Node<T extends Comparable<T>> {
 				return new BtreeIterator(this);
 		}
 
+		public List<List<Node<T>>> levels() {
+				List<List<Node<T>>> result = new ArrayList<>();
+				List<Node<T>> currentNodes = new ArrayList<>();
+				currentNodes.add(this);
+
+				while (!currentNodes.isEmpty()) {
+						List<Node<T>> nextNodes = new ArrayList<>();
+
+						currentNodes.forEach((node) -> {
+							if (node.getLeft() != null) {
+								nextNodes.add(node.getLeft());
+							}
+
+							if (node.getRight() != null) {
+								nextNodes.add(node.getRight());
+							}
+						});
+
+						result.add(currentNodes);
+						currentNodes = nextNodes;
+				}
+				
+				return result;
+		}
+
 		protected HashMap<String, Object> properties() {
 				HashMap<String, Object> result = new HashMap<>();
 
