@@ -14,39 +14,39 @@ import java.util.List;
 
 public class TreeCloneTest {
   
-  final int REPETITIONS = 20;
+    final int REPETITIONS = 20;
 
-  @Test
-  public void testTreeCloneWithNumbers() {
-    for (int dummy = 0; dummy < REPETITIONS; dummy++) {
-      int height = ThreadLocalRandom.current().nextInt(10);
-      boolean isPerfect = ThreadLocalRandom.current().nextBoolean();
-      boolean letters = false;
+    @Test
+    public void testTreeCloneWithNumbers() {
+        for (int dummy = 0; dummy < REPETITIONS; dummy++) {
+            int height = ThreadLocalRandom.current().nextInt(10);
+            boolean isPerfect = ThreadLocalRandom.current().nextBoolean();
+            boolean letters = false;
 
-      Node<Integer> root = Btree.tree(height, isPerfect, letters);
-      assertNotNull(root);
-      Node<Integer> clone = root.deepCopy();
-      assertEquals(clone.values(), root.values());
-      assertTrue(root.equals(clone));
-      assertTrue(clone.equals(root));
-      assertEquals(clone.properties(), root.properties());
+            Node<Integer> root = Btree.tree(height, isPerfect, letters);
+            assertNotNull(root);
+            Node<Integer> clone = root.deepCopy();
+            assertEquals(clone.values(), root.values());
+            assertTrue(root.equals(clone));
+            assertTrue(clone.equals(root));
+            assertEquals(clone.properties(), root.properties());
+        }
     }
-  }
 
-  @Test
-  public void testTreeCloneWithLetters() {
-    for (int dummy = 0; dummy < REPETITIONS; dummy++) {
-      int height = ThreadLocalRandom.current().nextInt(10);
-      boolean isPerfect = ThreadLocalRandom.current().nextBoolean();
-      boolean letters = true;
+    @Test
+    public void testTreeCloneWithLetters() {
+        for (int dummy = 0; dummy < REPETITIONS; dummy++) {
+            int height = ThreadLocalRandom.current().nextInt(10);
+            boolean isPerfect = ThreadLocalRandom.current().nextBoolean();
+            boolean letters = true;
 
-      Node<String> root = Btree.tree(height, isPerfect, letters);
-      assertNotNull(root);
-      Node<String> clone = root.deepCopy();
-      assertEquals(clone.values(), root.values());
-      assertTrue(root.equals(clone));
-      assertTrue(clone.equals(root));
-      assertEquals(clone.properties(), root.properties());
+            Node<String> root = Btree.tree(height, isPerfect, letters);
+            assertNotNull(root);
+            Node<String> clone = root.deepCopy();
+            assertEquals(clone.values(), root.values());
+            assertTrue(root.equals(clone));
+            assertTrue(clone.equals(root));
+            assertEquals(clone.properties(), root.properties());
+        }
     }
-  }
 }

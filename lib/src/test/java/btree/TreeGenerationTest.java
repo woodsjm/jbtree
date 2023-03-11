@@ -19,65 +19,63 @@ import java.util.stream.Stream;
 
 public class TreeGenerationTest {
 
-  final int REPETITIONS = 20;
+    final int REPETITIONS = 20;
 
-  @Test
-  void testTreeGeneration() {
-    Node<Integer> root = Btree.tree(0); // height
-    assertNotNull(root);
+    @Test
+    void testTreeGeneration() {
+        Node<Integer> root = Btree.tree(0); // height
+        assertNotNull(root);
 
-    root.validate();
-    assertEquals(0, root.height());
-    assertNull(root.getLeft());
-    assertNull(root.getRight());
-    assertTrue(root.getVal() instanceof Integer);
+        root.validate();
+        assertEquals(0, root.height());
+        assertNull(root.getLeft());
+        assertNull(root.getRight());
+        assertTrue(root.getVal() instanceof Integer);
 
-    for (int dummy = 0; dummy < REPETITIONS; dummy++) {
-      int height = ThreadLocalRandom.current().nextInt(10);
+        for (int dummy = 0; dummy < REPETITIONS; dummy++) {
+            int height = ThreadLocalRandom.current().nextInt(10);
 
-      root = Btree.tree(height);
-      assertNotNull(root);
+            root = Btree.tree(height);
+            assertNotNull(root);
 
-      root.validate();
-      assertEquals(height, root.height());
+            root.validate();
+            assertEquals(height, root.height());
+        }
+
+        for (int dummy = 0; dummy < REPETITIONS; dummy++) {
+        int height = ThreadLocalRandom.current().nextInt(10);
+
+        root = Btree.tree(height, true); // height, isPerfect
+        assertNotNull(root);
+
+        root.validate();
+        assertEquals(height, root.height());
+        assertTrue(root.isPerfect());
+        assertTrue(root.isBalanced());
+        assertTrue(root.isStrict());
+        }
     }
 
-    for (int dummy = 0; dummy < REPETITIONS; dummy++) {
-      int height = ThreadLocalRandom.current().nextInt(10);
+    @ParameterizedTest
+    @MethodSource("invalidHeightProvider")
+    void testTreeGenerationInvalidHeightWithException(int invalidHeight) throws Exception {
+        LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
 
-      root = Btree.tree(height, true); // height, isPerfect
-      assertNotNull(root);
+        int statusCode = catchSystemExit(() -> {
+            Btree.tree(invalidHeight);
+        });
+        assertEquals(0, statusCode);
 
-      root.validate();
-      assertEquals(height, root.height());
-      assertTrue(root.isPerfect());
-      assertTrue(root.isBalanced());
-      assertTrue(root.isStrict());
+        LogEvent capturedLogEvent = logCaptor.getLogEvents().get(0);
+
+        assertTrue(capturedLogEvent.getThrowable().get().getClass() == BtreeException.TreeHeightException.class);
+        assertTrue(capturedLogEvent.getThrowable().get().getMessage().contains("height must be an int between 0 - 9"));
     }
-  }
 
-  @ParameterizedTest
-  @MethodSource("invalidHeightProvider")
-  void testTreeGenerationInvalidHeightWithException(int invalidHeight) throws Exception {
-    LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
-
-    int statusCode = catchSystemExit(() -> {
-      Btree.tree(invalidHeight);
-    });
-    assertEquals(0, statusCode);
-
-    LogEvent capturedLogEvent = logCaptor.getLogEvents().get(0);
-
-    assertTrue(capturedLogEvent.getThrowable().get().getClass() == BtreeException.TreeHeightException.class);
-    assertTrue(capturedLogEvent.getThrowable().get().getMessage().contains("height must be an int between 0 - 9"));
-  }
-
-  static Stream<Arguments> invalidHeightProvider() {
-    return Stream.of(
-      Arguments.arguments(-1),
-      Arguments.arguments(10)
-    );
-  }
-
-
+    static Stream<Arguments> invalidHeightProvider() {
+        return Stream.of(
+            Arguments.arguments(-1),
+            Arguments.arguments(10)
+        );
+    }
 }

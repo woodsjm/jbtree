@@ -18,136 +18,136 @@ import java.util.List;
 
 public class ListRepresentation1Test {
 
-  final int REPETITIONS = 20;
+    final int REPETITIONS = 20;
 
-  @Test
-  public void testListRepresentation1() {
-    LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
+    @Test
+    public void testListRepresentation1() {
+        LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
 
-    List<Integer> treeAsList = new ArrayList<Integer>();
+        List<Integer> treeAsList = new ArrayList<Integer>();
 
-    Node<Integer> root = Btree.build(new ArrayList()); // []
-    assertNull(root);
+        Node<Integer> root = Btree.build(new ArrayList()); // []
+        assertNull(root);
 
-    treeAsList.addAll(Arrays.asList(1));
-    root = Btree.build(treeAsList); // [1]
-    assertNotNull(root);
-    assertEquals(Integer.valueOf(1), root.getVal());
-    assertNull(root.getLeft());
-    assertNull(root.getRight());
+        treeAsList.addAll(Arrays.asList(1));
+        root = Btree.build(treeAsList); // [1]
+        assertNotNull(root);
+        assertEquals(Integer.valueOf(1), root.getVal());
+        assertNull(root.getLeft());
+        assertNull(root.getRight());
 
-    treeAsList.addAll(Arrays.asList(2));
-    root = Btree.build(treeAsList); // [1, 2]
-    assertNotNull(root);
-    assertEquals(Integer.valueOf(1), root.getVal());
-    assertNotNull(root.getLeft());
-    assertEquals(Integer.valueOf(2), root.getLeft().getVal());
-    assertNull(root.getRight());
+        treeAsList.addAll(Arrays.asList(2));
+        root = Btree.build(treeAsList); // [1, 2]
+        assertNotNull(root);
+        assertEquals(Integer.valueOf(1), root.getVal());
+        assertNotNull(root.getLeft());
+        assertEquals(Integer.valueOf(2), root.getLeft().getVal());
+        assertNull(root.getRight());
 
-    treeAsList.addAll(Arrays.asList(3));
-    root = Btree.build(treeAsList); // [1, 2, 3]
-    assertNotNull(root);
-    assertEquals(Integer.valueOf(1), root.getVal());
-    assertNotNull(root.getLeft());
-    assertEquals(Integer.valueOf(2), root.getLeft().getVal());
-    assertNotNull(root.getRight());
-    assertEquals(Integer.valueOf(3), root.getRight().getVal());
-    assertNull(root.getLeft().getLeft());
-    assertNull(root.getLeft().getRight());
-    assertNull(root.getRight().getLeft());
-    assertNull(root.getRight().getRight());
+        treeAsList.addAll(Arrays.asList(3));
+        root = Btree.build(treeAsList); // [1, 2, 3]
+        assertNotNull(root);
+        assertEquals(Integer.valueOf(1), root.getVal());
+        assertNotNull(root.getLeft());
+        assertEquals(Integer.valueOf(2), root.getLeft().getVal());
+        assertNotNull(root.getRight());
+        assertEquals(Integer.valueOf(3), root.getRight().getVal());
+        assertNull(root.getLeft().getLeft());
+        assertNull(root.getLeft().getRight());
+        assertNull(root.getRight().getLeft());
+        assertNull(root.getRight().getRight());
 
-    treeAsList.addAll(Arrays.asList(null, 4));
-    root = Btree.build(treeAsList); // [1, 2, 3, null, 4]
-    assertNotNull(root);
-    assertEquals(Integer.valueOf(1), root.getVal());
-    assertNotNull(root.getLeft());
-    assertEquals(Integer.valueOf(2), root.getLeft().getVal());
-    assertNotNull(root.getRight());
-    assertEquals(Integer.valueOf(3), root.getRight().getVal());
-    assertNull(root.getLeft().getLeft());
-    assertNotNull(root.getLeft().getRight());
-    assertEquals(Integer.valueOf(4), root.getLeft().getRight().getVal());
-    assertNull(root.getRight().getLeft());
-    assertNull(root.getRight().getRight());
-    assertNull(root.getLeft().getRight().getLeft());
-    assertNull(root.getLeft().getRight().getRight());
+        treeAsList.addAll(Arrays.asList(null, 4));
+        root = Btree.build(treeAsList); // [1, 2, 3, null, 4]
+        assertNotNull(root);
+        assertEquals(Integer.valueOf(1), root.getVal());
+        assertNotNull(root.getLeft());
+        assertEquals(Integer.valueOf(2), root.getLeft().getVal());
+        assertNotNull(root.getRight());
+        assertEquals(Integer.valueOf(3), root.getRight().getVal());
+        assertNull(root.getLeft().getLeft());
+        assertNotNull(root.getLeft().getRight());
+        assertEquals(Integer.valueOf(4), root.getLeft().getRight().getVal());
+        assertNull(root.getRight().getLeft());
+        assertNull(root.getRight().getRight());
+        assertNull(root.getLeft().getRight().getLeft());
+        assertNull(root.getLeft().getRight().getRight());
 
-    treeAsList.clear();
-    treeAsList.addAll(Arrays.asList(1));
-    root = new Node(1); // [1]
-    assertArrayEquals(treeAsList.toArray(), root.values().toArray());
+        treeAsList.clear();
+        treeAsList.addAll(Arrays.asList(1));
+        root = new Node(1); // [1]
+        assertArrayEquals(treeAsList.toArray(), root.values().toArray());
 
-    treeAsList.addAll(Arrays.asList(null, 3));
-    root.setRight(new Node(3)); // [1, null, 3]
-    assertArrayEquals(treeAsList.toArray(), root.values().toArray());
+        treeAsList.addAll(Arrays.asList(null, 3));
+        root.setRight(new Node(3)); // [1, null, 3]
+        assertArrayEquals(treeAsList.toArray(), root.values().toArray());
 
-    treeAsList.set(1, 2);
-    root.setLeft(new Node(2)); // [1, 2, 3]
-    assertArrayEquals(treeAsList.toArray(), root.values().toArray());
+        treeAsList.set(1, 2);
+        root.setLeft(new Node(2)); // [1, 2, 3]
+        assertArrayEquals(treeAsList.toArray(), root.values().toArray());
 
-    treeAsList.addAll(Arrays.asList(null, null, 4));
-    root.getRight().setLeft(new Node(4)); // [1, 2, 3, null, null, 4]
-    assertArrayEquals(treeAsList.toArray(), root.values().toArray());
+        treeAsList.addAll(Arrays.asList(null, null, 4));
+        root.getRight().setLeft(new Node(4)); // [1, 2, 3, null, null, 4]
+        assertArrayEquals(treeAsList.toArray(), root.values().toArray());
 
-    treeAsList.add(5);
-    root.getRight().setRight(new Node(5)); // [1, 2, 3, null, null, 4, 5]
-    assertArrayEquals(treeAsList.toArray(), root.values().toArray()); 
+        treeAsList.add(5);
+        root.getRight().setRight(new Node(5)); // [1, 2, 3, null, null, 4, 5]
+        assertArrayEquals(treeAsList.toArray(), root.values().toArray()); 
 
-    treeAsList.set(3, 6);
-    root.getLeft().setLeft(new Node(6)); // [1, 2, 3, 6, null, 4, 5]
-    assertArrayEquals(treeAsList.toArray(), root.values().toArray());
+        treeAsList.set(3, 6);
+        root.getLeft().setLeft(new Node(6)); // [1, 2, 3, 6, null, 4, 5]
+        assertArrayEquals(treeAsList.toArray(), root.values().toArray());
 
-    treeAsList.set(4, 7);
-    root.getLeft().setRight(new Node(7)); // [1, 2, 3, 6, 7, 4, 5]
-    assertArrayEquals(treeAsList.toArray(), root.values().toArray());
+        treeAsList.set(4, 7);
+        root.getLeft().setRight(new Node(7)); // [1, 2, 3, 6, 7, 4, 5]
+        assertArrayEquals(treeAsList.toArray(), root.values().toArray());
 
-    for (int dummy = 0; dummy < REPETITIONS; dummy++) {
-      Node<Integer> tree1 = Btree.tree();
-      assertNotNull(tree1);
+        for (int dummy = 0; dummy < REPETITIONS; dummy++) {
+            Node<Integer> tree1 = Btree.tree();
+            assertNotNull(tree1);
 
-      Node<Integer> tree2 = Btree.build(tree1.values());
-      assertNotNull(tree2);
-      
-      assertArrayEquals(tree2.values().toArray(), tree1.values().toArray());
+            Node<Integer> tree2 = Btree.build(tree1.values());
+            assertNotNull(tree2);
+
+            assertArrayEquals(tree2.values().toArray(), tree1.values().toArray());
+        }
     }
-  }
 
-  @Test
-  public void testListRepresentation1EmptyRoot() throws Exception {
-    LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
+    @Test
+    public void testListRepresentation1EmptyRoot() throws Exception {
+        LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
 
-    int statusCode = catchSystemExit(() -> {
-      Node<Integer> root = Btree.build(Arrays.asList(null, 2, 3)); // [null, 2, 3]
-    });
-    assertEquals(0, statusCode);
+        int statusCode = catchSystemExit(() -> {
+            Node<Integer> root = Btree.build(Arrays.asList(null, 2, 3)); // [null, 2, 3]
+        });
+        assertEquals(0, statusCode);
 
-    String capturedLogs = String.valueOf(logCaptor.getLogs());
-    LogEvent capturedLogEvent = logCaptor.getLogEvents().get(0);
+        String capturedLogs = String.valueOf(logCaptor.getLogs());
+        LogEvent capturedLogEvent = logCaptor.getLogEvents().get(0);
 
-    assertTrue(capturedLogs.contains("Likely a problem with the ArrayList argument"));
-    assertTrue(capturedLogs.contains("Here's your stack trace..."));
+        assertTrue(capturedLogs.contains("Likely a problem with the ArrayList argument"));
+        assertTrue(capturedLogs.contains("Here's your stack trace..."));
 
-    assertTrue(capturedLogEvent.getThrowable().get() instanceof BtreeException.NodeNotFoundException);
-    assertTrue(capturedLogEvent.getThrowable().get().getMessage().contains("parent node missing at index 0"));
-  }
+        assertTrue(capturedLogEvent.getThrowable().get() instanceof BtreeException.NodeNotFoundException);
+        assertTrue(capturedLogEvent.getThrowable().get().getMessage().contains("parent node missing at index 0"));
+    }
 
-  @Test
-  public void testListRepresentation1EmptyParent() throws Exception {
-    LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
+    @Test
+    public void testListRepresentation1EmptyParent() throws Exception {
+        LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
 
-    int statusCode = catchSystemExit(() -> {
-      Node<Integer> root = Btree.build(Arrays.asList(1, null, 2, 3, 4)); // [1, null, 2, 3, 4]
-    });
-    assertEquals(0, statusCode);
+        int statusCode = catchSystemExit(() -> {
+            Node<Integer> root = Btree.build(Arrays.asList(1, null, 2, 3, 4)); // [1, null, 2, 3, 4]
+        });
+        assertEquals(0, statusCode);
 
-    String capturedLogs = String.valueOf(logCaptor.getLogs());
-    LogEvent capturedLogEvent = logCaptor.getLogEvents().get(0);
+        String capturedLogs = String.valueOf(logCaptor.getLogs());
+        LogEvent capturedLogEvent = logCaptor.getLogEvents().get(0);
 
-    assertTrue(capturedLogs.contains("Likely a problem with the ArrayList argument"));
-    assertTrue(capturedLogs.contains("Here's your stack trace..."));
+        assertTrue(capturedLogs.contains("Likely a problem with the ArrayList argument"));
+        assertTrue(capturedLogs.contains("Here's your stack trace..."));
 
-    assertTrue(capturedLogEvent.getThrowable().get() instanceof BtreeException.NodeNotFoundException);
-    assertTrue(capturedLogEvent.getThrowable().get().getMessage().contains("parent node missing at index 1"));
-  }
+        assertTrue(capturedLogEvent.getThrowable().get() instanceof BtreeException.NodeNotFoundException);
+        assertTrue(capturedLogEvent.getThrowable().get().getMessage().contains("parent node missing at index 1"));
+    }
 }

@@ -50,8 +50,10 @@ tasks.named('jar') {
 
 test {
     useJUnitPlatform()
+
     testLogging {
         events "passed", "skipped", "failed"
     }
-    testLogging.showStandardStreams true
+    
+    testLogging.showStandardStreams false
 }

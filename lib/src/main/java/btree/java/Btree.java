@@ -96,7 +96,7 @@ public class Btree {
 
     public static Node generatePerfectBST(int height, boolean letters) {
         int maxNodeCount = (1 << (height + 1)) - 1;
-	int[] numValues = IntStream.iterate(0, n -> Integer.valueOf(n + 1)).limit(maxNodeCount).toArray();
+        int[] numValues = IntStream.iterate(0, n -> Integer.valueOf(n + 1)).limit(maxNodeCount).toArray();
         
         String[] letterValues = new String[maxNodeCount];
         if (letters) {
