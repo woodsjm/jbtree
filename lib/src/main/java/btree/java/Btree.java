@@ -29,6 +29,14 @@ public class Btree {
         return tree(3, false, false);
     }
 
+    public static Node tree(int height) {
+        return tree(height, false, false);
+    }
+
+    public static Node tree(int height, boolean isPerfect) {
+        return tree(height, isPerfect, false);
+    }
+
     public static Node tree(int height, boolean isPerfect, boolean letters) {
         validateTreeHeight(height);
 
@@ -62,9 +70,9 @@ public class Btree {
 
                 if (child == null) {
                     if (direction == "left") {
-                        root.setLeft(new Node(value));
+                        node.setLeft(new Node(value));
                     } else if (direction == "right") {
-                        root.setRight(new Node(value));
+                        node.setRight(new Node(value));
                     }
                     inserted = true;
                 }
@@ -202,7 +210,8 @@ public class Btree {
                 throw new BtreeException.TreeHeightException("height must be an int between 0 - 9");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, "", e);
+			System.exit(0);
         }
     }
 

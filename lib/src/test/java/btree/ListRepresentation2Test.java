@@ -152,7 +152,7 @@ public class ListRepresentation2Test {
       Node<Integer> tree1 = Btree.tree();
       assertNotNull(tree1);
 
-      Node<Integer> tree2 = Btree.build(tree1.values2());
+      Node<Integer> tree2 = Btree.build2(tree1.values2());
       assertNotNull(tree2);
 
       assertArrayEquals(tree2.values2().toArray(), tree1.values2().toArray());
