@@ -56,7 +56,7 @@ public class BSTGenerationTest {
         for (int dummy = 0; dummy < REPETITIONS; dummy++) {
             int height = ThreadLocalRandom.current().nextInt(10);
 
-            Node<Integer> perfectIntBST = Btree.bst(height, true); // height, isPerfect, letters
+            Node<Integer> perfectIntBST = Btree.bst(height, true); // height, isPerfect
             assertNotNull(perfectIntBST);
 
             perfectIntBST.validate();

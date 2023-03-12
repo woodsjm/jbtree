@@ -26,6 +26,67 @@ import java.util.stream.IntStream;
 
 public class Btree {
 
+    public static Node heap() {
+        return heap(3, false, false, true);
+    }
+
+    public static Node heap(int height) {
+        return heap(height, false, false, true);
+    }
+
+    public static Node heap(int height, boolean isPerfect) {
+        return heap(height, isPerfect, false, true);
+    }
+
+    public static Node heap(int height, boolean isPerfect, boolean letters) {
+        return heap(height, isPerfect, letters, true);
+    }
+
+    public static Node heap(int height, boolean isPerfect, boolean letters, boolean isMax) {
+        validateTreeHeight(height);
+
+        List<Comparable> values = new ArrayList<>((1 << (height + 1)) - 1);
+
+        int[] numbers = generateHeapNums(height, isMax);
+        for (int num: numbers) {
+            values.add(letters ? numberToLetters(num) : num);
+        }
+
+        if (!isPerfect) {
+            if (height == 0) {
+                return build(values);
+            }
+            
+            if (height == 1) {
+                values.remove(values.size() - 1);
+            } else {
+                int randomCut = ThreadLocalRandom.current().nextInt((1 << height), values.size());
+                values.subList(randomCut, values.size()).clear();
+            }
+            
+            
+        }
+
+        return build(values);
+    }
+
+    //FIX: Hack to be replaced by an actual heapify method
+    public static int[] generateHeapNums(int height, boolean forMaxHeap) {
+        int maxNodeCount = (1 << (height + 1)) - 1;
+        int[] numValues = IntStream.iterate(0, n -> Integer.valueOf(n + 1)).limit(maxNodeCount).toArray();
+
+        if (forMaxHeap) {
+            int mid = Math.floorDiv(numValues.length, 2);
+            for (int i = 0; i <= mid; i++) {
+                int tmp = numValues[i];
+                numValues[i] = numValues[numValues.length - (i + 1)];
+                numValues[numValues.length - (i + 1)] = tmp;
+            }
+        }
+
+        return numValues;
+    }
+
     public static Node bst() {
         return bst(3, false, false);
     }
