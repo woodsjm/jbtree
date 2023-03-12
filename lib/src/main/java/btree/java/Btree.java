@@ -25,6 +25,36 @@ import java.util.stream.IntStream;
 
 
 public class Btree {
+    //FIX: make tree/bst/heap float conversion internal to builder
+    public static Node<Float> convertToFloat(Node<Integer> root) {
+        Node<Float> clone = new Node<>(new Float(root.getVal().toString()));
+
+        Stack<Node<Integer>> stack1 = new Stack<>();
+        stack1.push(root);
+        Stack<Node<Float>> stack2 = new Stack<>();
+        stack2.push(clone);
+        
+        while (stack1.size() > 0 || stack2.size() > 0) {
+            Node<Integer> node1 = stack1.pop();
+            Node<Float> node2 = stack2.pop();
+
+            if (node1.getLeft() != null) {
+                Float floatLeft = new Float(node1.getLeft().getVal().toString());
+                node2.setLeft(new Node<>(floatLeft));
+                stack1.push(node1.getLeft());
+                stack2.push(node2.getLeft());
+            }
+
+            if (node1.getRight() != null) {
+                Float floatRight = new Float(node1.getRight().getVal().toString());
+                node2.setRight(new Node<>(floatRight));
+                stack1.push(node1.getRight());
+                stack2.push(node2.getRight());
+            }
+        }
+
+        return clone;
+    }
 
     public static Node heap() {
         return heap(3, false, false, true);

@@ -16,12 +16,16 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Arrays;
+import java.util.function.Supplier;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Stack;
 import java.util.stream.Stream;
 
 
 public class HeapValuesTest {
+
+    final int REPETITIONS = 20;
 
     @Test
     void testHeapFloatValues() {
@@ -86,6 +90,53 @@ public class HeapValuesTest {
                 "    \\",
                 "    5.0"
             ))
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("builderProvider")
+    void testHeapFloatValuesBuilder(Supplier<Node<Integer>> builder) {
+        for (int dummy = 0; dummy < REPETITIONS; dummy++) {
+            //FIX: make tree/bst/heap float conversion internal to builder
+            Node<Integer> tmp = builder.get();
+            Node<Float> root = Btree.convertToFloat(tmp);
+            Node<Float> rootCopy = root.deepCopy();
+
+            Stack<Node<Float>> stack = new Stack<>();
+            stack.add(root);
+            
+            while (!stack.isEmpty()) {
+                Node<Float> node = stack.pop();
+                if (node != null) {
+                    node.setVal(node.getVal() + 0.1f);
+                    stack.add(node.getRight());
+                    stack.add(node.getLeft());
+                }
+            }
+
+            assertEquals(rootCopy.height(), root.height());
+            assertEquals(rootCopy.isBalanced(), root.isBalanced());
+            assertEquals(rootCopy.isBST(), root.isBST());
+            assertEquals(rootCopy.isComplete(), root.isComplete());
+            assertEquals(rootCopy.isMaxHeap(), root.isMaxHeap());
+            assertEquals(rootCopy.isMinHeap(), root.isMinHeap());
+            assertEquals(rootCopy.isPerfect(), root.isPerfect());
+            assertEquals(rootCopy.isStrict(), root.isStrict());
+            assertEquals(rootCopy.isSymmetric(), root.isSymmetric());
+            assertEquals(rootCopy.leafCount(), root.leafCount());
+            assertEquals(rootCopy.maxLeafDepth(), root.maxLeafDepth());
+            assertEquals(rootCopy.maxNodeValue() + 0.1f, root.maxNodeValue());
+            assertEquals(rootCopy.minLeafDepth(), root.minLeafDepth());
+            assertEquals(rootCopy.minNodeValue() + 0.1f, root.minNodeValue());
+            assertEquals(rootCopy.size(), root.size());
+        }
+    }
+
+    static Stream<Supplier> builderProvider() {
+        return Stream.of(
+            Btree::tree,
+            Btree::bst,
+            Btree::heap
         );
     }
 }

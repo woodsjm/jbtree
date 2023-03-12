@@ -52,11 +52,16 @@ public class Node<T extends Comparable<T>> {
         return this.val;
     }
 
-    public void setVal(T value) throws BtreeException.NodeValueException {
-        if (value instanceof Integer || value instanceof Float || value instanceof String) {
+    public void setVal(T value) {
+        try {
+            if (value instanceof Integer || value instanceof Float || value instanceof String) {
             this.val = value;
-        } else {
-            throw new BtreeException.NodeValueException("node value must be an Integer, a Float, or a String");
+            } else {
+                throw new BtreeException.NodeValueException("node value must be an Integer, a Float, or a String");
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, "", e);
+            System.exit(0);
         }
     }
 
