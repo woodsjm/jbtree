@@ -2,6 +2,7 @@ package btree.java;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.text.NumberFormat;
 
 
 public class BtreeCharacterBox {
@@ -32,11 +33,7 @@ public class BtreeCharacterBox {
         List<String> line1 = new ArrayList<String>();
         List<String> line2 = new ArrayList<String>();
         String nodeRepr = "";
-        if (root.getVal() instanceof Float) {
-            nodeRepr = includeIdx ? String.format("%s%s%.2f", currentIdx, delimiter, root.getVal()) : String.format("%.2f", root.getVal());
-        } else {
-            nodeRepr = includeIdx ? String.format("%s%s%s", currentIdx, delimiter, root.getVal()) : String.valueOf(root.getVal());
-        }
+        nodeRepr = includeIdx ? String.format("%s%s%s", currentIdx, delimiter, root.getVal()) : String.valueOf(root.getVal());
 
         int newRootWidth = nodeRepr.length();
         int gapSize = nodeRepr.length();
