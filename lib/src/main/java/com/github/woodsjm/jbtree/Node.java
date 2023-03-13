@@ -1,4 +1,4 @@
-package btree.java;
+package com.github.woodsjm.jbtree;
 
 import java.lang.Comparable;
 import java.lang.Math;

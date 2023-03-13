@@ -1,4 +1,4 @@
-package btree.java;
+package com.github.woodsjm.jbtree;
 
 import static com.github.stefanbirkner.systemlambda.SystemLambda.*;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;

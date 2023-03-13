@@ -1,4 +1,4 @@
-package btree.java;
+package com.github.woodsjm.jbtree;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

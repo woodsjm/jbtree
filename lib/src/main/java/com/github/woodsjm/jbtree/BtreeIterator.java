@@ -1,4 +1,4 @@
-package btree.java;
+package com.github.woodsjm.jbtree;
 
 import java.util.ArrayDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
