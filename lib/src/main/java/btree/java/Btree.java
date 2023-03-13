@@ -25,6 +25,101 @@ import java.util.stream.IntStream;
 
 
 public class Btree {
+
+    public static <T extends Comparable<T>> Node<T> getParent(Node<T> root, Node<T> child) {
+        if (child == null) {
+            return null;
+        }
+
+        Stack<Node<T>> stack = new Stack<>();
+        stack.add(root);
+
+        while (!stack.isEmpty()) {
+            Node<T> node = stack.pop();
+            if (node == null) {
+                continue;
+            }
+
+            if (node.getLeft() != null && node.getLeft().getVal() == child.getVal()) {
+                if (child.equals(node.getLeft())) { 
+                    return node;
+                }
+            }
+
+            if (node.getRight() != null && node.getRight().getVal() == child.getVal()) {
+                if (child.equals(node.getRight())) {
+                    return node;
+                }
+            }
+
+            stack.add(node.getLeft());
+            stack.add(node.getRight());
+        }
+
+        return null;
+    }
+
+    public static <T extends Comparable<T>> int getIndexHelper(Node<T> root, Node<T> descendant) {
+        List<Node<T>> currentNodes = new ArrayList<>();
+        currentNodes.add(root);
+        int currentIdx = 0;
+        boolean hasMoreNodes = true;
+
+        while (hasMoreNodes) {
+            hasMoreNodes = false;
+            List<Node<T>> nextNodes = new ArrayList<>();
+
+            for (Node<T> node : currentNodes) {
+                if (node == null) {
+                    nextNodes.add(null);
+                    nextNodes.add(null);
+                } else {
+                    if (node.getVal() == descendant.getVal() && descendant.equals(node)) {
+                        return currentIdx;
+                    }
+
+                    nextNodes.add(node.getLeft());
+                    nextNodes.add(node.getRight());
+
+                    if (node.getLeft() != null || node.getRight() != null) {
+                        hasMoreNodes = true;
+                    }
+                }
+
+                currentIdx++;
+            }
+
+            currentNodes = nextNodes;
+        }
+
+        return -1;
+    }
+
+    public static <T extends Comparable<T>> int getIndex(Node<T> root, Node<T> descendant) {
+        int result = -1;
+
+        try {
+            if (root == null) {
+                throw new BtreeException.NodeTypeException("root must be a Node instance");
+            }
+
+            if (descendant == null) {
+                throw new BtreeException.NodeTypeException("descendent must be a Node instance");
+            }
+
+            result = getIndexHelper(root, descendant);
+
+            if (result == -1) {
+                throw new BtreeException.NodeReferenceException("given nodes are not in the same tree");
+            }
+        } catch(Exception e) {
+            Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, "", e);
+            System.exit(0);
+        }
+
+        return result;
+    }
+
     //FIX: make tree/bst/heap float conversion internal to builder
     public static Node<Float> convertToFloat(Node<Integer> root) {
         Node<Float> clone = new Node<>(new Float(root.getVal().toString()));
