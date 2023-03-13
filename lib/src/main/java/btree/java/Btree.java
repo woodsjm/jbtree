@@ -490,7 +490,17 @@ public class Btree {
 	    return nodeValues;
 	}
 
-    private static String numberToLetters(int number) {
+    protected static String numberToLetters(int number) {
+        try {
+            if (number < 0) {
+                throw new AssertionError();
+            }
+        } catch (Error e) {
+            Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, "", e);
+            System.exit(0);
+        }
+
+        
         BigDecimal bigNum = new BigDecimal(number);
         BigDecimal[] divMod = bigNum.divideAndRemainder(new BigDecimal(26));
 
