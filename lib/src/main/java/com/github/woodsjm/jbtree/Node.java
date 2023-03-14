@@ -129,12 +129,12 @@ public class Node<T extends Comparable<T>> {
         return this.left;
     }
 
-    public Node getRight() {
-        return this.right;
-    }
-
     public void setLeft(Node node) {
         this.left = node;
+    }
+
+    public Node getRight() {
+        return this.right;
     }
 
     public void setRight(Node node) {
@@ -172,18 +172,6 @@ public class Node<T extends Comparable<T>> {
             Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, "", e);
             System.exit(0);
         }
-    }
-
-    private Node<T> bfs(int index) {
-        Iterator<Node<T>> nodes = this.iterator();
-        for (int iterationCount = 0; nodes.hasNext(); iterationCount++) {
-            if (iterationCount == index) {
-                return nodes.next();
-            }
-            nodes.next();
-        }
-
-        return null;
     }
 
     public Node deepCopy() {
@@ -258,6 +246,18 @@ public class Node<T extends Comparable<T>> {
 
     public Iterator<Node<T>> iterator() {
         return new BtreeIterator(this);
+    }
+
+    private Node<T> bfs(int index) {
+        Iterator<Node<T>> nodes = this.iterator();
+        for (int iterationCount = 0; nodes.hasNext(); iterationCount++) {
+            if (iterationCount == index) {
+                return nodes.next();
+            }
+            nodes.next();
+        }
+
+        return null;
     }
 
     public List<List<Node<T>>> levels() {
@@ -383,77 +383,7 @@ public class Node<T extends Comparable<T>> {
         return result;
     }
 
-    protected HashMap<String, Object> properties() {
-        HashMap<String, Object> result = new HashMap<>();
-
-        NodeProperties<T> props = this.getTreeProperties();
-        HashMap<String, Object> propsMap = props.toHashMap(); 
-        propsMap.forEach((k, v) -> result.put(k, v));
-
-        result.put("isBalanced", props.determineIfBalanced(this) >= 0);
-        result.put("isBST", props.determineIfBST(this));
-        result.put("isSymmetric", props.determineIfSymmetric(this));
-
-        return result;
-    }
-
-    public int height() {
-        return this.getTreeProperties().height;
-    }
-
-    public int leafCount() {
-        return this.getTreeProperties().leafCount;
-    }
-
-    public boolean isBalanced() {
-        return new NodeProperties().determineIfBalanced(this) >= 0;
-    }
-
-    public boolean isBST() {
-        return new NodeProperties().determineIfBST(this);
-    }
-
-    public boolean isSymmetric() {
-        return new NodeProperties().determineIfSymmetric(this);
-    }
-
-    public boolean isMaxHeap() {
-        return this.getTreeProperties().isMaxHeap;
-    }
-
-    public boolean isMinHeap() {
-        return this.getTreeProperties().isMinHeap;
-    }
-
-    public boolean isPerfect() {
-        return this.getTreeProperties().isPerfect;
-    }
-
-    public boolean isStrict() {
-        return this.getTreeProperties().isStrict;
-    }
-
-    public boolean isComplete() {
-        return this.getTreeProperties().isComplete;
-    }
-
-    public T minNodeValue() {
-        return (T) this.getTreeProperties().minNodeValue;
-    }
-
-    public T maxNodeValue() {
-        return (T) this.getTreeProperties().maxNodeValue;
-    }
-
-    public int maxLeafDepth() {
-        return this.getTreeProperties().maxLeafDepth;
-    }
-
-    public int minLeafDepth() {
-        return this.getTreeProperties().minLeafDepth;
-    }
-
-	protected NodeProperties getTreeProperties() {
+    protected NodeProperties getTreeProperties() {
         boolean isDescending = true;
         boolean isAscending = true;
         T minNodeValue = this.getVal();
@@ -542,6 +472,76 @@ public class Node<T extends Comparable<T>> {
             maxNodeValue,
             minLeafDepth,
             maxLeafDepth);
+    }
+
+    protected HashMap<String, Object> properties() {
+        HashMap<String, Object> result = new HashMap<>();
+
+        NodeProperties<T> props = this.getTreeProperties();
+        HashMap<String, Object> propsMap = props.toHashMap(); 
+        propsMap.forEach((k, v) -> result.put(k, v));
+
+        result.put("isBalanced", props.determineIfBalanced(this) >= 0);
+        result.put("isBST", props.determineIfBST(this));
+        result.put("isSymmetric", props.determineIfSymmetric(this));
+
+        return result;
+    }
+
+    public int height() {
+        return this.getTreeProperties().height;
+    }
+
+    public int leafCount() {
+        return this.getTreeProperties().leafCount;
+    }
+
+    public boolean isBalanced() {
+        return new NodeProperties().determineIfBalanced(this) >= 0;
+    }
+
+    public boolean isBST() {
+        return new NodeProperties().determineIfBST(this);
+    }
+
+    public boolean isSymmetric() {
+        return new NodeProperties().determineIfSymmetric(this);
+    }
+
+    public boolean isMaxHeap() {
+        return this.getTreeProperties().isMaxHeap;
+    }
+
+    public boolean isMinHeap() {
+        return this.getTreeProperties().isMinHeap;
+    }
+
+    public boolean isPerfect() {
+        return this.getTreeProperties().isPerfect;
+    }
+
+    public boolean isStrict() {
+        return this.getTreeProperties().isStrict;
+    }
+
+    public boolean isComplete() {
+        return this.getTreeProperties().isComplete;
+    }
+
+    public T minNodeValue() {
+        return (T) this.getTreeProperties().minNodeValue;
+    }
+
+    public T maxNodeValue() {
+        return (T) this.getTreeProperties().maxNodeValue;
+    }
+
+    public int maxLeafDepth() {
+        return this.getTreeProperties().maxLeafDepth;
+    }
+
+    public int minLeafDepth() {
+        return this.getTreeProperties().minLeafDepth;
     }
 
     public int size() {

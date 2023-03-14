@@ -5,6 +5,7 @@ import java.lang.Math;
 import java.util.HashMap;
 import java.util.Stack;
 
+
 public class NodeProperties<T extends Comparable<T>> {
     int height;
     int size;

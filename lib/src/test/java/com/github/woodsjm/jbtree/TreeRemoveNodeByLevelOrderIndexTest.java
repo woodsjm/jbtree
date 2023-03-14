@@ -1,9 +1,6 @@
 package com.github.woodsjm.jbtree;
 
-import static com.github.stefanbirkner.systemlambda.SystemLambda.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.stream.Stream;
 
 import nl.altindag.log.LogCaptor;
 import nl.altindag.log.model.LogEvent;
@@ -13,7 +10,10 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.stream.Stream;
+import static com.github.stefanbirkner.systemlambda.SystemLambda.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class TreeRemoveNodeByLevelOrderIndexTest {

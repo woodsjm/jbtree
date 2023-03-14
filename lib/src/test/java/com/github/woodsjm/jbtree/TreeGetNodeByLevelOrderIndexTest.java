@@ -1,16 +1,16 @@
 package com.github.woodsjm.jbtree;
 
-import static com.github.stefanbirkner.systemlambda.SystemLambda.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import nl.altindag.log.LogCaptor;
 import nl.altindag.log.model.LogEvent;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import static com.github.stefanbirkner.systemlambda.SystemLambda.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 class TreeGetNodeByLevelOrderIndexTest {

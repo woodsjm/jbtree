@@ -526,9 +526,9 @@ public class Btree {
 
     public static void main(String... args) {
         final String message = "\n"
-            + "Btree-java is a port of the (Python) Binarytree library.\n"
-            + "It has most of Binarytree's functionality, but lacks support for Graphviz and Jupyter Notebooks.\n"
-            + "Btree-java includes matching unit tests.\n";
+            + "JBtree is a port of the Python library \033[3mBinarytree\033[0m.\n"
+            + "It has most of Binarytree's functionality, but currently lacks support for Graphviz and Jupyter Notebooks.\n"
+            + "JBtree includes matching tests.\n";
         
         System.out.println(message);
     }

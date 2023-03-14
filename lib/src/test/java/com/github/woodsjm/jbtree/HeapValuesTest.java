@@ -3,11 +3,12 @@
  */
 package com.github.woodsjm.jbtree;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.Arrays;
+import java.util.function.Supplier;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Stack;
+import java.util.stream.Stream;
 
 import nl.altindag.console.ConsoleCaptor;
 import org.junit.jupiter.api.Test;
@@ -15,12 +16,11 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.Arrays;
-import java.util.function.Supplier;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Stack;
-import java.util.stream.Stream;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class HeapValuesTest {
