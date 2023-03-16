@@ -31,6 +31,8 @@ tasks.named('jar') {
     manifest {
         attributes('Implementation-Title': project.name, 'Implementation-Version': project.version)
     }
+
+    archiveBaseName.set('jbtree')
 }
 
 test {
