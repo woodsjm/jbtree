@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Stack;
 
 
-public class NodeProperties<T extends Comparable<T>> {
+class NodeProperties<T extends Comparable<T>> {
     int height;
     int size;
     boolean isMaxHeap;
@@ -20,9 +20,9 @@ public class NodeProperties<T extends Comparable<T>> {
     int minLeafDepth;
     int maxLeafDepth;
 
-    public NodeProperties() { }
+    NodeProperties() { }
 
-    public NodeProperties(
+    NodeProperties(
         int height, 
         int size, 
         boolean isMaxHeap, 
@@ -56,7 +56,7 @@ public class NodeProperties<T extends Comparable<T>> {
             this.maxLeafDepth = maxLeafDepth;
     }
 
-    protected HashMap<String, Object> toHashMap() {
+    HashMap<String, Object> toHashMap() {
         HashMap<String, Object> propsHashMap = new HashMap<>();
 
         propsHashMap.put("height", this.height);
@@ -75,7 +75,7 @@ public class NodeProperties<T extends Comparable<T>> {
         return propsHashMap;
     }
 
-    protected final int determineIfBalanced(Node root) {
+    final int determineIfBalanced(Node root) {
         if (root == null) {
             return 0;
         }
@@ -95,7 +95,7 @@ public class NodeProperties<T extends Comparable<T>> {
         return Math.abs(left - right) > 1 ? -1 : Math.max(left, right) + 1;
     }
 
-    protected final boolean determineIfBST(Node<T> root) {
+    final boolean determineIfBST(Node<T> root) {
         Stack<Node<T>> stack = new Stack<>();
         Node<T> current = root;
         Node<T> previous = null;
@@ -119,11 +119,11 @@ public class NodeProperties<T extends Comparable<T>> {
         return true;
     }
 
-    protected final boolean determineIfSymmetric(Node<T> root) {
+    final boolean determineIfSymmetric(Node<T> root) {
         return symmetricHelper(root, root);
     }
 
-    protected final boolean symmetricHelper(Node<T> left, Node<T> right) {
+    final boolean symmetricHelper(Node<T> left, Node<T> right) {
         if (left == null && right == null) {
             return true;
         }

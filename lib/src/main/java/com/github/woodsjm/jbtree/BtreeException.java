@@ -1,46 +1,46 @@
 package com.github.woodsjm.jbtree;
 
 
-public class BtreeException {
+class BtreeException {
 
-    public static class NodeIndexException extends Exception {
-        public NodeIndexException(String message) {
+    static class NodeIndexException extends Exception {
+        NodeIndexException(String message) {
             super(message);
         }
     }
 
-    public static class NodeModifyException extends Exception {
-        public NodeModifyException(String message) {
+    static class NodeModifyException extends Exception {
+        NodeModifyException(String message) {
             super(message);
         }
     }
 
-    public static class NodeNotFoundException extends Exception {
-        public NodeNotFoundException(String message) {
+    static class NodeNotFoundException extends Exception {
+        NodeNotFoundException(String message) {
             super(message);
         }
     }
 
-    public static class NodeReferenceException extends Exception {
-        public NodeReferenceException(String message) {
+    static class NodeReferenceException extends Exception {
+        NodeReferenceException(String message) {
             super(message);
         }
     }
 
-    public static class NodeTypeException extends Exception {
-        public NodeTypeException(String message) {
+    static class NodeTypeException extends Exception {
+        NodeTypeException(String message) {
             super(message);
         }
     }
 
-    public static class NodeValueException extends Exception {
-        public NodeValueException(String message) {
+    static class NodeValueException extends Exception {
+        NodeValueException(String message) {
             super(message);
         }
     }
 
-    public static class TreeHeightException extends Exception {
-        public TreeHeightException(String message) {
+    static class TreeHeightException extends Exception {
+        TreeHeightException(String message) {
             super(message);
         }
     }

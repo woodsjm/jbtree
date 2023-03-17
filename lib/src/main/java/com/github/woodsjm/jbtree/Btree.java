@@ -59,7 +59,7 @@ public class Btree {
         return null;
     }
 
-    public static <T extends Comparable<T>> int getIndexHelper(Node<T> root, Node<T> descendant) {
+    static <T extends Comparable<T>> int getIndexHelper(Node<T> root, Node<T> descendant) {
         List<Node<T>> currentNodes = new ArrayList<>();
         currentNodes.add(root);
         int currentIdx = 0;
@@ -196,7 +196,7 @@ public class Btree {
     }
 
     //FIX: Hack to be replaced by an actual heapify method
-    public static int[] generateHeapNums(int height, boolean forMaxHeap) {
+    static int[] generateHeapNums(int height, boolean forMaxHeap) {
         int maxNodeCount = (1 << (height + 1)) - 1;
         int[] numValues = IntStream.iterate(0, n -> Integer.valueOf(n + 1)).limit(maxNodeCount).toArray();
 
@@ -280,7 +280,7 @@ public class Btree {
         return root;
     }
 
-    public static Node generatePerfectBST(int height, boolean letters) {
+    static Node generatePerfectBST(int height, boolean letters) {
         int maxNodeCount = (1 << (height + 1)) - 1;
         int[] numValues = IntStream.iterate(0, n -> Integer.valueOf(n + 1)).limit(maxNodeCount).toArray();
         
@@ -296,7 +296,7 @@ public class Btree {
     }
 
     //NOTE: Refactor into individual buildBST...
-    public static Node buildBSTFromSortedValues(int[] sortedValues) {
+    static Node buildBSTFromSortedValues(int[] sortedValues) {
         if (sortedValues.length == 0) {
             return null;
         }
@@ -309,7 +309,7 @@ public class Btree {
     }
 
     //NOTE: Refactor into individual buildBST...
-    public static Node buildBSTFromSortedValues(String[] sortedValues) {
+    static Node buildBSTFromSortedValues(String[] sortedValues) {
         if (sortedValues.length == 0) {
             return null;
         }
@@ -389,7 +389,7 @@ public class Btree {
         return root;
     }
 
-    protected static <T extends Comparable<T>> Node build(List<T> values) {
+    public static <T extends Comparable<T>> Node build(List<T> values) {
         List<Node> nodes = new ArrayList<>(values.size());
         values.forEach(val -> nodes.add(val == null ? null : new Node(val)));
 
@@ -424,7 +424,7 @@ public class Btree {
         return nodes.isEmpty() ? null : nodes.get(0);
     }
 
-    protected static <T extends Comparable<T>> Node build2(List<T> values) {
+    public static <T extends Comparable<T>> Node build2(List<T> values) {
         Node root = null;
 
         Queue<Node> queue = new ArrayDeque();
@@ -465,7 +465,7 @@ public class Btree {
         return root;
     }
 
-    private static int generateRandomLeafCount(int height) {
+    static int generateRandomLeafCount(int height) {
         int maxLeafCount = 1 << height;
         int halfLeafCount = Math.floorDiv(maxLeafCount, 2);
 
@@ -490,7 +490,7 @@ public class Btree {
 	    return nodeValues;
 	}
 
-    protected static String numberToLetters(int number) {
+    static String numberToLetters(int number) {
         try {
             if (number < 0) {
                 throw new AssertionError();
@@ -511,7 +511,7 @@ public class Btree {
         return prefix + Character.toString(65 + remainder);
     }
 
-    private static void validateTreeHeight(int height)  {
+    static void validateTreeHeight(int height)  {
         try {
             if (height < 0 || height > 9) {
                 throw new BtreeException.TreeHeightException("height must be an int between 0 - 9");
@@ -521,8 +521,6 @@ public class Btree {
 			System.exit(0);
         }
     }
-
-    public Btree() {}
 
     public static void main(String... args) {
         final String message = "\n"

@@ -5,27 +5,27 @@ import java.util.List;
 import java.text.NumberFormat;
 
 
-public class BtreeCharacterBox {
-    public List<String> box;
-    public int width;
-    public int start;
-    public int end;
+class BtreeCharacterBox {
+    List<String> box;
+    int width;
+    int start;
+    int end;
     
-    public BtreeCharacterBox() {
+    BtreeCharacterBox() {
         this.box = null;
         this.width = 0;
         this.start = 0;
         this.end = 0;
     }
     
-    public BtreeCharacterBox(List<String> box, int width, int start, int end) {
+    BtreeCharacterBox(List<String> box, int width, int start, int end) {
         this.box = box;
         this.width = width;
         this.start = start;
         this.end = end;
     }
 
-    protected static <T extends Comparable<T>> BtreeCharacterBox buildTreeString(Node<T> root, int currentIdx, boolean includeIdx, String delimiter) {
+    static <T extends Comparable<T>> BtreeCharacterBox buildTreeString(Node<T> root, int currentIdx, boolean includeIdx, String delimiter) {
         if (root == null) {
             return new BtreeCharacterBox();
         }

@@ -33,7 +33,8 @@ public class Node<T extends Comparable<T>> {
                 throw new BtreeException.NodeValueException("node value must be an Integer, a Float, or a String");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, "", e);
+            System.exit(0);
         } 
     }
 
@@ -383,7 +384,7 @@ public class Node<T extends Comparable<T>> {
         return result;
     }
 
-    protected NodeProperties getTreeProperties() {
+    private NodeProperties getTreeProperties() {
         boolean isDescending = true;
         boolean isAscending = true;
         T minNodeValue = this.getVal();
@@ -474,7 +475,7 @@ public class Node<T extends Comparable<T>> {
             maxLeafDepth);
     }
 
-    protected HashMap<String, Object> properties() {
+    public HashMap<String, Object> properties() {
         HashMap<String, Object> result = new HashMap<>();
 
         NodeProperties<T> props = this.getTreeProperties();
@@ -664,7 +665,7 @@ public class Node<T extends Comparable<T>> {
 	    }
 	}
 
-    protected List<T> values() {
+    public List<T> values() {
         List<Node<T>> currentNodes = new ArrayList<>();
         currentNodes.add(this);
         List<T> nodeValues = new ArrayList<>();
@@ -700,7 +701,7 @@ public class Node<T extends Comparable<T>> {
         return nodeValues;
     }
 
-    protected List<T> values2() {
+    public List<T> values2() {
         List<T> nodeValues = new ArrayList<>();
 
         Iterator<Node<T>> nodes = this.iterator();
