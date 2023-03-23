@@ -20,9 +20,11 @@ public class HeapGenerationTest {
 
   final int REPETITIONS = 20;
 
+  private BtreeBuilder<HeapBuilder> hb = new HeapBuilder();
+
   @Test
   void testHeapGeneration() {
-    Node<Integer> root = Btree.heap(0); // height
+    Node<Integer> root = this.hb.setHeight(0).create();
     assertNotNull(root);
 
     root.validate();
@@ -34,8 +36,8 @@ public class HeapGenerationTest {
     for (int dummy = 0; dummy < REPETITIONS; dummy++) {
       int height = ThreadLocalRandom.current().nextInt(1, 10);
 
-      Node<Integer> imperfectIntMaxHeap =
-          Btree.heap(height, false, false, true); // height, isPerfect, letters, isMax
+      this.hb.reset();
+      Node<Integer> imperfectIntMaxHeap = this.hb.setHeight(height).create();
       assertNotNull(imperfectIntMaxHeap);
 
       imperfectIntMaxHeap.validate();
@@ -48,8 +50,8 @@ public class HeapGenerationTest {
     for (int dummy = 0; dummy < REPETITIONS; dummy++) {
       int height = ThreadLocalRandom.current().nextInt(1, 10);
 
-      Node<String> imperfectLettersMaxHeap =
-          Btree.heap(height, false, true, true); // height, isPerfect, letters, isMax
+      this.hb.reset();
+      Node<String> imperfectLettersMaxHeap = this.hb.setHeight(height).withLetters().create();
       assertNotNull(imperfectLettersMaxHeap);
 
       imperfectLettersMaxHeap.validate();
@@ -61,8 +63,8 @@ public class HeapGenerationTest {
     for (int dummy = 0; dummy < REPETITIONS; dummy++) {
       int height = ThreadLocalRandom.current().nextInt(1, 10);
 
-      Node<Integer> imperfectIntMinHeap =
-          Btree.heap(height, false, false, false); // height, isPerfect, letters, isMax
+      this.hb.reset();
+      Node<Integer> imperfectIntMinHeap = this.hb.setHeight(height).makeMin().create();
       assertNotNull(imperfectIntMinHeap);
 
       imperfectIntMinHeap.validate();
@@ -74,8 +76,9 @@ public class HeapGenerationTest {
     for (int dummy = 0; dummy < REPETITIONS; dummy++) {
       int height = ThreadLocalRandom.current().nextInt(1, 10);
 
+      this.hb.reset();
       Node<String> imperfectLettersMinHeap =
-          Btree.heap(height, false, true, false); // height, isPerfect, letters, isMax
+          this.hb.setHeight(height).withLetters().makeMin().create();
       assertNotNull(imperfectLettersMinHeap);
 
       imperfectLettersMinHeap.validate();
@@ -87,7 +90,8 @@ public class HeapGenerationTest {
     for (int dummy = 0; dummy < REPETITIONS; dummy++) {
       int height = ThreadLocalRandom.current().nextInt(1, 10);
 
-      Node<Integer> perfectIntMinHeap = Btree.heap(height, true); // height, isPerfect
+      this.hb.reset();
+      Node<Integer> perfectIntMinHeap = this.hb.setHeight(height).makePerfect().create();
       assertNotNull(perfectIntMinHeap);
 
       perfectIntMinHeap.validate();
@@ -102,8 +106,9 @@ public class HeapGenerationTest {
     for (int dummy = 0; dummy < REPETITIONS; dummy++) {
       int height = ThreadLocalRandom.current().nextInt(1, 10);
 
+      this.hb.reset();
       Node<String> perfectLettersMaxHeap =
-          Btree.heap(height, true, true); // height, isPerfect, letters
+          this.hb.setHeight(height).makePerfect().withLetters().create();
       assertNotNull(perfectLettersMaxHeap);
 
       perfectLettersMaxHeap.validate();
@@ -124,7 +129,8 @@ public class HeapGenerationTest {
     int statusCode =
         catchSystemExit(
             () -> {
-              Btree.heap(invalidHeight);
+              this.hb.reset();
+              this.hb.setHeight(invalidHeight).create();
             });
     assertEquals(0, statusCode);
 
