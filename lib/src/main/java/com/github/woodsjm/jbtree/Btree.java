@@ -3,533 +3,529 @@
  */
 package com.github.woodsjm.jbtree;
 
-import java.lang.Comparable;
-import java.lang.Math;
 import java.math.BigDecimal;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.IdentityHashMap;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Queue;
+import java.util.Stack;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.Queue;
-import java.util.Set;
-import java.util.Stack;
 import java.util.stream.IntStream;
-
 
 public class Btree {
 
-    public static <T extends Comparable<T>> Node<T> getParent(Node<T> root, Node<T> child) {
-        if (child == null) {
-            return null;
+  public static <T extends Comparable<T>> Node<T> getParent(Node<T> root, Node<T> child) {
+    if (child == null) {
+      return null;
+    }
+
+    Stack<Node<T>> stack = new Stack<>();
+    stack.add(root);
+
+    while (!stack.isEmpty()) {
+      Node<T> node = stack.pop();
+      if (node == null) {
+        continue;
+      }
+
+      if (node.getLeft() != null && node.getLeft().getVal() == child.getVal()) {
+        if (child.equals(node.getLeft())) {
+          return node;
+        }
+      }
+
+      if (node.getRight() != null && node.getRight().getVal() == child.getVal()) {
+        if (child.equals(node.getRight())) {
+          return node;
+        }
+      }
+
+      stack.add(node.getLeft());
+      stack.add(node.getRight());
+    }
+
+    return null;
+  }
+
+  static <T extends Comparable<T>> int getIndexHelper(Node<T> root, Node<T> descendant) {
+    List<Node<T>> currentNodes = new ArrayList<>();
+    currentNodes.add(root);
+    int currentIdx = 0;
+    boolean hasMoreNodes = true;
+
+    while (hasMoreNodes) {
+      hasMoreNodes = false;
+      List<Node<T>> nextNodes = new ArrayList<>();
+
+      for (Node<T> node : currentNodes) {
+        if (node == null) {
+          nextNodes.add(null);
+          nextNodes.add(null);
+        } else {
+          if (node.getVal() == descendant.getVal() && descendant.equals(node)) {
+            return currentIdx;
+          }
+
+          nextNodes.add(node.getLeft());
+          nextNodes.add(node.getRight());
+
+          if (node.getLeft() != null || node.getRight() != null) {
+            hasMoreNodes = true;
+          }
         }
 
-        Stack<Node<T>> stack = new Stack<>();
-        stack.add(root);
+        currentIdx++;
+      }
 
-        while (!stack.isEmpty()) {
-            Node<T> node = stack.pop();
-            if (node == null) {
-                continue;
-            }
-
-            if (node.getLeft() != null && node.getLeft().getVal() == child.getVal()) {
-                if (child.equals(node.getLeft())) { 
-                    return node;
-                }
-            }
-
-            if (node.getRight() != null && node.getRight().getVal() == child.getVal()) {
-                if (child.equals(node.getRight())) {
-                    return node;
-                }
-            }
-
-            stack.add(node.getLeft());
-            stack.add(node.getRight());
-        }
-
-        return null;
+      currentNodes = nextNodes;
     }
 
-    static <T extends Comparable<T>> int getIndexHelper(Node<T> root, Node<T> descendant) {
-        List<Node<T>> currentNodes = new ArrayList<>();
-        currentNodes.add(root);
-        int currentIdx = 0;
-        boolean hasMoreNodes = true;
+    return -1;
+  }
 
-        while (hasMoreNodes) {
-            hasMoreNodes = false;
-            List<Node<T>> nextNodes = new ArrayList<>();
+  public static <T extends Comparable<T>> int getIndex(Node<T> root, Node<T> descendant) {
+    int result = -1;
 
-            for (Node<T> node : currentNodes) {
-                if (node == null) {
-                    nextNodes.add(null);
-                    nextNodes.add(null);
-                } else {
-                    if (node.getVal() == descendant.getVal() && descendant.equals(node)) {
-                        return currentIdx;
-                    }
+    try {
+      if (root == null) {
+        throw new BtreeException.NodeTypeException("root must be a Node instance");
+      }
 
-                    nextNodes.add(node.getLeft());
-                    nextNodes.add(node.getRight());
+      if (descendant == null) {
+        throw new BtreeException.NodeTypeException("descendent must be a Node instance");
+      }
 
-                    if (node.getLeft() != null || node.getRight() != null) {
-                        hasMoreNodes = true;
-                    }
-                }
+      result = getIndexHelper(root, descendant);
 
-                currentIdx++;
-            }
-
-            currentNodes = nextNodes;
-        }
-
-        return -1;
+      if (result == -1) {
+        throw new BtreeException.NodeReferenceException("given nodes are not in the same tree");
+      }
+    } catch (Exception e) {
+      Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, "", e);
+      System.exit(0);
     }
 
-    public static <T extends Comparable<T>> int getIndex(Node<T> root, Node<T> descendant) {
-        int result = -1;
+    return result;
+  }
 
-        try {
-            if (root == null) {
-                throw new BtreeException.NodeTypeException("root must be a Node instance");
-            }
+  // FIX: make tree/bst/heap float conversion internal to builder
+  public static Node<Float> convertToFloat(Node<Integer> root) {
+    Node<Float> clone = new Node<>(new Float(root.getVal().toString()));
 
-            if (descendant == null) {
-                throw new BtreeException.NodeTypeException("descendent must be a Node instance");
-            }
+    Stack<Node<Integer>> stack1 = new Stack<>();
+    stack1.push(root);
+    Stack<Node<Float>> stack2 = new Stack<>();
+    stack2.push(clone);
 
-            result = getIndexHelper(root, descendant);
+    while (stack1.size() > 0 || stack2.size() > 0) {
+      Node<Integer> node1 = stack1.pop();
+      Node<Float> node2 = stack2.pop();
 
-            if (result == -1) {
-                throw new BtreeException.NodeReferenceException("given nodes are not in the same tree");
-            }
-        } catch(Exception e) {
-            Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, "", e);
-            System.exit(0);
-        }
+      if (node1.getLeft() != null) {
+        Float floatLeft = new Float(node1.getLeft().getVal().toString());
+        node2.setLeft(new Node<>(floatLeft));
+        stack1.push(node1.getLeft());
+        stack2.push(node2.getLeft());
+      }
 
-        return result;
+      if (node1.getRight() != null) {
+        Float floatRight = new Float(node1.getRight().getVal().toString());
+        node2.setRight(new Node<>(floatRight));
+        stack1.push(node1.getRight());
+        stack2.push(node2.getRight());
+      }
     }
 
-    //FIX: make tree/bst/heap float conversion internal to builder
-    public static Node<Float> convertToFloat(Node<Integer> root) {
-        Node<Float> clone = new Node<>(new Float(root.getVal().toString()));
+    return clone;
+  }
 
-        Stack<Node<Integer>> stack1 = new Stack<>();
-        stack1.push(root);
-        Stack<Node<Float>> stack2 = new Stack<>();
-        stack2.push(clone);
-        
-        while (stack1.size() > 0 || stack2.size() > 0) {
-            Node<Integer> node1 = stack1.pop();
-            Node<Float> node2 = stack2.pop();
+  public static Node heap() {
+    return heap(3, false, false, true);
+  }
 
-            if (node1.getLeft() != null) {
-                Float floatLeft = new Float(node1.getLeft().getVal().toString());
-                node2.setLeft(new Node<>(floatLeft));
-                stack1.push(node1.getLeft());
-                stack2.push(node2.getLeft());
-            }
+  public static Node heap(int height) {
+    return heap(height, false, false, true);
+  }
 
-            if (node1.getRight() != null) {
-                Float floatRight = new Float(node1.getRight().getVal().toString());
-                node2.setRight(new Node<>(floatRight));
-                stack1.push(node1.getRight());
-                stack2.push(node2.getRight());
-            }
-        }
+  public static Node heap(int height, boolean isPerfect) {
+    return heap(height, isPerfect, false, true);
+  }
 
-        return clone;
+  public static Node heap(int height, boolean isPerfect, boolean letters) {
+    return heap(height, isPerfect, letters, true);
+  }
+
+  public static Node heap(int height, boolean isPerfect, boolean letters, boolean isMax) {
+    validateTreeHeight(height);
+
+    List<Comparable> values = new ArrayList<>((1 << (height + 1)) - 1);
+
+    int[] numbers = generateHeapNums(height, isMax);
+    for (int num : numbers) {
+      values.add(letters ? numberToLetters(num) : num);
     }
 
-    public static Node heap() {
-        return heap(3, false, false, true);
-    }
-
-    public static Node heap(int height) {
-        return heap(height, false, false, true);
-    }
-
-    public static Node heap(int height, boolean isPerfect) {
-        return heap(height, isPerfect, false, true);
-    }
-
-    public static Node heap(int height, boolean isPerfect, boolean letters) {
-        return heap(height, isPerfect, letters, true);
-    }
-
-    public static Node heap(int height, boolean isPerfect, boolean letters, boolean isMax) {
-        validateTreeHeight(height);
-
-        List<Comparable> values = new ArrayList<>((1 << (height + 1)) - 1);
-
-        int[] numbers = generateHeapNums(height, isMax);
-        for (int num: numbers) {
-            values.add(letters ? numberToLetters(num) : num);
-        }
-
-        if (!isPerfect) {
-            if (height == 0) {
-                return build(values);
-            }
-            
-            if (height == 1) {
-                values.remove(values.size() - 1);
-            } else {
-                int randomCut = ThreadLocalRandom.current().nextInt((1 << height), values.size());
-                values.subList(randomCut, values.size()).clear();
-            }
-            
-            
-        }
-
+    if (!isPerfect) {
+      if (height == 0) {
         return build(values);
+      }
+
+      if (height == 1) {
+        values.remove(values.size() - 1);
+      } else {
+        int randomCut = ThreadLocalRandom.current().nextInt((1 << height), values.size());
+        values.subList(randomCut, values.size()).clear();
+      }
     }
 
-    //FIX: Hack to be replaced by an actual heapify method
-    static int[] generateHeapNums(int height, boolean forMaxHeap) {
-        int maxNodeCount = (1 << (height + 1)) - 1;
-        int[] numValues = IntStream.iterate(0, n -> Integer.valueOf(n + 1)).limit(maxNodeCount).toArray();
+    return build(values);
+  }
 
-        if (forMaxHeap) {
-            int mid = Math.floorDiv(numValues.length, 2);
-            for (int i = 0; i <= mid; i++) {
-                int tmp = numValues[i];
-                numValues[i] = numValues[numValues.length - (i + 1)];
-                numValues[numValues.length - (i + 1)] = tmp;
-            }
+  // FIX: Hack to be replaced by an actual heapify method
+  static int[] generateHeapNums(int height, boolean forMaxHeap) {
+    int maxNodeCount = (1 << (height + 1)) - 1;
+    int[] numValues =
+        IntStream.iterate(0, n -> Integer.valueOf(n + 1)).limit(maxNodeCount).toArray();
+
+    if (forMaxHeap) {
+      int mid = Math.floorDiv(numValues.length, 2);
+      for (int i = 0; i <= mid; i++) {
+        int tmp = numValues[i];
+        numValues[i] = numValues[numValues.length - (i + 1)];
+        numValues[numValues.length - (i + 1)] = tmp;
+      }
+    }
+
+    return numValues;
+  }
+
+  public static Node bst() {
+    return bst(3, false, false);
+  }
+
+  public static Node bst(int height) {
+    return bst(height, false, false);
+  }
+
+  public static Node bst(int height, boolean isPerfect) {
+    return bst(height, isPerfect, false);
+  }
+
+  public static Node bst(int height, boolean isPerfect, boolean letters) {
+    validateTreeHeight(height);
+
+    if (isPerfect) {
+      return generatePerfectBST(height, letters);
+    }
+
+    List<Comparable> values = new ArrayList<>((1 << (height + 1)) - 1);
+
+    int[] numbers = generateRandomNumbers(height);
+    for (int num : numbers) {
+      values.add(letters ? numberToLetters(num) : num);
+    }
+
+    if (values.get(0) == null) {
+      return null;
+    }
+
+    Node root = new Node(values.remove(0));
+    HashSet<Node> leaves = new HashSet<>();
+    int leafCount = generateRandomLeafCount(height);
+
+    for (Comparable value : values) {
+      Node node = root;
+      int depth = 0;
+      boolean inserted = false;
+
+      while (depth < height && !inserted) {
+        String direction = String.valueOf(node.getVal().compareTo(value) > 0 ? "left" : "right");
+        Node child = direction == "left" ? node.getLeft() : node.getRight();
+
+        if (child == null) {
+          if (direction == "left") {
+            node.setLeft(new Node(value));
+          } else if (direction == "right") {
+            node.setRight(new Node(value));
+          }
+          inserted = true;
         }
 
-        return numValues;
+        node = child;
+        depth++;
+      }
+
+      if (inserted && depth == height) {
+        leaves.add(node);
+      }
+
+      if (leaves.size() == leafCount) {
+        break;
+      }
     }
 
-    public static Node bst() {
-        return bst(3, false, false);
+    return root;
+  }
+
+  static Node generatePerfectBST(int height, boolean letters) {
+    int maxNodeCount = (1 << (height + 1)) - 1;
+    int[] numValues =
+        IntStream.iterate(0, n -> Integer.valueOf(n + 1)).limit(maxNodeCount).toArray();
+
+    String[] letterValues = new String[maxNodeCount];
+    if (letters) {
+      for (int num : numValues) {
+        letterValues[num] = numberToLetters(num);
+      }
+      return buildBSTFromSortedValues(letterValues);
     }
 
-    public static Node bst(int height) {
-        return bst(height, false, false);
+    return buildBSTFromSortedValues(numValues);
+  }
+
+  // NOTE: Refactor into individual buildBST...
+  static Node buildBSTFromSortedValues(int[] sortedValues) {
+    if (sortedValues.length == 0) {
+      return null;
     }
 
-    public static Node bst(int height, boolean isPerfect) {
-        return bst(height, isPerfect, false);
+    int mid = Math.floorDiv(sortedValues.length, 2);
+    Node root = new Node(sortedValues[mid]);
+    root.setLeft(buildBSTFromSortedValues(Arrays.copyOfRange(sortedValues, 0, mid)));
+    root.setRight(
+        buildBSTFromSortedValues(Arrays.copyOfRange(sortedValues, mid + 1, sortedValues.length)));
+    return root;
+  }
+
+  // NOTE: Refactor into individual buildBST...
+  static Node buildBSTFromSortedValues(String[] sortedValues) {
+    if (sortedValues.length == 0) {
+      return null;
     }
 
-    public static Node bst(int height, boolean isPerfect, boolean letters) {
-        validateTreeHeight(height);
+    int mid = Math.floorDiv(sortedValues.length, 2);
+    Node root = new Node(sortedValues[mid]);
+    root.setLeft(buildBSTFromSortedValues(Arrays.copyOfRange(sortedValues, 0, mid)));
+    root.setRight(
+        buildBSTFromSortedValues(Arrays.copyOfRange(sortedValues, mid + 1, sortedValues.length)));
+    return root;
+  }
 
-        if (isPerfect) {
-            return generatePerfectBST(height, letters);
+  public static Node tree() {
+    return tree(3, false, false);
+  }
+
+  public static Node tree(int height) {
+    return tree(height, false, false);
+  }
+
+  public static Node tree(int height, boolean isPerfect) {
+    return tree(height, isPerfect, false);
+  }
+
+  public static Node tree(int height, boolean isPerfect, boolean letters) {
+    validateTreeHeight(height);
+
+    List<Comparable> values = new ArrayList<>((1 << (height + 1)) - 1);
+
+    int[] numbers = generateRandomNumbers(height);
+    for (int num : numbers) {
+      values.add(letters ? numberToLetters(num) : num);
+    }
+
+    if (isPerfect) {
+      return build(values);
+    }
+
+    if (values.get(0) == null) {
+      return null;
+    }
+
+    Node root = new Node(values.remove(0));
+    HashSet<Node> leaves = new HashSet<>();
+    int leafCount = generateRandomLeafCount(height);
+
+    for (Comparable value : values) {
+      Node node = root;
+      int depth = 0;
+      boolean inserted = false;
+
+      while (depth < height && !inserted) {
+        String direction =
+            String.valueOf(ThreadLocalRandom.current().nextBoolean() ? "left" : "right");
+        Node child = direction == "left" ? node.getLeft() : node.getRight();
+
+        if (child == null) {
+          if (direction == "left") {
+            node.setLeft(new Node(value));
+          } else if (direction == "right") {
+            node.setRight(new Node(value));
+          }
+          inserted = true;
         }
 
-        List<Comparable> values = new ArrayList<>((1 << (height + 1)) - 1);
+        node = child;
+        depth++;
+      }
 
-        int[] numbers = generateRandomNumbers(height);
-        for (int num: numbers) {
-            values.add(letters ? numberToLetters(num) : num);
-        }
+      if (inserted && depth == height) {
+        leaves.add(node);
+      }
 
-        if (values.get(0) == null) {
-            return null;
-        }
-
-        Node root = new Node(values.remove(0));
-        HashSet<Node> leaves = new HashSet<>();
-        int leafCount = generateRandomLeafCount(height);
-        
-        for (Comparable value: values) {
-            Node node = root;
-            int depth = 0;
-            boolean inserted = false;
-
-            while (depth < height && !inserted) {
-                String direction = String.valueOf(node.getVal().compareTo(value) > 0 ? "left" : "right");
-                Node child = direction == "left" ? node.getLeft() : node.getRight();
-
-                if (child == null) {
-                    if (direction == "left") {
-                        node.setLeft(new Node(value));
-                    } else if (direction == "right") {
-                        node.setRight(new Node(value));
-                    }
-                    inserted = true;
-                }
-
-                node = child;
-                depth++;
-            }
-
-            if (inserted && depth == height) {
-                leaves.add(node);
-            }
-
-            if (leaves.size() == leafCount) {
-                break;
-            }
-        }
-
-        return root;
+      if (leaves.size() == leafCount) {
+        break;
+      }
     }
 
-    static Node generatePerfectBST(int height, boolean letters) {
-        int maxNodeCount = (1 << (height + 1)) - 1;
-        int[] numValues = IntStream.iterate(0, n -> Integer.valueOf(n + 1)).limit(maxNodeCount).toArray();
-        
-        String[] letterValues = new String[maxNodeCount];
-        if (letters) {
-            for (int num : numValues) {
-                letterValues[num] = numberToLetters(num);
-            }
-            return buildBSTFromSortedValues(letterValues);
-        }
-        
-        return buildBSTFromSortedValues(numValues);
-    }
+    return root;
+  }
 
-    //NOTE: Refactor into individual buildBST...
-    static Node buildBSTFromSortedValues(int[] sortedValues) {
-        if (sortedValues.length == 0) {
-            return null;
-        }
+  public static <T extends Comparable<T>> Node build(List<T> values) {
+    List<Node> nodes = new ArrayList<>(values.size());
+    values.forEach(val -> nodes.add(val == null ? null : new Node(val)));
 
-        int mid = Math.floorDiv(sortedValues.length, 2);
-        Node root = new Node(sortedValues[mid]);
-        root.setLeft(buildBSTFromSortedValues(Arrays.copyOfRange(sortedValues, 0, mid)));
-        root.setRight(buildBSTFromSortedValues(Arrays.copyOfRange(sortedValues, mid + 1, sortedValues.length)));
-        return root;
-    }
+    for (int idx = 1; idx < nodes.size(); idx++) {
+      if (!(nodes.get(idx) == null)) {
+        int parentIdx = Math.floorDiv(idx - 1, 2);
+        Node parent = nodes.get(parentIdx);
 
-    //NOTE: Refactor into individual buildBST...
-    static Node buildBSTFromSortedValues(String[] sortedValues) {
-        if (sortedValues.length == 0) {
-            return null;
-        }
-
-        int mid = Math.floorDiv(sortedValues.length, 2);
-        Node root = new Node(sortedValues[mid]);
-        root.setLeft(buildBSTFromSortedValues(Arrays.copyOfRange(sortedValues, 0, mid)));
-        root.setRight(buildBSTFromSortedValues(Arrays.copyOfRange(sortedValues, mid + 1, sortedValues.length)));
-        return root;
-    }
-
-    public static Node tree() {
-        return tree(3, false, false);
-    }
-
-    public static Node tree(int height) {
-        return tree(height, false, false);
-    }
-
-    public static Node tree(int height, boolean isPerfect) {
-        return tree(height, isPerfect, false);
-    }
-
-    public static Node tree(int height, boolean isPerfect, boolean letters) {
-        validateTreeHeight(height);
-
-        List<Comparable> values = new ArrayList<>((1 << (height + 1)) - 1);
-
-        int[] numbers = generateRandomNumbers(height);
-        for (int num: numbers) {
-            values.add(letters ? numberToLetters(num) : num);
-        }
-
-        if (isPerfect) {
-            return build(values);
-        }
-
-        if (values.get(0) == null) {
-            return null;
-        }
-
-        Node root = new Node(values.remove(0));
-        HashSet<Node> leaves = new HashSet<>();
-        int leafCount = generateRandomLeafCount(height);
-        
-        for (Comparable value: values) {
-            Node node = root;
-            int depth = 0;
-            boolean inserted = false;
-
-            while (depth < height && !inserted) {
-                String direction = String.valueOf(ThreadLocalRandom.current().nextBoolean() ? "left" : "right");
-                Node child = direction == "left" ? node.getLeft() : node.getRight();
-
-                if (child == null) {
-                    if (direction == "left") {
-                        node.setLeft(new Node(value));
-                    } else if (direction == "right") {
-                        node.setRight(new Node(value));
-                    }
-                    inserted = true;
-                }
-
-                node = child;
-                depth++;
-            }
-
-            if (inserted && depth == height) {
-                leaves.add(node);
-            }
-
-            if (leaves.size() == leafCount) {
-                break;
-            }
-        }
-
-        return root;
-    }
-
-    public static <T extends Comparable<T>> Node build(List<T> values) {
-        List<Node> nodes = new ArrayList<>(values.size());
-        values.forEach(val -> nodes.add(val == null ? null : new Node(val)));
-
-        for (int idx = 1; idx < nodes.size(); idx++) {
-            if (!( nodes.get(idx) == null) ) {
-                int parentIdx = Math.floorDiv(idx - 1, 2);
-                Node parent = nodes.get(parentIdx);
-
-                try {
-                    if (parent == null) {
-                        throw new BtreeException.NodeNotFoundException("parent node missing at index " + parentIdx);
-                    }
-                } catch (Exception e) {
-                    final String message = "Likely a problem with the ArrayList argument\n\n"
-                        + "Example A: [null, 2, 4]\n"
-                        + "Fix: [1, 2, 4]\n\n"
-                        + "Example B: [1, null, 4, null, 8]\n"
-                        + "Fix: [1, 2, 4, null, 8]\n\n"
-                        + "Here's your stack trace...";
-                    Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, message, e);
-                    System.exit(0);
-                } 
-                
-                if (idx % 2 == 0) {
-                    parent.setRight(nodes.get(idx));
-                } else {
-                    parent.setLeft(nodes.get(idx));
-                }
-            }
-        }
-
-        return nodes.isEmpty() ? null : nodes.get(0);
-    }
-
-    public static <T extends Comparable<T>> Node build2(List<T> values) {
-        Node root = null;
-
-        Queue<Node> queue = new ArrayDeque();
-
-        if (!values.isEmpty()) {
-            try {
-                if (values.get(0) == null) {
-                    throw new BtreeException.NodeValueException("node value must be an Integer, a Float, or a String");
-                } else {
-                    root = new Node(values.get(0));
-                    queue.add(root);
-                }
-            } catch (Exception e) {
-                Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, "", e);
-                System.exit(0);
-            } 
-        } 
-
-        int idx = 1;
-        while (idx < values.size()) {
-            Node node = queue.remove();
-
-            if (values.get(idx) != null) {
-                node.setLeft(new Node(values.get(idx)));
-                queue.add(node.getLeft());
-            }
-
-            idx++;
-
-            if (idx < values.size() && values.get(idx) != null) {
-                node.setRight(new Node(values.get(idx)));
-                queue.add(node.getRight());
-            }
-
-            idx++;
-        }
-
-        return root;
-    }
-
-    static int generateRandomLeafCount(int height) {
-        int maxLeafCount = 1 << height;
-        int halfLeafCount = Math.floorDiv(maxLeafCount, 2);
-
-        int roll1 = ThreadLocalRandom.current().nextInt(halfLeafCount == 0 ? 1 : halfLeafCount);
-        int roll2 = ThreadLocalRandom.current().nextInt(maxLeafCount - halfLeafCount);
-
-        return roll1 + roll2 > 0 ? roll1 + roll2 : halfLeafCount;
-    }
-
-    private static int[] generateRandomNumbers(int height) {
-		int maxNodeCount = (1 << (height + 1)) - 1;
-		int[] nodeValues = IntStream.iterate(0, n -> n + 1).limit(maxNodeCount).toArray();
-
-        // shuffle
-		for (int idx = 0; idx < nodeValues.length; idx++) {
-			int idxToSwap = ThreadLocalRandom.current().nextInt(nodeValues.length);
-			int temp = nodeValues[idxToSwap];
-			nodeValues[idxToSwap] = nodeValues[idx];
-			nodeValues[idx] = temp;
-		}
-		
-	    return nodeValues;
-	}
-
-    static String numberToLetters(int number) {
         try {
-            if (number < 0) {
-                throw new AssertionError();
-            }
-        } catch (Error e) {
-            Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, "", e);
-            System.exit(0);
-        }
-
-        
-        BigDecimal bigNum = new BigDecimal(number);
-        BigDecimal[] divMod = bigNum.divideAndRemainder(new BigDecimal(26));
-
-        int quotient = divMod[0].intValue();
-        int remainder = divMod[1].intValue();
-
-        String prefix = new String(new char[quotient]).replace("\0", "Z");
-        return prefix + Character.toString(65 + remainder);
-    }
-
-    static void validateTreeHeight(int height)  {
-        try {
-            if (height < 0 || height > 9) {
-                throw new BtreeException.TreeHeightException("height must be an int between 0 - 9");
-            }
+          if (parent == null) {
+            throw new BtreeException.NodeNotFoundException(
+                "parent node missing at index " + parentIdx);
+          }
         } catch (Exception e) {
-            Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, "", e);
-			System.exit(0);
+          final String message =
+              "Likely a problem with the ArrayList argument\n\n"
+                  + "Example A: [null, 2, 4]\n"
+                  + "Fix: [1, 2, 4]\n\n"
+                  + "Example B: [1, null, 4, null, 8]\n"
+                  + "Fix: [1, 2, 4, null, 8]\n\n"
+                  + "Here's your stack trace...";
+          Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, message, e);
+          System.exit(0);
         }
+
+        if (idx % 2 == 0) {
+          parent.setRight(nodes.get(idx));
+        } else {
+          parent.setLeft(nodes.get(idx));
+        }
+      }
     }
 
-    public static void main(String... args) {
-        final String message = "\n"
+    return nodes.isEmpty() ? null : nodes.get(0);
+  }
+
+  public static <T extends Comparable<T>> Node build2(List<T> values) {
+    Node root = null;
+
+    Queue<Node> queue = new ArrayDeque();
+
+    if (!values.isEmpty()) {
+      try {
+        if (values.get(0) == null) {
+          throw new BtreeException.NodeValueException(
+              "node value must be an Integer, a Float, or a String");
+        } else {
+          root = new Node(values.get(0));
+          queue.add(root);
+        }
+      } catch (Exception e) {
+        Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, "", e);
+        System.exit(0);
+      }
+    }
+
+    int idx = 1;
+    while (idx < values.size()) {
+      Node node = queue.remove();
+
+      if (values.get(idx) != null) {
+        node.setLeft(new Node(values.get(idx)));
+        queue.add(node.getLeft());
+      }
+
+      idx++;
+
+      if (idx < values.size() && values.get(idx) != null) {
+        node.setRight(new Node(values.get(idx)));
+        queue.add(node.getRight());
+      }
+
+      idx++;
+    }
+
+    return root;
+  }
+
+  static int generateRandomLeafCount(int height) {
+    int maxLeafCount = 1 << height;
+    int halfLeafCount = Math.floorDiv(maxLeafCount, 2);
+
+    int roll1 = ThreadLocalRandom.current().nextInt(halfLeafCount == 0 ? 1 : halfLeafCount);
+    int roll2 = ThreadLocalRandom.current().nextInt(maxLeafCount - halfLeafCount);
+
+    return roll1 + roll2 > 0 ? roll1 + roll2 : halfLeafCount;
+  }
+
+  private static int[] generateRandomNumbers(int height) {
+    int maxNodeCount = (1 << (height + 1)) - 1;
+    int[] nodeValues = IntStream.iterate(0, n -> n + 1).limit(maxNodeCount).toArray();
+
+    // shuffle
+    for (int idx = 0; idx < nodeValues.length; idx++) {
+      int idxToSwap = ThreadLocalRandom.current().nextInt(nodeValues.length);
+      int temp = nodeValues[idxToSwap];
+      nodeValues[idxToSwap] = nodeValues[idx];
+      nodeValues[idx] = temp;
+    }
+
+    return nodeValues;
+  }
+
+  static String numberToLetters(int number) {
+    try {
+      if (number < 0) {
+        throw new AssertionError();
+      }
+    } catch (Error e) {
+      Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, "", e);
+      System.exit(0);
+    }
+
+    BigDecimal bigNum = new BigDecimal(number);
+    BigDecimal[] divMod = bigNum.divideAndRemainder(new BigDecimal(26));
+
+    int quotient = divMod[0].intValue();
+    int remainder = divMod[1].intValue();
+
+    String prefix = new String(new char[quotient]).replace("\0", "Z");
+    return prefix + Character.toString(65 + remainder);
+  }
+
+  static void validateTreeHeight(int height) {
+    try {
+      if (height < 0 || height > 9) {
+        throw new BtreeException.TreeHeightException("height must be an int between 0 - 9");
+      }
+    } catch (Exception e) {
+      Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, "", e);
+      System.exit(0);
+    }
+  }
+
+  public static void main(String... args) {
+    final String message =
+        "\n"
             + "JBtree is a port of the Python library \033[3mBinarytree\033[0m.\n"
             + "It has most of Binarytree's functionality, but currently lacks support for Graphviz and Jupyter Notebooks.\n"
             + "JBtree includes matching tests.\n";
-        
-        System.out.println(message);
-    }
+
+    System.out.println(message);
+  }
 }
-
-

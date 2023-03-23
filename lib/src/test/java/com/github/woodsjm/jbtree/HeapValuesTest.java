@@ -3,140 +3,136 @@
  */
 package com.github.woodsjm.jbtree;
 
-import java.util.Arrays;
-import java.util.function.Supplier;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Stack;
-import java.util.stream.Stream;
-
-import nl.altindag.console.ConsoleCaptor;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Stack;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
+import nl.altindag.console.ConsoleCaptor;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 public class HeapValuesTest {
 
-    final int REPETITIONS = 20;
+  final int REPETITIONS = 20;
 
-    @Test
-    void testHeapFloatValues() {
-        Node<Float> root = new Node<>(1.0f);
-        root.setLeft(new Node<>(0.5f));
-        root.setRight(new Node<>(1.5f));
+  @Test
+  void testHeapFloatValues() {
+    Node<Float> root = new Node<>(1.0f);
+    root.setLeft(new Node<>(0.5f));
+    root.setRight(new Node<>(1.5f));
 
-        assertEquals(1, root.height());
-        assertTrue(root.isBalanced());
-        assertTrue(root.isBST());
-        assertTrue(root.isComplete());
-        assertFalse(root.isMaxHeap());
-        assertFalse(root.isMinHeap());
-        assertTrue(root.isPerfect());
-        assertTrue(root.isStrict());
-        assertEquals(2, root.leafCount());
-        assertEquals(1, root.maxLeafDepth());
-        assertEquals(1.5f, root.maxNodeValue());
-        assertEquals(1, root.minLeafDepth());
-        assertEquals(0.5f, root.minNodeValue());
-        assertEquals(3, root.size());
-    }
+    assertEquals(1, root.height());
+    assertTrue(root.isBalanced());
+    assertTrue(root.isBST());
+    assertTrue(root.isComplete());
+    assertFalse(root.isMaxHeap());
+    assertFalse(root.isMinHeap());
+    assertTrue(root.isPerfect());
+    assertTrue(root.isStrict());
+    assertEquals(2, root.leafCount());
+    assertEquals(1, root.maxLeafDepth());
+    assertEquals(1.5f, root.maxNodeValue());
+    assertEquals(1, root.minLeafDepth());
+    assertEquals(0.5f, root.minNodeValue());
+    assertEquals(3, root.size());
+  }
 
-    @ParameterizedTest
-    @MethodSource("floatListAndExpectedConsoleOutputProvider")
-    void testHeapFloatValuesPrettyPrintNoIndex(List<Float> floats, List<String> expectedConsoleOutput) {
-        ConsoleCaptor consoleCaptor = ConsoleCaptor.builder().allowTrimmingWhiteSpace(false).allowEmptyLines(true).build();
+  @ParameterizedTest
+  @MethodSource("floatListAndExpectedConsoleOutputProvider")
+  void testHeapFloatValuesPrettyPrintNoIndex(
+      List<Float> floats, List<String> expectedConsoleOutput) {
+    ConsoleCaptor consoleCaptor =
+        ConsoleCaptor.builder().allowTrimmingWhiteSpace(false).allowEmptyLines(true).build();
 
-        Node<Float> root = Btree.build(floats);
-        assertNotNull(root);
+    Node<Float> root = Btree.build(floats);
+    assertNotNull(root);
 
-        root.prettyPrint();
-        List<String> standardOutput = consoleCaptor.getStandardOutput();
-        
-        assertArrayEquals(expectedConsoleOutput.toArray(), standardOutput.toArray());
-    }
+    root.prettyPrint();
+    List<String> standardOutput = consoleCaptor.getStandardOutput();
 
-    @ParameterizedTest
-    @MethodSource("floatListAndExpectedConsoleOutputProvider")
-    void testHeapFloatValuesDefaultPrintNoIndex(List<Float> floats, List<String> expectedConsoleOutput) {
-        ConsoleCaptor consoleCaptor = ConsoleCaptor.builder().allowTrimmingWhiteSpace(false).allowEmptyLines(true).build();
+    assertArrayEquals(expectedConsoleOutput.toArray(), standardOutput.toArray());
+  }
 
-        Node<Float> root = Btree.build(floats);
-        assertNotNull(root);
+  @ParameterizedTest
+  @MethodSource("floatListAndExpectedConsoleOutputProvider")
+  void testHeapFloatValuesDefaultPrintNoIndex(
+      List<Float> floats, List<String> expectedConsoleOutput) {
+    ConsoleCaptor consoleCaptor =
+        ConsoleCaptor.builder().allowTrimmingWhiteSpace(false).allowEmptyLines(true).build();
 
-        System.out.print(root);
-        List<String> standardOutput = consoleCaptor.getStandardOutput();
-        
-        assertArrayEquals(expectedConsoleOutput.toArray(), standardOutput.toArray());
-    }
+    Node<Float> root = Btree.build(floats);
+    assertNotNull(root);
 
-    static Stream<Arguments> floatListAndExpectedConsoleOutputProvider() {
-        return Stream.of(
-            Arguments.arguments(Arrays.asList(1.0f), Arrays.asList("1.0")),
-            Arguments.arguments(Arrays.asList(1.0f, 2.0f), Arrays.asList("   _1.0", "  /", "2.0")),
-            Arguments.arguments(Arrays.asList(1.0f, null, 3.0f), Arrays.asList("1.0_", "    \\", "    3.0")),
-            Arguments.arguments(Arrays.asList(1.0f, 2.0f, 3.0f), Arrays.asList("   _1.0_", "  /     \\", "2.0     3.0")),
-            Arguments.arguments(Arrays.asList(1.0f, 2.0f, 3.0f, null, 5.0f), Arrays.asList(
-                "   _____1.0_",
-                "  /         \\",
-                "2.0_        3.0",
-                "    \\",
-                "    5.0"
-            ))
-        );
-    }
+    System.out.print(root);
+    List<String> standardOutput = consoleCaptor.getStandardOutput();
 
-    @ParameterizedTest
-    @MethodSource("builderProvider")
-    void testHeapFloatValuesBuilder(Supplier<Node<Integer>> builder) {
-        for (int dummy = 0; dummy < REPETITIONS; dummy++) {
-            //FIX: make tree/bst/heap float conversion internal to builder
-            Node<Integer> tmp = builder.get();
-            Node<Float> root = Btree.convertToFloat(tmp);
-            Node<Float> rootCopy = root.deepCopy();
+    assertArrayEquals(expectedConsoleOutput.toArray(), standardOutput.toArray());
+  }
 
-            Stack<Node<Float>> stack = new Stack<>();
-            stack.add(root);
-            
-            while (!stack.isEmpty()) {
-                Node<Float> node = stack.pop();
-                if (node != null) {
-                    node.setVal(node.getVal() + 0.1f);
-                    stack.add(node.getRight());
-                    stack.add(node.getLeft());
-                }
-            }
+  static Stream<Arguments> floatListAndExpectedConsoleOutputProvider() {
+    return Stream.of(
+        Arguments.arguments(Arrays.asList(1.0f), Arrays.asList("1.0")),
+        Arguments.arguments(Arrays.asList(1.0f, 2.0f), Arrays.asList("   _1.0", "  /", "2.0")),
+        Arguments.arguments(
+            Arrays.asList(1.0f, null, 3.0f), Arrays.asList("1.0_", "    \\", "    3.0")),
+        Arguments.arguments(
+            Arrays.asList(1.0f, 2.0f, 3.0f),
+            Arrays.asList("   _1.0_", "  /     \\", "2.0     3.0")),
+        Arguments.arguments(
+            Arrays.asList(1.0f, 2.0f, 3.0f, null, 5.0f),
+            Arrays.asList(
+                "   _____1.0_", "  /         \\", "2.0_        3.0", "    \\", "    5.0")));
+  }
 
-            assertEquals(rootCopy.height(), root.height());
-            assertEquals(rootCopy.isBalanced(), root.isBalanced());
-            assertEquals(rootCopy.isBST(), root.isBST());
-            assertEquals(rootCopy.isComplete(), root.isComplete());
-            assertEquals(rootCopy.isMaxHeap(), root.isMaxHeap());
-            assertEquals(rootCopy.isMinHeap(), root.isMinHeap());
-            assertEquals(rootCopy.isPerfect(), root.isPerfect());
-            assertEquals(rootCopy.isStrict(), root.isStrict());
-            assertEquals(rootCopy.isSymmetric(), root.isSymmetric());
-            assertEquals(rootCopy.leafCount(), root.leafCount());
-            assertEquals(rootCopy.maxLeafDepth(), root.maxLeafDepth());
-            assertEquals(rootCopy.maxNodeValue() + 0.1f, root.maxNodeValue());
-            assertEquals(rootCopy.minLeafDepth(), root.minLeafDepth());
-            assertEquals(rootCopy.minNodeValue() + 0.1f, root.minNodeValue());
-            assertEquals(rootCopy.size(), root.size());
+  @ParameterizedTest
+  @MethodSource("builderProvider")
+  void testHeapFloatValuesBuilder(Supplier<Node<Integer>> builder) {
+    for (int dummy = 0; dummy < REPETITIONS; dummy++) {
+      // FIX: make tree/bst/heap float conversion internal to builder
+      Node<Integer> tmp = builder.get();
+      Node<Float> root = Btree.convertToFloat(tmp);
+      Node<Float> rootCopy = root.deepCopy();
+
+      Stack<Node<Float>> stack = new Stack<>();
+      stack.add(root);
+
+      while (!stack.isEmpty()) {
+        Node<Float> node = stack.pop();
+        if (node != null) {
+          node.setVal(node.getVal() + 0.1f);
+          stack.add(node.getRight());
+          stack.add(node.getLeft());
         }
-    }
+      }
 
-    static Stream<Supplier> builderProvider() {
-        return Stream.of(
-            Btree::tree,
-            Btree::bst,
-            Btree::heap
-        );
+      assertEquals(rootCopy.height(), root.height());
+      assertEquals(rootCopy.isBalanced(), root.isBalanced());
+      assertEquals(rootCopy.isBST(), root.isBST());
+      assertEquals(rootCopy.isComplete(), root.isComplete());
+      assertEquals(rootCopy.isMaxHeap(), root.isMaxHeap());
+      assertEquals(rootCopy.isMinHeap(), root.isMinHeap());
+      assertEquals(rootCopy.isPerfect(), root.isPerfect());
+      assertEquals(rootCopy.isStrict(), root.isStrict());
+      assertEquals(rootCopy.isSymmetric(), root.isSymmetric());
+      assertEquals(rootCopy.leafCount(), root.leafCount());
+      assertEquals(rootCopy.maxLeafDepth(), root.maxLeafDepth());
+      assertEquals(rootCopy.maxNodeValue() + 0.1f, root.maxNodeValue());
+      assertEquals(rootCopy.minLeafDepth(), root.minLeafDepth());
+      assertEquals(rootCopy.minNodeValue() + 0.1f, root.minNodeValue());
+      assertEquals(rootCopy.size(), root.size());
     }
+  }
+
+  static Stream<Supplier> builderProvider() {
+    return Stream.of(Btree::tree, Btree::bst, Btree::heap);
+  }
 }
