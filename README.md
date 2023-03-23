@@ -14,12 +14,12 @@ JBtree includes matching tests.
 
 A replit using the latest release can be found [here](https://replit.com/@JBtree/JBtree-Playground?v=1).
 
-Or drop into a new project where Main.java is and:
+Or drop into a new project where `Main.java` is and:
 ```shell
 wget https://github.com/woodsjm/jbtree/releases/download/v0.1.2-alpha/jbtree-0.1.2.jar && mkdir jars/ && mv jbtree-0.1.2.jar jars/ 
 ```
 
-and then in Main.java:
+and then in `Main.java`:
 ```java
 import com.github.woodsjm.jbtree.*;
 ```
