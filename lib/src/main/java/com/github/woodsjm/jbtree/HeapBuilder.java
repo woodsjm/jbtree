@@ -1,6 +1,7 @@
 package com.github.woodsjm.jbtree;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
 
@@ -15,27 +16,29 @@ public class HeapBuilder extends BtreeBuilder<HeapBuilder> {
   public Node create() {
     Node result = null;
 
+    List<Comparable> values = new ArrayList<>((1 << (this.height + 1)) - 1);
+
     int[] numbers = this.generateHeapNums();
     for (int num : numbers) {
-      this.values.add(this.letters ? Btree.numberToLetters(num) : num);
+      values.add(this.letters ? Btree.numberToLetters(num) : num);
     }
 
     if (!this.isPerfect) {
       if (this.height == 0) {
-        result = Btree.build(this.values);
+        result = Btree.build(values);
         this.reset();
         return result;
       }
 
       if (this.height == 1) {
-        this.values.remove(this.values.size() - 1);
+        values.remove(values.size() - 1);
       } else {
-        int randomCut = ThreadLocalRandom.current().nextInt((1 << this.height), this.values.size());
-        this.values.subList(randomCut, this.values.size()).clear();
+        int randomCut = ThreadLocalRandom.current().nextInt((1 << this.height), values.size());
+        values.subList(randomCut, values.size()).clear();
       }
     }
 
-    result = Btree.build(this.values);
+    result = Btree.build(values);
     this.reset();
     return result;
   }
@@ -68,6 +71,5 @@ public class HeapBuilder extends BtreeBuilder<HeapBuilder> {
     this.isPerfect = false;
     this.letters = false;
     this.isMax = true;
-    this.values = new ArrayList<>((1 << (height + 1)) - 1);
   }
 }

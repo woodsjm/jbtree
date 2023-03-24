@@ -11,6 +11,8 @@ public class TreeCloneTest {
 
   final int REPETITIONS = 20;
 
+  BtreeBuilder<TreeBuilder> tb = new TreeBuilder();
+
   @Test
   public void testTreeCloneWithNumbers() {
     for (int dummy = 0; dummy < REPETITIONS; dummy++) {
@@ -18,8 +20,14 @@ public class TreeCloneTest {
       boolean isPerfect = ThreadLocalRandom.current().nextBoolean();
       boolean letters = false;
 
-      Node<Integer> root = Btree.tree(height, isPerfect, letters);
+      this.tb.reset();
+      Node<Integer> root =
+          isPerfect
+              ? this.tb.setHeight(height).makePerfect().create()
+              : this.tb.setHeight(height).create();
+
       assertNotNull(root);
+
       Node<Integer> clone = root.deepCopy();
       assertEquals(clone.values(), root.values());
       assertTrue(root.equals(clone));
@@ -35,8 +43,14 @@ public class TreeCloneTest {
       boolean isPerfect = ThreadLocalRandom.current().nextBoolean();
       boolean letters = true;
 
-      Node<String> root = Btree.tree(height, isPerfect, letters);
+      this.tb.reset();
+      Node<String> root =
+          isPerfect
+              ? this.tb.setHeight(height).makePerfect().withLetters().create()
+              : this.tb.setHeight(height).withLetters().create();
+
       assertNotNull(root);
+
       Node<String> clone = root.deepCopy();
       assertEquals(clone.values(), root.values());
       assertTrue(root.equals(clone));

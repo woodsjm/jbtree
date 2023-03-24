@@ -19,9 +19,11 @@ public class TreeGenerationTest {
 
   final int REPETITIONS = 20;
 
+  BtreeBuilder<TreeBuilder> tb = new TreeBuilder();
+
   @Test
   void testTreeGeneration() {
-    Node<Integer> root = Btree.tree(0); // height
+    Node<Integer> root = this.tb.setHeight(0).create();
     assertNotNull(root);
 
     root.validate();
@@ -33,7 +35,8 @@ public class TreeGenerationTest {
     for (int dummy = 0; dummy < REPETITIONS; dummy++) {
       int height = ThreadLocalRandom.current().nextInt(10);
 
-      root = Btree.tree(height);
+      this.tb.reset();
+      root = this.tb.setHeight(height).create();
       assertNotNull(root);
 
       root.validate();
@@ -43,7 +46,8 @@ public class TreeGenerationTest {
     for (int dummy = 0; dummy < REPETITIONS; dummy++) {
       int height = ThreadLocalRandom.current().nextInt(10);
 
-      root = Btree.tree(height, true); // height, isPerfect
+      this.tb.reset();
+      root = this.tb.setHeight(height).makePerfect().create();
       assertNotNull(root);
 
       root.validate();
@@ -62,7 +66,8 @@ public class TreeGenerationTest {
     int statusCode =
         catchSystemExit(
             () -> {
-              Btree.tree(invalidHeight);
+              this.tb.reset();
+              this.tb.setHeight(invalidHeight).create();
             });
     assertEquals(0, statusCode);
 

@@ -19,9 +19,11 @@ public class BSTGenerationTest {
 
   final int REPETITIONS = 20;
 
+  BtreeBuilder<BSTBuilder> bb = new BSTBuilder();
+
   @Test
   void testBSTGeneration() {
-    Node<Integer> root = Btree.bst(0); // height
+    Node<Integer> root = this.bb.setHeight(0).create();
     assertNotNull(root);
 
     root.validate();
@@ -33,7 +35,8 @@ public class BSTGenerationTest {
     for (int dummy = 0; dummy < REPETITIONS; dummy++) {
       int height = ThreadLocalRandom.current().nextInt(10);
 
-      root = Btree.bst(height);
+      this.bb.reset();
+      root = this.bb.setHeight(height).create();
       assertNotNull(root);
 
       root.validate();
@@ -43,7 +46,8 @@ public class BSTGenerationTest {
     for (int dummy = 0; dummy < REPETITIONS; dummy++) {
       int height = ThreadLocalRandom.current().nextInt(10);
 
-      Node<String> lettersBST = Btree.bst(height, false, true); // height, isPerfect, letters
+      this.bb.reset();
+      Node<String> lettersBST = this.bb.setHeight(height).withLetters().create();
       assertNotNull(lettersBST);
 
       lettersBST.validate();
@@ -54,7 +58,8 @@ public class BSTGenerationTest {
     for (int dummy = 0; dummy < REPETITIONS; dummy++) {
       int height = ThreadLocalRandom.current().nextInt(10);
 
-      Node<Integer> perfectIntBST = Btree.bst(height, true); // height, isPerfect
+      this.bb.reset();
+      Node<Integer> perfectIntBST = this.bb.setHeight(height).makePerfect().create();
       assertNotNull(perfectIntBST);
 
       perfectIntBST.validate();
@@ -69,7 +74,9 @@ public class BSTGenerationTest {
     for (int dummy = 0; dummy < REPETITIONS; dummy++) {
       int height = ThreadLocalRandom.current().nextInt(10);
 
-      Node<Integer> perfectLettersBST = Btree.bst(height, true, true); // height, isPerfect, letters
+      this.bb.reset();
+      Node<Integer> perfectLettersBST =
+          this.bb.setHeight(height).makePerfect().withLetters().create();
       assertNotNull(perfectLettersBST);
 
       perfectLettersBST.validate();
@@ -90,7 +97,8 @@ public class BSTGenerationTest {
     int statusCode =
         catchSystemExit(
             () -> {
-              Btree.bst(invalidHeight);
+              this.bb.reset();
+              this.bb.setHeight(invalidHeight).create();
             });
     assertEquals(0, statusCode);
 

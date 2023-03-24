@@ -6,15 +6,11 @@ package com.github.woodsjm.jbtree;
 import java.math.BigDecimal;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Queue;
 import java.util.Stack;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.IntStream;
 
 public class Btree {
 
@@ -148,184 +144,11 @@ public class Btree {
   }
 
   public static Node bst() {
-    return bst(3, false, false);
-  }
-
-  public static Node bst(int height) {
-    return bst(height, false, false);
-  }
-
-  public static Node bst(int height, boolean isPerfect) {
-    return bst(height, isPerfect, false);
-  }
-
-  public static Node bst(int height, boolean isPerfect, boolean letters) {
-    validateTreeHeight(height);
-
-    if (isPerfect) {
-      return generatePerfectBST(height, letters);
-    }
-
-    List<Comparable> values = new ArrayList<>((1 << (height + 1)) - 1);
-
-    int[] numbers = generateRandomNumbers(height);
-    for (int num : numbers) {
-      values.add(letters ? numberToLetters(num) : num);
-    }
-
-    if (values.get(0) == null) {
-      return null;
-    }
-
-    Node root = new Node(values.remove(0));
-    HashSet<Node> leaves = new HashSet<>();
-    int leafCount = generateRandomLeafCount(height);
-
-    for (Comparable value : values) {
-      Node node = root;
-      int depth = 0;
-      boolean inserted = false;
-
-      while (depth < height && !inserted) {
-        String direction = String.valueOf(node.getVal().compareTo(value) > 0 ? "left" : "right");
-        Node child = direction == "left" ? node.getLeft() : node.getRight();
-
-        if (child == null) {
-          if (direction == "left") {
-            node.setLeft(new Node(value));
-          } else if (direction == "right") {
-            node.setRight(new Node(value));
-          }
-          inserted = true;
-        }
-
-        node = child;
-        depth++;
-      }
-
-      if (inserted && depth == height) {
-        leaves.add(node);
-      }
-
-      if (leaves.size() == leafCount) {
-        break;
-      }
-    }
-
-    return root;
-  }
-
-  static Node generatePerfectBST(int height, boolean letters) {
-    int maxNodeCount = (1 << (height + 1)) - 1;
-    int[] numValues =
-        IntStream.iterate(0, n -> Integer.valueOf(n + 1)).limit(maxNodeCount).toArray();
-
-    String[] letterValues = new String[maxNodeCount];
-    if (letters) {
-      for (int num : numValues) {
-        letterValues[num] = numberToLetters(num);
-      }
-      return buildBSTFromSortedValues(letterValues);
-    }
-
-    return buildBSTFromSortedValues(numValues);
-  }
-
-  // NOTE: Refactor into individual buildBST...
-  static Node buildBSTFromSortedValues(int[] sortedValues) {
-    if (sortedValues.length == 0) {
-      return null;
-    }
-
-    int mid = Math.floorDiv(sortedValues.length, 2);
-    Node root = new Node(sortedValues[mid]);
-    root.setLeft(buildBSTFromSortedValues(Arrays.copyOfRange(sortedValues, 0, mid)));
-    root.setRight(
-        buildBSTFromSortedValues(Arrays.copyOfRange(sortedValues, mid + 1, sortedValues.length)));
-    return root;
-  }
-
-  // NOTE: Refactor into individual buildBST...
-  static Node buildBSTFromSortedValues(String[] sortedValues) {
-    if (sortedValues.length == 0) {
-      return null;
-    }
-
-    int mid = Math.floorDiv(sortedValues.length, 2);
-    Node root = new Node(sortedValues[mid]);
-    root.setLeft(buildBSTFromSortedValues(Arrays.copyOfRange(sortedValues, 0, mid)));
-    root.setRight(
-        buildBSTFromSortedValues(Arrays.copyOfRange(sortedValues, mid + 1, sortedValues.length)));
-    return root;
+    return new BSTBuilder().create();
   }
 
   public static Node tree() {
-    return tree(3, false, false);
-  }
-
-  public static Node tree(int height) {
-    return tree(height, false, false);
-  }
-
-  public static Node tree(int height, boolean isPerfect) {
-    return tree(height, isPerfect, false);
-  }
-
-  public static Node tree(int height, boolean isPerfect, boolean letters) {
-    validateTreeHeight(height);
-
-    List<Comparable> values = new ArrayList<>((1 << (height + 1)) - 1);
-
-    int[] numbers = generateRandomNumbers(height);
-    for (int num : numbers) {
-      values.add(letters ? numberToLetters(num) : num);
-    }
-
-    if (isPerfect) {
-      return build(values);
-    }
-
-    if (values.get(0) == null) {
-      return null;
-    }
-
-    Node root = new Node(values.remove(0));
-    HashSet<Node> leaves = new HashSet<>();
-    int leafCount = generateRandomLeafCount(height);
-
-    for (Comparable value : values) {
-      Node node = root;
-      int depth = 0;
-      boolean inserted = false;
-
-      while (depth < height && !inserted) {
-        String direction =
-            String.valueOf(ThreadLocalRandom.current().nextBoolean() ? "left" : "right");
-        Node child = direction == "left" ? node.getLeft() : node.getRight();
-
-        if (child == null) {
-          if (direction == "left") {
-            node.setLeft(new Node(value));
-          } else if (direction == "right") {
-            node.setRight(new Node(value));
-          }
-          inserted = true;
-        }
-
-        node = child;
-        depth++;
-      }
-
-      if (inserted && depth == height) {
-        leaves.add(node);
-      }
-
-      if (leaves.size() == leafCount) {
-        break;
-      }
-    }
-
-    return root;
+    return new TreeBuilder().create();
   }
 
   public static <T extends Comparable<T>> Node build(List<T> values) {
@@ -405,31 +228,6 @@ public class Btree {
     }
 
     return root;
-  }
-
-  static int generateRandomLeafCount(int height) {
-    int maxLeafCount = 1 << height;
-    int halfLeafCount = Math.floorDiv(maxLeafCount, 2);
-
-    int roll1 = ThreadLocalRandom.current().nextInt(halfLeafCount == 0 ? 1 : halfLeafCount);
-    int roll2 = ThreadLocalRandom.current().nextInt(maxLeafCount - halfLeafCount);
-
-    return roll1 + roll2 > 0 ? roll1 + roll2 : halfLeafCount;
-  }
-
-  private static int[] generateRandomNumbers(int height) {
-    int maxNodeCount = (1 << (height + 1)) - 1;
-    int[] nodeValues = IntStream.iterate(0, n -> n + 1).limit(maxNodeCount).toArray();
-
-    // shuffle
-    for (int idx = 0; idx < nodeValues.length; idx++) {
-      int idxToSwap = ThreadLocalRandom.current().nextInt(nodeValues.length);
-      int temp = nodeValues[idxToSwap];
-      nodeValues[idxToSwap] = nodeValues[idx];
-      nodeValues[idx] = temp;
-    }
-
-    return nodeValues;
   }
 
   static String numberToLetters(int number) {
