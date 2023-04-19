@@ -70,7 +70,7 @@ public class TreeRemoveNodeByLevelOrderIndexTest {
   @MethodSource("nodeIndexAndExceptionProvider")
   void testTreeRemoveNodeByLevelOrderIndexWithException(int index, Class exception, String message)
       throws Exception {
-    LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
+    LogCaptor logCaptor = LogCaptor.forClass(Node.class);
 
     int statusCode =
         catchSystemExit(

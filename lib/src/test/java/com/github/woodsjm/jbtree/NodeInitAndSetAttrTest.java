@@ -131,7 +131,7 @@ public class NodeInitAndSetAttrTest {
   @ParameterizedTest
   @NullAndEmptySource
   public void testNodeValueExceptionOnEmptyNode(List list) throws Exception {
-    LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
+    LogCaptor logCaptor = LogCaptor.forClass(Node.class);
 
     int statusCode =
         catchSystemExit(
@@ -154,7 +154,7 @@ public class NodeInitAndSetAttrTest {
   @ParameterizedTest
   @NullAndEmptySource
   public void testNodeValueExceptionOnEmptyVal(List list) throws Exception {
-    LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
+    LogCaptor logCaptor = LogCaptor.forClass(Node.class);
 
     Node<Integer> root = new Node<>(1);
     // List<Integer> emptyVal = new ArrayList<>();

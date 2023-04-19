@@ -25,7 +25,7 @@ public class Node<T extends Comparable<T>> {
             "node value must be an Integer, a Float, or a String");
       }
     } catch (Exception e) {
-      Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, "", e);
+      Logger.getLogger(Node.class.getName()).log(Level.SEVERE, "", e);
       System.exit(0);
     }
   }
@@ -37,7 +37,7 @@ public class Node<T extends Comparable<T>> {
             "node value must be an Integer, a Float, or a String");
       }
     } catch (Exception e) {
-      Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, "", e);
+      Logger.getLogger(Node.class.getName()).log(Level.SEVERE, "", e);
       System.exit(0);
     }
   }
@@ -55,7 +55,7 @@ public class Node<T extends Comparable<T>> {
             "node value must be an Integer, a Float, or a String");
       }
     } catch (Exception e) {
-      Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, "", e);
+      Logger.getLogger(Node.class.getName()).log(Level.SEVERE, "", e);
       System.exit(0);
     }
   }
@@ -67,7 +67,7 @@ public class Node<T extends Comparable<T>> {
             "node value must be an Integer, a Float, or a String");
       }
     } catch (Exception e) {
-      Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, "", e);
+      Logger.getLogger(Node.class.getName()).log(Level.SEVERE, "", e);
       System.exit(0);
     }
   }
@@ -86,7 +86,7 @@ public class Node<T extends Comparable<T>> {
         throw new BtreeException.NodeNotFoundException("node missing at index " + index);
       }
     } catch (Exception e) {
-      Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, "", e);
+      Logger.getLogger(Node.class.getName()).log(Level.SEVERE, "", e);
       System.exit(0);
     }
 
@@ -116,7 +116,7 @@ public class Node<T extends Comparable<T>> {
         parent.setLeft(node);
       }
     } catch (Exception e) {
-      Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, "", e);
+      Logger.getLogger(Node.class.getName()).log(Level.SEVERE, "", e);
       System.exit(0);
     }
   }
@@ -165,7 +165,7 @@ public class Node<T extends Comparable<T>> {
         parent.setLeft(null);
       }
     } catch (Exception e) {
-      Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, "", e);
+      Logger.getLogger(Node.class.getName()).log(Level.SEVERE, "", e);
       System.exit(0);
     }
   }
@@ -650,7 +650,7 @@ public class Node<T extends Comparable<T>> {
             throw new BtreeException.NodeValueException("invalid node value at index " + nodeIdx);
           }
         } catch (Exception e) {
-          Logger.getLogger(Btree.class.getName()).log(Level.SEVERE, "", e);
+          Logger.getLogger(Node.class.getName()).log(Level.SEVERE, "", e);
           System.exit(0);
         }
 

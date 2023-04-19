@@ -39,7 +39,7 @@ class TreeGetNodeByLevelOrderIndexTest {
   @ParameterizedTest
   @ValueSource(ints = {5, 6, 7, 8, 10})
   public void testTreeGetNodeByLevelOrderIndexForMissingNode(int index) throws Exception {
-    LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
+    LogCaptor logCaptor = LogCaptor.forClass(Node.class);
 
     int statusCode =
         catchSystemExit(
@@ -59,7 +59,7 @@ class TreeGetNodeByLevelOrderIndexTest {
   @ParameterizedTest
   @ValueSource(ints = {-1, -10})
   public void testTreeGetNodeByLevelOrderIndexForInvalidIndex(int invalidIndex) throws Exception {
-    LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
+    LogCaptor logCaptor = LogCaptor.forClass(Node.class);
 
     int statusCode =
         catchSystemExit(

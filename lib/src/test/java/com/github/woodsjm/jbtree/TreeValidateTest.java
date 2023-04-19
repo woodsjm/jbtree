@@ -58,7 +58,7 @@ public class TreeValidateTest {
 
   @Test
   void testTreeValidateWithIntegersWithException() throws Exception {
-    LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
+    LogCaptor logCaptor = LogCaptor.forClass(Node.class);
 
     Node<Integer> root = new Node<>(1);
     root.setLeft(new Node<>(2));
@@ -86,7 +86,7 @@ public class TreeValidateTest {
 
   @Test
   void testTreeValidateWithLettersWithException() throws Exception {
-    LogCaptor logCaptor = LogCaptor.forClass(Btree.class);
+    LogCaptor logCaptor = LogCaptor.forClass(Node.class);
 
     Node<String> root = new Node<>("A");
     root.setLeft(new Node<>("B"));
