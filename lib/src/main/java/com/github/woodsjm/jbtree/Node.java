@@ -2,6 +2,7 @@ package com.github.woodsjm.jbtree;
 
 import com.github.woodsjm.jbtree.iterators.BtreeIterator;
 import com.github.woodsjm.jbtree.iterators.InorderIterator;
+import com.github.woodsjm.jbtree.iterators.PostorderIterator;
 import com.github.woodsjm.jbtree.iterators.PreorderIterator;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -338,19 +339,12 @@ public class Node<T extends Comparable<T>> {
 
   public List<Node<T>> postorder() {
     List<Node<T>> result = new ArrayList<>();
-    Stack<Node<T>> stack = new Stack<>();
-    stack.add(this);
 
-    while (!stack.isEmpty()) {
-      Node<T> node = stack.pop();
-      if (node != null) {
-        result.add(node);
-        stack.add(node.getLeft());
-        stack.add(node.getRight());
-      }
+    Iterator<Node<T>> nodes = new PostorderIterator(this);
+    while (nodes.hasNext()) {
+      result.add(nodes.next());
     }
 
-    Collections.reverse(result);
     return result;
   }
 
