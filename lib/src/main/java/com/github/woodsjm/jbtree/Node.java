@@ -1,5 +1,8 @@
 package com.github.woodsjm.jbtree;
 
+import com.github.woodsjm.jbtree.iterators.BtreeIterator;
+import com.github.woodsjm.jbtree.iterators.InorderIterator;
+import com.github.woodsjm.jbtree.iterators.PreorderIterator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -313,21 +316,10 @@ public class Node<T extends Comparable<T>> {
 
   public List<Node<T>> inorder() {
     List<Node<T>> result = new ArrayList<>();
-    Stack<Node<T>> stack = new Stack<>();
 
-    Node<T> currentNode = this;
-
-    while (currentNode != null || !stack.isEmpty()) {
-      while (currentNode != null) {
-        stack.add(currentNode);
-        currentNode = currentNode.getLeft();
-      }
-
-      if (!stack.isEmpty()) {
-        currentNode = stack.pop();
-        result.add(currentNode);
-        currentNode = currentNode.getRight();
-      }
+    Iterator<Node<T>> nodes = new InorderIterator(this);
+    while (nodes.hasNext()) {
+      result.add(nodes.next());
     }
 
     return result;
@@ -335,16 +327,10 @@ public class Node<T extends Comparable<T>> {
 
   public List<Node<T>> preorder() {
     List<Node<T>> result = new ArrayList<>();
-    Stack<Node<T>> stack = new Stack<>();
-    stack.add(this);
 
-    while (!stack.isEmpty()) {
-      Node<T> node = stack.pop();
-      if (node != null) {
-        result.add(node);
-        stack.add(node.getRight());
-        stack.add(node.getLeft());
-      }
+    Iterator<Node<T>> nodes = new PreorderIterator(this);
+    while (nodes.hasNext()) {
+      result.add(nodes.next());
     }
 
     return result;

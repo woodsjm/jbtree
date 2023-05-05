@@ -1,5 +1,6 @@
-package com.github.woodsjm.jbtree;
+package com.github.woodsjm.jbtree.iterators;
 
+import com.github.woodsjm.jbtree.Node;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Optional;
