@@ -6,14 +6,14 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
-public class InorderIterator<T extends Comparable<T>> implements Iterator<Node<T>> {
+public class InOrderIterator<T extends Comparable<T>> implements Iterator<Node<T>> {
   private ConcurrentLinkedDeque<Optional<Node<T>>> nextNodes = new ConcurrentLinkedDeque();
 
-  public InorderIterator(Node<T> root) {
-    this.traverseLeft(Optional.ofNullable(root));
+  public InOrderIterator(Node<T> root) {
+    this.traverse(Optional.ofNullable(root));
   }
 
-  public void traverseLeft(Optional<Node<T>> current) {
+  private void traverse(Optional<Node<T>> current) {
     while (current.isPresent()) {
       this.nextNodes.addFirst(current);
       current = Optional.ofNullable(current.get().getLeft());
@@ -32,7 +32,7 @@ public class InorderIterator<T extends Comparable<T>> implements Iterator<Node<T
     Optional<Node<T>> nextNode = this.nextNodes.poll();
 
     if (nextNode.isPresent()) {
-      this.traverseLeft(Optional.ofNullable(nextNode.get().getRight()));
+      this.traverse(Optional.ofNullable(nextNode.get().getRight()));
     }
 
     return nextNode.get();

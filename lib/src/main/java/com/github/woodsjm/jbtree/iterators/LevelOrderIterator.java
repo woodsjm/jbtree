@@ -6,11 +6,10 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-// only bfs for now
-public class BtreeIterator<T extends Comparable<T>> implements Iterator<Node<T>> {
+public class LevelOrderIterator<T extends Comparable<T>> implements Iterator<Node<T>> {
   private ConcurrentLinkedQueue<Optional<Node<T>>> nextNodes = new ConcurrentLinkedQueue<>();
 
-  public BtreeIterator(Node<T> root) {
+  public LevelOrderIterator(Node<T> root) {
     this.nextNodes.add(Optional.of(root));
   }
 

@@ -6,10 +6,10 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
-public class PostorderIterator<T extends Comparable<T>> implements Iterator<Node<T>> {
+public class PostOrderIterator<T extends Comparable<T>> implements Iterator<Node<T>> {
   private ConcurrentLinkedDeque<Optional<Node<T>>> nextNodes = new ConcurrentLinkedDeque();
 
-  public PostorderIterator(Node<T> root) {
+  public PostOrderIterator(Node<T> root) {
     this.traverse(Optional.ofNullable(root));
   }
 

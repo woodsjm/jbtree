@@ -6,10 +6,10 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
-public class PreorderIterator<T extends Comparable<T>> implements Iterator<Node<T>> {
+public class PreOrderIterator<T extends Comparable<T>> implements Iterator<Node<T>> {
   private ConcurrentLinkedDeque<Optional<Node<T>>> nextNodes = new ConcurrentLinkedDeque();
 
-  public PreorderIterator(Node<T> root) {
+  public PreOrderIterator(Node<T> root) {
     this.nextNodes.add(Optional.of(root));
   }
 

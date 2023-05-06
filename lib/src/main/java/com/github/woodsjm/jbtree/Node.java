@@ -1,9 +1,9 @@
 package com.github.woodsjm.jbtree;
 
-import com.github.woodsjm.jbtree.iterators.BtreeIterator;
-import com.github.woodsjm.jbtree.iterators.InorderIterator;
-import com.github.woodsjm.jbtree.iterators.PostorderIterator;
-import com.github.woodsjm.jbtree.iterators.PreorderIterator;
+import com.github.woodsjm.jbtree.iterators.InOrderIterator;
+import com.github.woodsjm.jbtree.iterators.LevelOrderIterator;
+import com.github.woodsjm.jbtree.iterators.PostOrderIterator;
+import com.github.woodsjm.jbtree.iterators.PreOrderIterator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -245,11 +245,11 @@ public class Node<T extends Comparable<T>> {
   }
 
   public Iterator<Node<T>> iterator() {
-    return new BtreeIterator(this);
+    return new LevelOrderIterator(this);
   }
 
   private Node<T> bfs(int index) {
-    Iterator<Node<T>> nodes = this.iterator();
+    Iterator<Node<T>> nodes = new LevelOrderIterator(this);
     for (int iterationCount = 0; nodes.hasNext(); iterationCount++) {
       if (iterationCount == index) {
         return nodes.next();
@@ -318,7 +318,7 @@ public class Node<T extends Comparable<T>> {
   public List<Node<T>> inorder() {
     List<Node<T>> result = new ArrayList<>();
 
-    Iterator<Node<T>> nodes = new InorderIterator(this);
+    Iterator<Node<T>> nodes = new InOrderIterator(this);
     while (nodes.hasNext()) {
       result.add(nodes.next());
     }
@@ -329,7 +329,7 @@ public class Node<T extends Comparable<T>> {
   public List<Node<T>> preorder() {
     List<Node<T>> result = new ArrayList<>();
 
-    Iterator<Node<T>> nodes = new PreorderIterator(this);
+    Iterator<Node<T>> nodes = new PreOrderIterator(this);
     while (nodes.hasNext()) {
       result.add(nodes.next());
     }
@@ -340,7 +340,7 @@ public class Node<T extends Comparable<T>> {
   public List<Node<T>> postorder() {
     List<Node<T>> result = new ArrayList<>();
 
-    Iterator<Node<T>> nodes = new PostorderIterator(this);
+    Iterator<Node<T>> nodes = new PostOrderIterator(this);
     while (nodes.hasNext()) {
       result.add(nodes.next());
     }
@@ -350,7 +350,7 @@ public class Node<T extends Comparable<T>> {
 
   public List<Node<T>> levelorder() {
     List<Node<T>> result = new ArrayList<>();
-    Iterator<Node<T>> nodes = this.iterator();
+    Iterator<Node<T>> nodes = new LevelOrderIterator(this);
     while (nodes.hasNext()) {
       Node<T> node = nodes.next();
       if (node != null) {
