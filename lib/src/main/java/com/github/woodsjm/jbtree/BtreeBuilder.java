@@ -49,7 +49,7 @@ public abstract class BtreeBuilder<T extends BtreeBuilder> {
   }
 
   public T withLetters() {
-    this.letters = letters;
+    this.letters = true;
     return (T) this;
   }
 }

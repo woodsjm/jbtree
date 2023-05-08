@@ -6,9 +6,8 @@ Documentation will be wrapped into the **v0.5.0-beta** release that is added to 
 
 JBtree includes matching tests.
 
-----
 
-<br>
+
 
 ## Try it out
 
@@ -16,7 +15,7 @@ A replit using the latest release can be found [here](https://replit.com/@JBtree
 
 Or drop into a new project where `Main.java` is and:
 ```shell
-wget https://github.com/woodsjm/jbtree/releases/download/v0.1.2-alpha/jbtree-0.1.2.jar && mkdir jars/ && mv jbtree-0.1.2.jar jars/ 
+wget https://github.com/woodsjm/jbtree/releases/download/v0.1.5-alpha/jbtree-0.1.5.jar && mkdir jars/ && mv jbtree-0.1.5.jar jars/ 
 ```
 
 and then in `Main.java`:
@@ -31,36 +30,52 @@ javac -classpath ./jars/* -d . Main.java && java -classpath ./jars/* Main
 
 ## Example
 
-Create and print a binary tree:
-
+Create and print different types of binary trees:
 ```java
-// A random binary tree with a 
-// height of 3, that is not perfect, and has letters
-Node<String> root = tree(3, false, true);
+// Create a random binary Tree and return its root node
+BtreeBuilder<TreeBuilder> treeBuilder = new TreeBuilder();
+Node<Integer> defaultTree = treeBuilder.create();
 
-// Standard print
-System.out.println(root);
+// Create a random BST that is perfect and return its root node
+BtreeBuilder<BSTBuilder> bstBuilder = new BSTBuilder();
+Node<Integer> perfectBST = bstBuilder.setHeight(3).makePerfect().create();
 
-// Gets you:
-  __A__
- /     \
-B       C
- \     / \
-  E   F   G
+// Create a random min Heap and return its root node
+BtreeBuilder<HeapBuilder> heapBuilder = new HeapBuilder();
+Node<Integer> heap = heapBuilder.setHeight(3).makeMin().create();
 
-// Then change it up
-root.getRight().getLeft().setVal("Z");
 
-// And print with indices
-root.prettyPrint(true);
+defaultTree.prettyPrint();
+//
+//           _____10______
+//          /             \
+//      ___2__           __4___
+//     /      \         /      \
+//    9        14      0       _7
+//   / \      /       / \     /
+//  1   11   3       8   6   13
 
-// Gets you:
-   _____0:A_____
-  /             \
-1:B           _2:C_
-  \         /      \
-  4:E     5:Z       6:G
 
+perfectBST.prettyPrint();
+//
+//          ______7_______
+//         /              \
+//      __3__           ___11___
+//     /     \         /        \
+//    1       5       9         _13
+//   / \     / \     / \       /   \
+//  0   2   4   6   8   10    12    14
+
+
+minHeap.prettyPrint();
+//
+//          _______0__
+//         /          \
+//      __1__          2
+//     /     \        / \
+//    3       4      5   6
+//   / \     / \
+//  7   8   9   10
 ```
 
 
