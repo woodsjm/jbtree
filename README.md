@@ -28,7 +28,17 @@ and finally:
 javac -classpath ./jars/* -d . Main.java && java -classpath ./jars/* Main
 ```
 
-## Example
+## Getting Started
+
+JBtree uses this class to represent a node:
+```java
+
+public class Node<T extends Comparable<T>> {
+  private T val; // Node value (float/integer/string)
+  private Node<T> left; // Left child
+  private Node<T> right; // Right child
+
+```
 
 Create and print different types of binary trees:
 ```java
@@ -76,6 +86,57 @@ minHeap.prettyPrint();
 //    3       4      5   6
 //   / \     / \
 //  7   8   9   10
+```
+
+Build a tree yourself:
+```java
+
+Node<Integer> root = new Node<>(1);
+root.setLeft(new Node<>(2));
+root.setRight(new Node<>(3));
+root.getLeft().setRight(new Node<>(4));
+
+System.out.println(root);
+//
+//    _1
+//   /  \
+//  2    3
+//   \
+//    4
+```
+
+Inspect tree properties:
+```java
+
+Node<Integer> root = new Node<>(1);
+root.setLeft(new Node<>(2));
+root.setRight(new Node<>(3));
+root.getLeft().setLeft(new Node<>(4));
+root.getLeft().setRight(new Node<>(5));
+
+System.out.println(root);
+//
+//      _1
+//     /  \
+//    2    3
+//   / \
+//  4   5
+
+assertEquals((Integer) 2, root.height());
+assertEquals((boolean) true, root.isBalanced());
+assertEquals((boolean) false, root.isBST());
+assertEquals((boolean) true, root.isComplete());
+assertEquals((boolean) false, root.isMaxHeap());
+assertEquals((boolean) true, root.isMinHeap());
+assertEquals((boolean) false, root.isPerfect());
+assertEquals((boolean) true, root.isStrict());
+assertEquals((boolean) false, root.isSymmetric());
+assertEquals((Integer) 3, root.leafCount());
+assertEquals((Integer) 2, root.maxLeafDepth());
+assertEquals((Integer) 5, root.maxNodeValue());
+assertEquals((Integer) 1, root.minLeafDepth());
+assertEquals((Integer) 1, root.minNodeValue());
+assertEquals((Integer) 5, root.size());
 ```
 
 
