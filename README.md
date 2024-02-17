@@ -212,6 +212,26 @@ root.prettyPrint(true, ":");
 //        2:3
 ```
 
+Convert to [list representations](https://en.wikipedia.org/wiki/Binary_tree#Arrays):
+```java
+import java.util.Arrays;
+
+Node<Integer> root = Btree.build(Arrays.asList(7, 3, 2, 6, 9, null, 1, 5, 8));
+System.out.println(root);
+//
+//            __7
+//           /   \
+//        __3     2
+//       /   \     \
+//      6     9     1
+//     / \
+//    5   8
+
+// Go back to list representation
+System.out.println(root.values());
+// [7, 3, 2, 6, 9, null, 1, 5, 8]
+```
+
 
 
 
