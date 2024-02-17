@@ -137,6 +137,57 @@ assertEquals((Integer) 5, root.maxNodeValue());
 assertEquals((Integer) 1, root.minLeafDepth());
 assertEquals((Integer) 1, root.minNodeValue());
 assertEquals((Integer) 5, root.size());
+
+System.out.println(root.leaves);
+// [3, 4, 5]
+```
+
+Compare and clone trees:
+```java
+
+Node<Integer> original = Btree.tree();
+
+// Clone the binary tree
+Node<Integer> clone = original.deepCopy();
+
+// Check if the trees are equal
+original.equals(clone);
+```
+
+Use [level-order (breadth-first)](https://en.wikipedia.org/wiki/Tree_traversal#Breadth-first_search) to manipulate nodes:
+```java
+
+Node<Integer> root = new Node<>(1);                // index: 0, value: 1
+root.setLeft(new Node<>(2));                       // index: 1, value: 2
+root.setRight(new Node<>(3));                      // index: 2, value: 3
+root.getLeft().setRight(new Node<>(4));            // index: 4, value: 4
+root.getLeft().getRight().setLeft(new Node<>(5));  // index: 9, value: 5
+
+System.out.println(root);
+//
+//      _1
+//     /  \
+//    2_   3
+//      \
+//       4
+//      /
+//     5
+
+root.prettyPrint(true, ":");
+//
+//       ___0:1_
+//      /       \
+//    1:2__    2:3
+//         \
+//        4:4
+//       /
+//     9:5
+//
+System.out.println(root.get(4));
+//
+//   4
+//  /
+// 5
 ```
 
 
