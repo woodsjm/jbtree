@@ -182,12 +182,34 @@ root.prettyPrint(true, ":");
 //        4:4
 //       /
 //     9:5
-//
+
 System.out.println(root.get(4));
 //
 //   4
 //  /
 // 5
+
+// Replace the node subtree at index 4
+root.set(4, new Node<>(6));
+root.get(4).setLeft(new Node<>(7));
+root.get(4).setRight(new Node<>(8));
+root.prettyPrint(true, ":");
+// 
+//       ___0:1_
+//      /       \
+//    1:2__    2:3
+//         \
+//        4:6
+//       /   \
+//     9:7  10:8
+
+// Remove the node subtree at index 1
+root.remove(1);
+root.prettyPrint(true, ":");
+//
+//     0:1_
+//         \
+//        2:3
 ```
 
 
